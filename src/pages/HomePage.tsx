@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Facebook, Instagram, Youtube, Mail } from 'lucide-react';
 import { Footer } from '../components/Footer';
 import { Link } from 'react-router-dom';
@@ -145,7 +145,7 @@ function HomePage() {
                   </button>
                 </form>
                 <a 
-                  href="mailto:info@sanskriti-hamburg.de"
+                  href="mailto:info@sanskriti-hamburg.de" target='_blank' rel='noreferrer'
                   className="w-full sm:w-auto bg-emerald-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-emerald-700 transition-colors duration-300 flex items-center justify-center space-x-2"
                 >
                   <Mail className="w-5 h-5" />
