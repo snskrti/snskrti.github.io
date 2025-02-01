@@ -49,7 +49,7 @@ function SponsorsPartners() {
     <div className="min-h-screen bg-gray-50">
       <main className="py-16 px-4 sm:px-6 lg:px-8">
         {/* Sponsors Section */}
-        <section className="max-w-7xl mx-auto mb-20">
+        <section id='sponsors' className="max-w-7xl mx-auto mb-20">
           <h1 className="text-4xl font-bold text-center mb-16">Our Sponsors</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {sponsors.map((sponsor, index) => (
@@ -77,7 +77,7 @@ function SponsorsPartners() {
         </section>
 
         {/* Partners Section */}
-        <section className="max-w-7xl mx-auto">
+        <section id='partners' className="max-w-7xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-16">Our Partners</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {partners.map((partner, index) => (

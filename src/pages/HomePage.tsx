@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Facebook, Instagram, Youtube, Mail } from 'lucide-react';
 import { Footer } from '../components/Footer';
+import { Link } from 'react-router-dom';
 
 function HomePage() {
   useEffect(() => {
@@ -28,55 +29,60 @@ function HomePage() {
 
   const events = [
     {
-      title: "Pohela Boishakh 2024",
-      date: "April 14, 2024",
+      title: "Poila Boishakh 2025",
+      date: "April 14, 2025",
       description: "Bengali New Year Celebration",
-      image: "/images/hero-image.jpg"
+      image: "/images/lamps-cultural-event.jpg",
+      link: "/events/poila-boishakh-2025"
     },
     {
-      title: "Durga Puja 2024",
-      date: "October 9-13, 2024",
+      title: "Durga Puja 2025",
+      date: "Sep 28 - Oct 02, 2025",
       description: "Annual Durga Puja Festival",
-      image: "/images/durga-puja.jpg"
+      image: "/images/ma-durga-face-right.jpg",
+      link: "/events/durga-puja-2025"
     },
     {
-      title: "Winter Cultural Night",
-      date: "December 15, 2024",
-      description: "Music and Dance Performance",
-      image: "/images/cultural-night.jpg"
+      title: "Alpona competition",
+      date: "June 02, 2025",
+      description: "Drawing competition for kids",
+      image: "/images/hand-alpona.jpg",
+      link: "/events/alpona-competition"
     }
   ];
 
   return (
-    <div className="w-full overflow-x-hidden">
+    <div className="w-full min-h-screen bg-background_color">
+
       {/* Hero Section */}
-      <section className="h-screen relative">
+      <section id="home" className="h-screen relative">
         <div className="absolute inset-0">
           <img 
-            src="/images/hero-image.jpg"
+            src="/images/hero-image2.jpg"
             alt="Bengali Culture" 
-            className="w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover object-center" 
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent" />
         </div>
-        
+
         <div className="relative h-full flex items-center px-8 md:px-16 lg:px-24">
           <div className="max-w-2xl text-white animate-hero-fade-in opacity-0">
-            <h1 className="text-5xl md:text-7xl font-bold mb-4">Sanskriti</h1>
-            <p className="text-xl md:text-2xl mb-8">A piece of Bengali life in Hamburg</p>
+            <h1 className="text-7xl md:text-7xl font-bold mb-4">Sanskriti</h1>
+            <p className="text-xl md:text-2xl mb-8 text-gray-400">Where tradition meets togetherness</p>
             <div className="flex space-x-6">
-              <a href="#" className="transform hover:scale-110 transition-transform">
-                <Instagram size={32} />
+              <a href="https://instagram.com" className="transform hover:scale-110 transition-transform">
+          <Instagram size={32} />
               </a>
-              <a href="#" className="transform hover:scale-110 transition-transform">
-                <Facebook size={32} />
+              <a href="https://facebook.com" className="transform hover:scale-110 transition-transform">
+          <Facebook size={32} />
               </a>
-              <a href="#" className="transform hover:scale-110 transition-transform">
-                <Youtube size={32} />
+              <a href="https://youtube.com" className="transform hover:scale-110 transition-transform">
+          <Youtube size={32} />
               </a>
             </div>
           </div>
         </div>
+        
       </section>
 
       {/* Events Section */}
@@ -96,11 +102,13 @@ function HomePage() {
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="absolute inset-0 p-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end">
-                    <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-                    <p className="text-sm mb-2">{event.date}</p>
-                    <p>{event.description}</p>
-                  </div>
+                  <Link to={event.link}>
+                    <div className="absolute inset-0 p-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end">
+                      <h3 className="text-xl font-bold mb-2">{event.title}</h3>
+                      <p className="text-sm mb-2">{event.date}</p>
+                      <p>{event.description}</p>
+                    </div>
+                  </Link>
                 </div>
               </div>
             ))}
@@ -115,9 +123,9 @@ function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div className="relative h-[400px] overflow-hidden rounded-lg">
               <img 
-                src="/images/organization.jpg"
+                src="/images/vorstand_ladies_2.jpg"
                 alt="Cultural Performance"
-                className="w-full h-full object-cover"
+                className="object-cover rounded-lg"
               />
             </div>
             <div className="flex flex-col space-y-6">
@@ -127,7 +135,7 @@ function HomePage() {
                   Our mission is to create a vibrant community that celebrates our rich heritage while fostering cultural exchange and understanding.
                 </p>
               </div>
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 items-center">
                 <form action="https://www.paypal.com/donate" method="post" target="_blank">
                   <button 
                     type="submit"
