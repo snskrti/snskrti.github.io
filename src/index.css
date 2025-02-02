@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary-color: #005F73;
+    --secondary-color: #ffed4a;
+    --accent-color: #e3342f;
+    /* --background-color: #f8fafc; */
+    --background-color: radial-gradient(circle, rgb(253, 207, 147), var(--primary-color));
+    --text-color: #2d3748;
+  }
+}
+
+html, body, #root {
+  background: var(--background_color);
+  height: 100%;
+  margin: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease-out forwards;
+}
+
+.animate-hero-fade-in {
+  animation: heroFadeIn 1.5s ease-out forwards;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+.prose {
+  max-width: 65ch;
+  margin-left: auto;
+  margin-right: auto;
+}

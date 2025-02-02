@@ -1,56 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Sanskriti</title>
-
-    <!-- Link to Google Fonts for Artistic Style -->
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-
-    <style>
-        /* General page styling */
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: white;
-            font-family: 'Dancing Script', cursive;
-        }
-
-        .message {
-            font-size: 3rem;
-            color: black;
-            text-align: center;
-        }
-
-        .message .highlight {
-            color: red; /* Highlights the first character */
-        }
-
-        /* Responsive text adjustments */
-        @media (max-width: 768px) {
-            .message {
-                font-size: 2.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .message {
-                font-size: 2rem;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="message">
-        <span class="highlight">A</span>sche bochor...abar hobe
-    </div>
-
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sanskriti e.V.</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
