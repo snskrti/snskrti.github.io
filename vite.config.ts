@@ -7,7 +7,7 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
-  base: '/snskrti.github.io/',
+  base: '/',
   build: {
     outDir: 'dist',
     rollupOptions: {

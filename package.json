@@ -8,8 +8,9 @@
     "dev": "vite --port 4242",
     "build": "vite build",
     "lint": "eslint .",
+    "add-domain": "echo 'www.sanskriti-hamburg.de' > dist/CNAME",
     "preview": "vite preview",
-    "predeploy": "vite build",
+    "predeploy": "vite build && npm run add-domain",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
