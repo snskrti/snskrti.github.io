@@ -1,3 +1,4 @@
+import React from 'react';
 import { Facebook, Instagram, Youtube, Mail, Home } from 'lucide-react';
 import { FaWhatsapp } from "react-icons/fa";
 import { Link } from 'react-router-dom';

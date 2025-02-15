@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect } from 'react';
 import { Facebook, Instagram, Youtube, Mail } from 'lucide-react';
 import { Footer } from '../components/Footer';
