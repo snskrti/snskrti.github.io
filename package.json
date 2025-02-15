@@ -8,9 +8,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "lint": "eslint .",
-    "add-domain": "echo 'www.sanskriti-hamburg.de' > dist/CNAME",
+    "add-domain": "echo 'www.sanskriti-hamburg.de' > build/CNAME",
     "predeploy": "npm run build && npm run add-domain",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "lucide-react": "^0.344.0",
