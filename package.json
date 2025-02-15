@@ -1,9 +1,9 @@
 {
-  "name": "vite-react-typescript-starter",
+  "name": "snskriti.github.io",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
-  "homepage": "https://snskriti.github.io/snskriti.github.io",
+  "homepage": "https://snskriti.github.io",
   "scripts": {
     "dev": "vite --port 4242",
     "build": "vite build",
