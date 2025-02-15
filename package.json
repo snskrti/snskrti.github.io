@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "type": "module",
-  "homepage": ".",
+  "homepage": "https://snskriti.github.io",
   "scripts": {
     "dev": "vite --port 4242",
     "build": "vite build",
