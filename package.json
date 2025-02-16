@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "type": "module",
-  "homepage": "https://sanskriti-hamburg.de",
+  "homepage": "https://sanskriti-hamburg.de/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

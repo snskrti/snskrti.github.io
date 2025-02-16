@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Calendar } from 'lucide-react';
 import { Footer } from '../components/Footer';
 
 function Holi2025() {
+
+  useEffect(() => {
+      window.scrollTo(0, 0)
+    }, []);
+    
   return (
     <div className="min-h-screen bg-custom_background">
 

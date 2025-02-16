@@ -1,50 +1,56 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ExternalLink } from 'lucide-react';
 import { Footer } from '../components/Footer';
 
+const sponsors = [
+  {
+    name: "Hamburg Cultural Board",
+    description: "Supporting cultural diversity and artistic expression in Hamburg",
+    logo: "/images/sponsor1.jpg",
+    website: "#"
+  },
+  {
+    name: "Local Business Council",
+    description: "Promoting community engagement and cultural events",
+    logo: "/images/sponsor2.jpg",
+    website: "#"
+  },
+  {
+    name: "Arts Foundation Hamburg",
+    description: "Fostering artistic growth and cultural preservation",
+    logo: "/images/sponsor3.jpg",
+    website: "#"
+  }
+];
+
+const partners = [
+  {
+    name: "Hamburg University",
+    description: "Academic collaboration for cultural research and education",
+    logo: "/images/partner1.jpg",
+    website: "#"
+  },
+  {
+    name: "Cultural Exchange Network",
+    description: "Connecting communities through cultural programs",
+    logo: "/images/partner2.jpg",
+    website: "#"
+  },
+  {
+    name: "Hamburg Arts Society",
+    description: "Promoting artistic collaboration and cultural events",
+    logo: "/images/partner3.jpg",
+    website: "#"
+  }
+];
+
 function SponsorsPartners() {
-  const sponsors = [
-    {
-      name: "Hamburg Cultural Board",
-      description: "Supporting cultural diversity and artistic expression in Hamburg",
-      logo: "/images/sponsor1.jpg",
-      website: "#"
-    },
-    {
-      name: "Local Business Council",
-      description: "Promoting community engagement and cultural events",
-      logo: "/images/sponsor2.jpg",
-      website: "#"
-    },
-    {
-      name: "Arts Foundation Hamburg",
-      description: "Fostering artistic growth and cultural preservation",
-      logo: "/images/sponsor3.jpg",
-      website: "#"
-    }
-  ];
+  
 
-  const partners = [
-    {
-      name: "Hamburg University",
-      description: "Academic collaboration for cultural research and education",
-      logo: "/images/partner1.jpg",
-      website: "#"
-    },
-    {
-      name: "Cultural Exchange Network",
-      description: "Connecting communities through cultural programs",
-      logo: "/images/partner2.jpg",
-      website: "#"
-    },
-    {
-      name: "Hamburg Arts Society",
-      description: "Promoting artistic collaboration and cultural events",
-      logo: "/images/partner3.jpg",
-      website: "#"
-    }
-  ];
-
+  useEffect(() => {
+      window.scrollTo(0, 0)
+    }, []);
+    
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="py-16 px-4 sm:px-6 lg:px-8">

@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Calendar, MapPin } from 'lucide-react';
 import { Footer } from '../components/Footer';
 
 function DurgaPuja2025() {
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, []);
+  
   return (
-    <div className="min-h-screen bg-custom_background">
+    <div className="min-h-screen">
 
       {/* Hero Section */}
       <div className="relative h-screen">
@@ -15,7 +20,7 @@ function DurgaPuja2025() {
         />
         <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
           <div className="text-center text-white">
-            <h1 className="text-5xl md:text-8xl font-bold mb-4">মা আসছে</h1>
+            <h1 className="text-8xl md:text-8xl font-bold mb-4">মা আসছে</h1>
             
             <div className="flex items-center justify-center space-x-2 my-16">
               <MapPin className="w-6 h-6" />
