@@ -1,16 +1,16 @@
 {
-  "name": "snskriti.github.io",
+  "name": "sanskriti-hamburg.de",
   "private": true,
   "version": "0.0.1",
   "type": "module",
-  "homepage": "https://snskriti.github.io",
+  "homepage": "https://sanskriti-hamburg.de",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "lint": "eslint .",
     "add-domain": "echo 'www.sanskriti-hamburg.de' > build/CNAME",
     "predeploy": "npm run build && npm run add-domain",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -b main -d build"
   },
   "dependencies": {
     "lucide-react": "^0.344.0",
