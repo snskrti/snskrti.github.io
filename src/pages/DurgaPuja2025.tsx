@@ -16,7 +16,7 @@ function DurgaPuja2025() {
         <img
           src="/images/kallol_durga_idol.jpg"
           alt="Durga Puja Celebration"
-          className="w-full h-full object-cover blur-md"
+          className="w-full h-full object-cover blur-sm"
         />
         <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
           <div className="text-center text-white">
