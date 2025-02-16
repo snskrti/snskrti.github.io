@@ -1,9 +1,9 @@
 {
   "name": "sanskriti-hamburg.de",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
-  "homepage": "https://sanskriti-hamburg.de/",
+  "homepage": "https://sanskriti-hamburg.de",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
