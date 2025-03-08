@@ -14,7 +14,6 @@ export function Footer() {
           <div className='text-gray-400'>
             <p className='text-xs text-gray-400'>
               Sanskriti e.V. is a registered non-profit organization based in Hamburg, Germany. 
-              We are dedicated to promoting Indian culture and heritage in Germany.
               <br /><br />
               Verein Nummer: xxxx
               <br /><br />
@@ -26,18 +25,18 @@ export function Footer() {
 
           {/* Useful links including Sponsors, Partners, etc */}
             <div className='text-white-900'>
-            <div className='grid grid-cols-1 gap-8 justify-center'>
-              <div className='flex justify-center text-center'>
-              <span className='text-sm'>
-                <Link to='/sponsors-partners#sponsors'>Sponsors</Link>
-              </span>
+              <div className='grid grid-cols-1 gap-8 justify-center'>
+                <div className='flex justify-center text-center'>
+                  {/* <span className='text-sm'>
+                    <Link to='/sponsors-partners#sponsors'>Sponsors</Link>
+                  </span> */}
+                </div>
+                <div className='flex justify-center text-center'>
+                  {/* <span className='text-sm'>
+                    <Link to='/sponsors-partners#partners'>Partners</Link>
+                  </span> */}
+                </div>
               </div>
-              <div className='flex justify-center text-center'>
-              <span className='text-sm'>
-                <Link to='/sponsors-partners#partners'>Partners</Link>
-              </span>
-              </div>
-            </div>
             </div>
 
           {/* Contact Information */}

@@ -7,14 +7,14 @@
     --primary-color: #005F73;
     --secondary-color: #ffed4a;
     --accent-color: #e3342f;
-    /* --background-color: #f8fafc; */
-    --background-color: radial-gradient(circle, rgb(253, 207, 147), var(--primary-color));
+    --background-color: #f7f6e4;
+    --background-color-radial: radial-gradient(circle, rgb(253, 207, 147), var(--primary-color));
     --text-color: #2d3748;
   }
 }
 
 html, body, #root {
-  background: var(--background_color);
+  background: var(--background-color);
   height: 100%;
   margin: 0;
 }
