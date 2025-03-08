@@ -216,13 +216,13 @@ function HomePage() {
                     <span>Donate to the Club</span>
                   </button>
                 </form>
-                <a 
-                  href="mailto:info@sanskriti-hamburg.de" target='_blank' rel='noreferrer'
+                <button 
+                  onClick={() => window.location.href = '/membership'}
                   className="w-full sm:w-auto bg-emerald-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-emerald-700 transition-colors duration-300 flex items-center justify-center space-x-2"
                 >
                   <Mail className="w-5 h-5" />
                   <span>Join Us</span>
-                </a>
+                </button>
               </div>
             </div>
           </div>
