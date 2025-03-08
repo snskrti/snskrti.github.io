@@ -62,8 +62,8 @@ function HomePage() {
   const sections: NavigationSection[] = [
     { id: 'home', name: 'Banner', icon: <Home size={24} /> },
     { id: 'events', name: 'Events', icon: <Calendar size={24} /> },
-    { id: 'about', name: 'About the Verein', icon: <Users size={24} /> },
-    { id: 'organization', name: 'Organisational Structure', icon: <Info size={24} /> }
+    { id: 'about', name: 'About the Verein', icon: <Info size={24} /> },
+    { id: 'organization', name: 'Organisational Structure', icon: <Users size={24} /> }
   ];
 
   const handleSubscribe = () => {
@@ -192,7 +192,7 @@ function HomePage() {
       </section>
 
       {/* Organization Section */}
-      <section className="w-full min-h-screen py-20 px-8 md:px-16 lg:px-24 bg-white" id="organization">
+      <section className="w-full min-h-[70vh] py-20 px-8 md:px-16 lg:px-24 bg-white" id="organization">
         <div className="max-w-7xl mx-auto animate-on-scroll opacity-0">
           <h2 className="text-4xl font-bold mb-24 text-center">Our Organization</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -208,9 +208,9 @@ function HomePage() {
 
                 <button 
                   onClick={() => window.location.href = '/membership/request'}
-                  className="w-full sm:w-auto bg-emerald-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-emerald-700 transition-colors duration-300 flex items-center justify-center space-x-2"
+                  className="w-full sm:w-auto bg-emerald-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-emerald-700 transition-colors duration-300 flex items-center justify-center space-x-2"
                 >
-                  <Mail className="w-5 h-5" />
+                  <Users className="w-6 h-6" />
                   <span>Become a Member</span>
                 </button>
 
