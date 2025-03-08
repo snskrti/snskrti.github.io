@@ -7,10 +7,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "lint": "eslint .",
-    "add-domain": "echo 'www.sanskriti-hamburg.de' > build/CNAME",
-    "predeploy": "npm run build && npm run add-domain",
-    "deploy": "gh-pages -b main -d build"
+    "lint": "eslint ."
   },
   "dependencies": {
     "jspdf": "^3.0.0",
