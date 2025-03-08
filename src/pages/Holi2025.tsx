@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Calendar } from 'lucide-react';
-import { Footer } from '../components/Footer';
+import { Footer } from '../components/shared/Footer';
 
 function Holi2025() {
 
