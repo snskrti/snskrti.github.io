@@ -125,6 +125,10 @@ function HomePage() {
             className="group relative overflow-hidden rounded-lg shadow-lg transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl flex items-center justify-center">
             
             <div className="relative h-full w-full">
+                <div className="absolute bottom-0 left-0 p-6 group-hover:opacity-0 transition-opacity duration-300">
+                    <h3 className="text-xl text-white font-bold mb-2 transition-opacity duration-300 ease-in-out">{event.title}</h3>
+                </div>
+
               <img 
                 src={event.image} 
                 alt={event.title}
@@ -132,13 +136,13 @@ function HomePage() {
                 
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                <Link to={event.link}>
-                  <div className="absolute inset-0 p-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end">
-                    <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-                    <p className="text-sm mb-2">{event.date}</p>
-                    <p>{event.description}</p>
-                  </div>
-                </Link>
+                <div className="absolute inset-0 p-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end">
+                  <Link to={event.link}>
+                      <h3 className="text-xl font-bold mb-2">{event.title}</h3>
+                      <p className="text-sm mb-2">{event.date}</p>
+                      <p>{event.description}</p>
+                  </Link>
+                </div>
               </div>
             </div>
           ))
@@ -191,39 +195,33 @@ function HomePage() {
         <div className="max-w-7xl mx-auto animate-on-scroll opacity-0">
           <h2 className="text-4xl font-bold mb-24 text-center">Our Organization</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="relative h-[400px] overflow-hidden rounded-lg">
-                <img 
-                src="/images/vorstand_ladies_2.jpg"
-                alt="Cultural Performance"
-                className="object-cover rounded-lg"
-                />
-              </div>
-              <p className="text-center text-gray-600 text-xs mt-2">Members of the Board of Sanskriti e.V.</p>
-            </div>
-            <div className="flex flex-col space-y-6">
-              <div className="prose lg:prose-xl">
+          <div className="prose lg:prose-xl">
                 <p className="text-lg text-gray-700 leading-relaxed">
-                  Sanskriti is a proud women-led non-profit organization dedicated to preserving and promoting Bengali culture in Hamburg. 
+                  Sanskriti is a proud women-led non-profit organization dedicated to preserving and promoting Indian culture in Hamburg. 
                   Our mission is to create a vibrant community that celebrates our rich heritage while fostering cultural exchange and understanding.
                 </p>
               </div>
-              <div className="flex flex-col sm:flex-row gap-4 py-12 justify-center">
-                <form action="https://www.paypal.com/donate" method="post" target="_blank">
-                  <button 
-                    type="submit"
-                    className="w-full sm:w-auto bg-[#0070BA] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#003087] transition-colors duration-300 flex items-center justify-center space-x-2">
-                    <span>Donate to the Club</span>
-                  </button>
-                </form>
+            <div className="flex flex-col space-y-6">
+              
+                <div className="flex flex-col gap-4 py-12 justify-center items-center space-y-12">
+
                 <button 
-                  onClick={() => window.location.href = '/membership'}
+                  onClick={() => window.location.href = '/membership/request'}
                   className="w-full sm:w-auto bg-emerald-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-emerald-700 transition-colors duration-300 flex items-center justify-center space-x-2"
                 >
                   <Mail className="w-5 h-5" />
                   <span>Join Us</span>
                 </button>
-              </div>
+
+                <form action="https://www.paypal.com/donate" method="post" target="_blank">
+                  <button 
+                  type="submit"
+                  className="w-full sm:w-auto bg-[#0070BA] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#003087] transition-colors duration-300 flex items-center justify-center space-x-2">
+                  <span>Donate to the Club</span>
+                  </button>
+                </form>
+
+                </div>
             </div>
           </div>
         </div>

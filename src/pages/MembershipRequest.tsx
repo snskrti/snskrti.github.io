@@ -78,6 +78,10 @@ export const MembershipRequest= () => {
         }
     }
 
+    const handleSubmitStopped = async() => {
+        alert("Registrations are currently closed. Please get in touch with the Verein by Email / Phone for more information.");
+    };
+
     const handleSubmit = async() => {
         setLoading(true);
 
@@ -101,7 +105,9 @@ export const MembershipRequest= () => {
 
             <div className="w-full max-w-md md:max-w-2xl space-y-8 p-8 bg-surface rounded-xl border border-border">      
             <div className="text-center">
-                <img src="/images/logo.png" alt="Sign In" className="mx-auto h-64 w-64 rounded-full" />
+                <img src="/images/logo.png" alt="Membership Request" 
+                    className="mx-auto h-64 w-64 rounded-full cursor-pointer"
+                    onClick={() => window.location.href = '/'} />
                 <h2 className="mt-6 text-3xl font-bold text-text">Membership Request</h2>
             </div>
 
@@ -123,7 +129,7 @@ export const MembershipRequest= () => {
                 </div>  
             </div>
             {/*  form entry */}
-            <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+            <form className="mt-8 space-y-6" onSubmit={handleSubmitStopped}>
                 <div className="space-y-4">
                 <div>
                     <label htmlFor="name" className="block text-sm font-medium text-text">
@@ -172,7 +178,7 @@ export const MembershipRequest= () => {
                     disabled={loading}
                     className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-black bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:ring-offset-background disabled:opacity-50"
                     >
-                    {loading ? 'Signing in...' : 'Apply for Membership'}
+                    {loading ? 'Registering...' : 'Apply for Membership'}
                 </button>
                 </div>
             </form>
