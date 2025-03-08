@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { ExternalLink } from 'lucide-react';
-import { Footer } from '../components/Footer';
+import { Footer } from '../components/shared/Footer';
 
 const sponsors = [
   {
