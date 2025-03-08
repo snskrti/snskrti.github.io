@@ -9,7 +9,7 @@ function DurgaPuja2025() {
   }, []);
   
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-inherit">
 
       {/* Hero Section */}
       <div className="relative h-screen">
@@ -30,12 +30,12 @@ function DurgaPuja2025() {
         </div>
       </div>
 
-      <main className="max-w-4xl mx-auto px-4 py-16">
+      <main className="max-w-4xl mx-auto px-4 py-16 bg-inherit">
         
         {/* Sanskriti's Vision */}
-        <section className=" mx-auto mb-16">
+        <section className=" mx-auto mb-16 bg-inherit">
 
-            <div className="bg-amber-50 p-6 rounded-lg mt-8 text-center">
+            <div className="bg-inherit p-6 rounded-lg mt-8 text-center">
               <h3 className="text-xl font-semibold mb-4">Get Involved</h3>
               <p>
                 We welcome volunteers and participants to join us in making this celebration memorable. Whether you'd like to perform, help with organization, or contribute in any other way, we'd love to hear from you.

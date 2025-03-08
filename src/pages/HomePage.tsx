@@ -9,6 +9,7 @@ import { NavigationSection } from '../types/navigation_section';
 import { events } from '../types/events';
 import { SectionNavigation } from '../components/shared/SectionNavigation';
 import { DonateByPaypal } from '../components/DonateActions/DonateByPaypal';
+import { socialMediaLinks } from '../types/socialMediaLinks';
 
 function HomePage() {
 
@@ -79,12 +80,12 @@ function HomePage() {
   }
 
   return (
-    <div className="w-full min-h-screen bg-background_color">
+    <div className="w-full min-h-screen bg-inherit">
 
       <SectionNavigation activeSection={activeSection} sections={sections} />
 
       {/* Hero Section */}
-      <section id="home" className="h-screen relative">
+      <section id="home" className="h-screen relative bg-inherit">
         <div className="absolute inset-0">
           <img 
             src="/images/candles-among-diwali-designs.jpg"
@@ -99,14 +100,13 @@ function HomePage() {
             <h1 className="text-7xl md:text-7xl font-bold mb-4">Sanskriti</h1>
             <p className="text-xl md:text-2xl mb-8 text-gray-400">Where tradition meets togetherness</p>
             <div className="flex space-x-6">
-              <a href="https://instagram.com" className="transform hover:scale-110 transition-transform">
-          <Instagram size={32} />
+              <a href={socialMediaLinks.facebook} target='_blank'
+                className="transform hover:scale-110 transition-transform">
+                  <Facebook size={32} />
               </a>
-              <a href="https://facebook.com" className="transform hover:scale-110 transition-transform">
-          <Facebook size={32} />
-              </a>
-              <a href="https://youtube.com" className="transform hover:scale-110 transition-transform">
-          <Youtube size={32} />
+              <a href={socialMediaLinks.youtube} target='_blank'
+                className="transform hover:scale-110 transition-transform">
+                  <Youtube size={32} />
               </a>
             </div>
           </div>
@@ -115,7 +115,7 @@ function HomePage() {
       </section>
 
       {/* Events Section */}
-      <section className="w-full min-h-screen bg-gray-50" id="events">
+      <section className="w-full min-h-screen bg-gray-50 bg-inherit" id="events">
         <div className="h-full w-full animate-on-scroll opacity-0 flex flex-col justify-center px-8 md:px-16 lg:px-24">
           <h2 className="text-4xl font-bold mb-12 text-center mt-12">Upcoming Events</h2>
           <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -153,7 +153,7 @@ function HomePage() {
       </section>
 
       {/* About the Verein Section */}
-      <section className="w-full min-h-screen relative" id="about">
+      <section className="w-full min-h-screen relative bg-inherit" id="about">
         <div className="absolute inset-0">
           <img 
             src="/images/fireworkds-at-side-of-hill.jpg"
@@ -192,7 +192,7 @@ function HomePage() {
       </section>
 
       {/* Organization Section */}
-      <section className="w-full min-h-[70vh] py-20 px-8 md:px-16 lg:px-24 bg-white" id="organization">
+      <section className="w-full min-h-[70vh] py-20 px-8 md:px-16 lg:px-24 bg-inherit" id="organization">
         <div className="max-w-7xl mx-auto animate-on-scroll opacity-0">
           <h2 className="text-4xl font-bold mb-24 text-center">Our Organization</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">

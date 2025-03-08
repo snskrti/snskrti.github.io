@@ -102,87 +102,87 @@ export const MembershipRequest= () => {
     }
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen">
+        <div className="flex flex-col items-center justify-center bg-white">
 
-            <div className="w-full max-w-md md:max-w-2xl space-y-8 p-8 bg-surface rounded-xl border border-border">      
-            <div className="text-center">
-                <img src="/images/logo.png" alt="Membership Request" 
-                    className="mx-auto h-64 w-64 rounded-full cursor-pointer"
-                    onClick={() => window.location.href = '/'} />
-                <h2 className="mt-6 text-3xl font-bold text-text">Membership Request</h2>
-            </div>
+            <div className="w-full max-w-md md:max-w-2xl space-y-8 p-8 my-8 bg-background_color rounded-xl border border-border">      
+                <div className="text-center">
+                    <img src="/images/logo.png" alt="Membership Request" 
+                        className="mx-auto h-64 w-64 rounded-full cursor-pointer"
+                        onClick={() => window.location.href = '/'} />
+                    <h2 className="mt-6 text-3xl font-bold text-text">Membership Request</h2>
+                </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                <div className="flex items-start gap-3">
-                <div>
-                    <div className="mt-4 flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 text-orange-500 flex-shrink-0" />
-                    <p className="text-xs text-orange-700">
-                        Please fill in the form below to apply for membership. 
-                        <br />
-                        On submission, a PDF of the membership form will be generated and downloaded to your device. 
-                        Please print, sign and send the form to the Verein's office, by post. The Verein will verify the membership request and get back to you.
-                        <br />
-                        We are legally obliged to have your membership request in writing, with your signature.
-                    </p>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                    <div className="flex items-start gap-3">
+                    <div>
+                        <div className="mt-4 flex items-center gap-2">
+                        <AlertCircle className="w-4 h-4 text-orange-500 flex-shrink-0" />
+                        <p className="text-xs text-orange-700">
+                            Please fill in the form below to apply for membership. 
+                            <br />
+                            On submission, a PDF of the membership form will be generated and downloaded to your device. 
+                            Please print, sign and send the form to the Verein's office, by post. The Verein will verify the membership request and get back to you.
+                            <br />
+                            We are legally obliged to have your membership request in writing, with your signature.
+                        </p>
+                        </div>
                     </div>
+                    </div>  
                 </div>
-                </div>  
-            </div>
-            {/*  form entry */}
-            <form className="mt-8 space-y-6" onSubmit={handleSubmitStopped}>
-                <div className="space-y-4">
-                <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-text">
-                    Your Name
-                    </label>
-                    <input
-                    id="text"
-                    type="name"
-                    required
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="mt-1 px-4 py-2 block w-full border rounded-lg border-border bg-surface text-text shadow-sm focus:border-primary focus:ring-primary"
-                    />
-                </div>
-
-                <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-text">
-                    Your Email Address
-                    </label>
-                    <input
-                        id="emailAddress"
-                        type="emailAddress"
+                {/*  form entry */}
+                <form className="mt-8 space-y-6" onSubmit={handleSubmitStopped}>
+                    <div className="space-y-4">
+                    <div>
+                        <label htmlFor="name" className="block text-sm font-medium text-text">
+                        Your Name
+                        </label>
+                        <input
+                        id="text"
+                        type="name"
                         required
-                        value={emailAddress}
-                        onChange={(e) => setEmailAddress(e.target.value)}
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                         className="mt-1 px-4 py-2 block w-full border rounded-lg border-border bg-surface text-text shadow-sm focus:border-primary focus:ring-primary"
-                    />
-                </div>
-                
-                <div>
-                    <label htmlFor="address" className="block text-sm font-medium text-text">
-                    Your Residential Address
-                    </label>
-                    <input
-                    id="address"
-                    type="text"
-                    required
-                    value={residentialAddress}
-                    onChange={(e) => setResidentialAddress(e.target.value)}
-                    className="mt-1 px-4 py-2 block w-full border rounded-lg border-border bg-surface text-text shadow-sm focus:border-primary focus:ring-primary"
-                    />
-                </div>
+                        />
+                    </div>
 
-                <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-black bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:ring-offset-background disabled:opacity-50"
-                    >
-                    {loading ? 'Registering...' : 'Apply for Membership'}
-                </button>
-                </div>
-            </form>
+                    <div>
+                        <label htmlFor="email" className="block text-sm font-medium text-text">
+                        Your Email Address
+                        </label>
+                        <input
+                            id="emailAddress"
+                            type="emailAddress"
+                            required
+                            value={emailAddress}
+                            onChange={(e) => setEmailAddress(e.target.value)}
+                            className="mt-1 px-4 py-2 block w-full border rounded-lg border-border bg-surface text-text shadow-sm focus:border-primary focus:ring-primary"
+                        />
+                    </div>
+                    
+                    <div>
+                        <label htmlFor="address" className="block text-sm font-medium text-text">
+                        Your Residential Address
+                        </label>
+                        <input
+                        id="address"
+                        type="text"
+                        required
+                        value={residentialAddress}
+                        onChange={(e) => setResidentialAddress(e.target.value)}
+                        className="mt-1 px-4 py-2 block w-full border rounded-lg border-border bg-surface text-text shadow-sm focus:border-primary focus:ring-primary"
+                        />
+                    </div>
+
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-black bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:ring-offset-background disabled:opacity-50"
+                        >
+                        {loading ? 'Registering...' : 'Apply for Membership'}
+                    </button>
+                    </div>
+                </form>
             </div>
 
         </div>
