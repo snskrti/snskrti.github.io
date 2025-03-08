@@ -8,6 +8,7 @@ import { Home, Calendar, Users, Info } from 'lucide-react';
 import { NavigationSection } from '../types/navigation_section';
 import { events } from '../types/events';
 import { SectionNavigation } from '../components/shared/SectionNavigation';
+import { DonateByPaypal } from '../components/DonateActions/DonateByPaypal';
 
 function HomePage() {
 
@@ -196,8 +197,8 @@ function HomePage() {
           <h2 className="text-4xl font-bold mb-24 text-center">Our Organization</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="prose lg:prose-xl">
-                <p className="text-lg text-gray-700 leading-relaxed">
-                  Sanskriti is a proud women-led non-profit organization dedicated to preserving and promoting Indian culture in Hamburg. 
+                <p className="text-lg font-semibold text-gray-700 animate-hero-fade-in opacity-0 text-center">
+                  Sanskriti is a proud women-led non-profit organization dedicated to preserving and promoting Indian culture in Hamburg. <br /> 
                   Our mission is to create a vibrant community that celebrates our rich heritage while fostering cultural exchange and understanding.
                 </p>
               </div>
@@ -210,16 +211,10 @@ function HomePage() {
                   className="w-full sm:w-auto bg-emerald-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-emerald-700 transition-colors duration-300 flex items-center justify-center space-x-2"
                 >
                   <Mail className="w-5 h-5" />
-                  <span>Join Us</span>
+                  <span>Become a Member</span>
                 </button>
 
-                <form action="https://www.paypal.com/donate" method="post" target="_blank">
-                  <button 
-                  type="submit"
-                  className="w-full sm:w-auto bg-[#0070BA] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#003087] transition-colors duration-300 flex items-center justify-center space-x-2">
-                  <span>Donate to the Club</span>
-                  </button>
-                </form>
+                <DonateByPaypal />
 
                 </div>
             </div>
