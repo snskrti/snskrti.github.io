@@ -1,7 +1,7 @@
 import { AlertCircle } from "lucide-react";
 import React from "react"
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+// import html2canvas from 'html2canvas';
 
 export const MembershipRequest= () => {
 
@@ -52,25 +52,26 @@ export const MembershipRequest= () => {
 
         try {
             // Convert HTML to canvas
-            const canvas = await html2canvas(container);
+            // const canvas = await html2canvas(container);
 
-            console.log('canvas:', canvas);
+            // console.log('canvas:', canvas);
             
-            // Convert the HTML content to an image
-            const imgData = canvas.toDataURL('image/png');
-            const pdfWidth = 190;
-            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+            // // Convert the HTML content to an image
+            // const imgData = canvas.toDataURL('image/png');
+            // const pdfWidth = 190;
+            // const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-            const pdf = new jsPDF('p', 'mm', 'a4');
-            pdf.addImage(imgData, "JPEG", 10, 10, 180, 0);
+            // const pdf = new jsPDF('p', 'mm', 'a4');
+            // pdf.addImage(imgData, "JPEG", 10, 10, 180, 0);
 
-            pdf.save('sanskriti_membership_request.pdf');
+            // pdf.save('sanskriti_membership_request.pdf');
 
-            const pdfBlob = pdf.output('blob');
+            // const pdfBlob = pdf.output('blob');
 
-            console.log("PDF Blob:", pdfBlob);
-            // Download the PDF
-            return new File([pdfBlob], 'sanskriti_membership_request.pdf', { type: 'application/pdf' });
+            // console.log("PDF Blob:", pdfBlob);
+            // // Download the PDF
+            // return new File([pdfBlob], 'sanskriti_membership_request.pdf', { type: 'application/pdf' });
+            return null;
         } catch (error) {
             console.error('Error generating PDF:', error);
         } finally {
