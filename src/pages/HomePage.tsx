@@ -10,6 +10,7 @@ import { events } from '../types/events';
 import { SectionNavigation } from '../components/shared/SectionNavigation';
 import { DonateByPaypal } from '../components/DonateActions/DonateByPaypal';
 import { socialMediaLinks } from '../types/socialMediaLinks';
+import { NewsletterSubscribe } from '../components/shared/NewsletterSubscribe';
 
 function HomePage() {
 
@@ -164,28 +165,14 @@ function HomePage() {
         </div>
 
         <div className="min-h-screen flex items-center justify-end px-8 md:px-16 lg:px-24 animate-on-scroll opacity-0">
-            <div className="max-w-2xl text-white animate-hero-fade-in opacity-0 text-center flex flex-col items-center justify-center h-full">
+            <div className="max-w-2xl text-white animate-hero-fade-in text-center flex flex-col items-center justify-center h-full">
               <p className="mb-8 text-gray-100">
                 Sanskriti e.V. is a multi-cultural club that welcomes people from all cultures, backgrounds, and interest groups. 
                 We are dedicated to bringing together individuals, in and around Hamburg, who share a passion for celebrating Indian festivals and promoting cultural exchange. 
                 <br /><br />
                 We welcome you to join our vibrant community by subscribing to our newsletters. Stay updated with our latest events and activities.
               </p>
-                <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-end my-8">
-                <input 
-                  type="email" 
-                  placeholder="Email address" 
-                  onChange={(e) => setSubscriptionEmail(e.target.value)}
-                  className="px-4 py-3 text-black shadow-sm rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600" 
-                  id="email-input"
-                />
-                <button 
-                  className="bg-blue-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-700 transition-colors duration-300"
-                  onClick={handleSubscribe}
-                >
-                  Subscribe
-                </button>
-                </div>
+              <NewsletterSubscribe />
             </div>
         </div>
         
