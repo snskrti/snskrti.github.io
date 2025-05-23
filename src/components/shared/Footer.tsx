@@ -15,7 +15,7 @@ export function Footer() {
             <p className='text-xs text-gray-400'>
               Sanskriti e.V. is a registered non-profit organization based in Hamburg, Germany. 
               <br /><br />
-              Verein Nummer: xxxx
+              Verein Nummer: VR 25931
               <br /><br />
               Bank Account: <br />
               IBAN: DE xx xx xx xx xx xx xx xx <br />
