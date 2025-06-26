@@ -8,21 +8,21 @@ export interface Event {
 
 export const events: Event[] = [
     {
-      title: "Poila Boishakh 2025",
-      date: "April 14, 2025",
-      description: "Bengali New Year Celebration",
-      image: "/images/lamps-cultural-event.jpg",
-      link: "/events/poila-boishakh-2025"
+      title: "Summer Grill 2025",
+      date: "August, 2025",
+      description: "Summer Grill Event in Hamburg",
+      image: "/images/grill_event_banner_2025.jpeg",
+      link: "/events/grill-2025"
     },
     {
-      title: "Holi 2025",
-      date: "Mar 14, 2025",
-      description: "Holi Celebration",
-      image: "/images/holi-colors-hands.jpg",
-      link: "/events/holi-2025"
+      title: "Rakhi",
+      date: "August, 2025",
+      description: "Rakhi Celebration",
+      image: "/images/rakhi_event_banner_2025.jpg",
+      link: "/events/rakhi-2025"
     },
     {
-      title: "Durga Puja 2025",
+      title: "Durga Puja",
       date: "Sep 28 - Oct 02, 2025",
       description: "Annual Durga Puja Festival",
       image: "/images/ma-durga-face-right.jpg",
@@ -36,7 +36,7 @@ export const events: Event[] = [
       link: "/events/sit-and-draw-2025"
     },
     {
-      title: "Diwali 2025",
+      title: "Diwali",
       date: "(tbd), 2025",
       description: "Diwali 2025 Celebration",
       image: "/images/candles-among-diwali-designs.jpg",
