@@ -69,7 +69,7 @@ function Rakhi2025() {
             Would you like to help organize, perform, or contribute to the event? We welcome your participation!
           </p>
           <a
-            href="mailto:info@sanskriti-hamburg.de" target='_blank' rel='noreferrer'
+            href="mailto:admin@sanskriti-hamburg.de" target='_blank' rel='noreferrer'
             className="inline-block mt-4 bg-amber-600 text-white px-6 py-2 rounded-full hover:bg-amber-700 transition-colors">
             Contact Us to Participate
           </a>

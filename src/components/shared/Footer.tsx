@@ -49,7 +49,7 @@ export function Footer() {
               <div className='flex align-center items-center'>
                 <Mail className='w-4 h-4 inline-block mr-2 text-gray-400' />
                 <span className='text-sm'>
-                  <a href="mailto:info@sanskriti-hamburg.de">info@sanskriti-hamburg.de</a>
+                  <a href="mailto:admin@sanskriti-hamburg.de">admin@sanskriti-hamburg.de</a>
                 </span>
               </div>
               <div className='flex align-center items-center'>

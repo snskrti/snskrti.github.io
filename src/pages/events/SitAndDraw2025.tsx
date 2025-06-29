@@ -67,7 +67,7 @@ function SitAndDraw2025() {
             Interested in participating or volunteering? We welcome parents, teachers, and art enthusiasts to join us in making this event a success!
           </p>
           <a
-            href="mailto:info@sanskriti-hamburg.de" target='_blank' rel='noreferrer'
+            href="mailto:admin@sanskriti-hamburg.de" target='_blank' rel='noreferrer'
             className="inline-block mt-4 bg-amber-600 text-white px-6 py-2 rounded-full hover:bg-amber-700 transition-colors">
             Contact Us to Participate
           </a>
