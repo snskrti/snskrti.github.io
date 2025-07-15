@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react';
 import { Calendar, MapPin } from 'lucide-react';
 import { Footer } from '../../components/shared/Footer';
+import { getEventDate } from '../../utils/eventUtils';
 
 function GrillEvent2025() {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, []);
+
+  const eventDate = getEventDate('/events/grill-2025');
 
   return (
     <div className="min-h-screen bg-inherit">
@@ -22,7 +25,7 @@ function GrillEvent2025() {
             <h1 className="text-5xl md:text-6xl font-bold mb-4">Sanskriti Summer Grill 2025</h1>
             <div className="flex items-center justify-center space-x-2">
               <Calendar className="w-6 h-6" />
-              <p className="text-xl">August 2025</p>
+              <p className="text-xl">{eventDate}</p>
               <MapPin className="w-6 h-6 ml-4" />
               <p className="text-xl">Hamburg, Germany</p>
             </div>

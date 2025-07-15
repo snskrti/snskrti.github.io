@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Calendar, MapPin } from 'lucide-react';
 import { Footer } from '../../components/shared/Footer';
+import { SEOHead } from '../../components/SEO/SEOHead';
 
 function DurgaPuja2025() {
 
@@ -10,6 +11,17 @@ function DurgaPuja2025() {
   
   return (
     <div className="min-h-screen bg-inherit">
+      <SEOHead
+        title="Durga Puja 2025 - Sanskriti e.V. Hamburg"
+        description="Join Sanskriti e.V. for the grand celebration of Durga Puja 2025 in Hamburg from Sep 28 - Oct 02, 2025. Experience the divine festivities, cultural performances, and traditional Bengali celebration of Maa Durga."
+        keywords="Durga Puja, Durga Puja 2025, Hamburg, Bengali festival, Maa Durga, Indian cultural events, Sanskriti eV, Bengali community Hamburg"
+        url="/events/durga-puja-2025"
+        type="event"
+        image="/images/kallol_durga_idol.jpg"
+        eventDate="2025-09-28"
+        eventLocation="Hamburg, Germany"
+        eventType="Cultural Festival"
+      />
 
       {/* Hero Section */}
       <div className="relative h-screen">
