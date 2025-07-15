@@ -1,51 +1,438 @@
 import React, { useEffect } from 'react';
-import { Calendar, MapPin } from 'lucide-react';
+import { Calendar, MapPin, Users, Heart, Star, Mic, HandHeart, Music, PaintBucket, Mail, Facebook, Instagram } from 'lucide-react';
 import { Footer } from '../../components/shared/Footer';
+import { SEOHead } from '../../components/SEO/SEOHead';
+import { getEventDate } from '../../utils/eventUtils';
 
 function DurgaPuja2025() {
 
+  // Gallery data
+  const galleryData = [
+    {
+      id: 1,
+      image: "/images/durga-puja-announcement-2025/event-value-puja.jpg",
+      alt: "Sacred Worship",
+      title: "The Worship",
+      description: "Experience the profound spiritual atmosphere as our community comes together in devotion to Maa Durga, following age-old traditions and rituals."
+    },
+    {
+      id: 2,
+      image: "/images/durga-puja-announcement-2025/event-value-community.JPG",
+      alt: "Community Gathering",
+      title: "Community Adda",
+      description: "Join the heartwarming conversations and connections that make Durga Puja special - where strangers become friends and bonds are strengthened."
+    },
+    {
+      id: 3,
+      image: "/images/durga-puja-announcement-2025/event-value-food.jpg",
+      alt: "Traditional Bengali Cuisine",
+      title: "Authentic Flavors",
+      description: "Savor the rich, traditional Bengali cuisine prepared with love by our community volunteers, bringing the taste of home to Hamburg."
+    },
+    {
+      id: 4,
+      image: "/images/durga-puja-announcement-2025/event-value-spirit.jpg",
+      alt: "Festival Spirit",
+      title: "Festival Spirit",
+      description: "Feel the infectious joy, enthusiasm and devotion that fills the air during Durga Puja, as the entire community comes alive with celebration and devotion."
+    },
+    {
+      id: 5,
+      image: "/images/durga-puja-announcement-2025/event-value-dhunuchi.jpg",
+      alt: "Dhunuchi Dance",
+      title: "Dhunuchi Dance",
+      description: "Witness the mesmerizing dhunuchi dance, where devotees perform rhythmic movements with smoking incense burners, creating a divine atmosphere of worship."
+    },
+    {
+      id: 6,
+      image: "/images/durga-puja-announcement-2025/event-value-sindoor.jpg",
+      alt: "Sindoor Khela Tradition",
+      title: "Sindoor Khela",
+      description: "Participate in the beautiful tradition of sindoor khela, where married women apply vermillion to each other and to Maa Durga, symbolizing marital bliss and prosperity."
+    },
+  ];
+
   useEffect(() => {
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
+    
+    // Add scroll animations
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-in');
+          entry.target.classList.remove('opacity-0');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.animate-on-scroll').forEach((element) => {
+      observer.observe(element);
+    });
+
+    // Gallery scroll effect
+    const handleGalleryScroll = () => {
+      const gallerySection = document.querySelector('section.relative > div.relative');
+      if (!gallerySection) return;
+      
+      const rect = gallerySection.getBoundingClientRect();
+      const scrollProgress = Math.max(0, Math.min(1, -rect.top / (rect.height - window.innerHeight)));
+      
+      // Calculate which image should be visible
+      const imageIndex = Math.floor(scrollProgress * galleryData.length);
+      const currentIndex = Math.min(galleryData.length - 1, Math.max(0, imageIndex));
+      
+      // Update image visibility
+      galleryData.forEach((item, index) => {
+        const image = document.getElementById(`gallery-image-${item.id}`);
+        if (image) {
+          if (index === currentIndex) {
+            image.style.opacity = '1';
+          } else {
+            image.style.opacity = '0';
+          }
+        }
+      });
+    };
+
+    window.addEventListener('scroll', handleGalleryScroll);
+    handleGalleryScroll(); // Initial call
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', handleGalleryScroll);
+    };
   }, []);
+
+  const eventDate = getEventDate('/events/durga-puja-2025');
   
   return (
     <div className="min-h-screen bg-inherit">
+      <SEOHead
+        title="Durga Puja 2025 - Historic First Celebration | Sanskriti e.V. Hamburg"
+        description="Join Sanskriti e.V. for the historic first Durga Puja celebration in Hamburg from Sep 28 - Oct 02, 2025. Experience divine festivities, cultural performances, traditional Bengali rituals, and community bonding. Volunteers and participants welcome!"
+        keywords="Durga Puja 2025, Hamburg, Bengali festival, Maa Durga, first Durga Puja Hamburg, Indian cultural events, Sanskriti eV, Bengali community, volunteers, cultural performances"
+        url="/events/durga-puja-2025"
+        type="event"
+        image="/images/kallol_durga_idol.jpg"
+        eventDate="2025-09-28"
+        eventLocation="Hamburg, Germany"
+        eventType="Cultural Festival"
+      />
+
+
 
       {/* Hero Section */}
       <div className="relative h-screen">
         <img
           src="/images/kallol_durga_idol.jpg"
           alt="Durga Puja Celebration"
-          className="w-full h-full object-cover blur-sm"
+          className="w-full h-full object-cover blur-sm opacity-90"
         />
-        <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+        <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
           <div className="text-center text-white">
-            <h1 className="text-8xl md:text-8xl font-bold mb-4">মা আসছে</h1>
+            <div className="flex items-center justify-center space-x-2 mb-4">
+              <Calendar className="w-5 h-5" />
+              <p className="text-xl font-light">{eventDate}</p>
+            </div>
             
-            <div className="flex items-center justify-center space-x-2 my-16">
-              <MapPin className="w-6 h-6" />
-              <p className="text-xl">Hamburg, Germany</p>
+            <h1 className="text-8xl md:text-9xl font-bold mb-12">Durga Puja</h1>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <a 
+                href="https://www.google.com/maps/place/B%C3%BCrgerverein+Waldenau-Datum+e.V./@53.6211916,9.7977995,17z/data=!3m2!4b1!5s0x47b1811264d608b1:0x1d2d3e834f7f79f0!4m6!3m5!1s0x47b1811264ab5c7b:0xec3cd5b12fe9e60e!8m2!3d53.6211884!4d9.8003744!16s%2Fg%2F1tdmjjnt?entry=ttu&g_ep=EgoyMDI1MDcwOS4wIKXMDSoASAFQAw%3D%3D"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center space-x-2 px-6 py-3 rounded-full border-2 font-semibold btn-secondary">
+                <MapPin className="w-5 h-5" />
+                <span>View Location</span>
+              </a>
+              
+              <a
+                href="https://www.instagram.com/snskrtiham?igsh=Z3Njajl5bXZsbW1u"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center space-x-2 px-6 py-3 rounded-full border-2 font-semibold btn-secondary-accent">
+                <Instagram className="w-5 h-5" />
+                <span>Follow Us</span>
+              </a>
+
+              <a
+                href="https://www.facebook.com/profile.php?id=61573798568184"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center space-x-2 px-6 py-3 rounded-full border-2 font-semibold btn-secondary-accent">
+                <Facebook className="w-5 h-5" />
+                <span>Stay Connected</span>
+              </a>
+
             </div>
           </div>
         </div>
       </div>
 
-      <main className="max-w-4xl mx-auto px-4 py-16 bg-inherit">
+      <main className="max-w-6xl mx-auto px-4 py-16 flex flex-col space-y-48">
         
-        {/* Sanskriti's Vision */}
-        <section className=" mx-auto mb-16 bg-inherit">
+        {/* Sanskrit Shlok Section */}
+        <section className="flex items-center justify-center animate-on-scroll opacity-0 w-full h-screen">
+          <div className="bg-gradient-to-r from-amber-50 to-orange-50 p-16 rounded-lg shadow-lg flex items-center justify-center w-full">
+            <div className="max-w-4xl mx-auto w-full">
+              <div className="relative">
+                <div className="absolute -top-8 -left-8 text-8xl text-amber-200 font-serif">"</div>
+                <div className="absolute -bottom-8 -right-8 text-8xl text-amber-200 font-serif">"</div>
+                <div className="py-8">
+                  <p className="text-4xl md:text-5xl font-bold text-amber-800 mb-8 leading-relaxed tracking-wide">
+                    या देवी सर्वभूतेषु मातृरूपेण संस्थिता<br/>
+                    नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः
+                  </p>
+                </div>
+                <div className="border-t-2 border-amber-300 pt-6 mt-6">
+                  <p className="text-xl text-gray-700 italic font-light">
+                    To the Divine Mother who dwells in all beings as the Universal Mother,<br/>
+                    we offer our deepest reverence, again and again.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+      </main>
 
-            <div className="bg-inherit p-6 rounded-lg mt-8 text-center">
-              <h3 className="text-xl font-semibold mb-4">Get Involved</h3>
+      {/* Image Gallery Section - Full Screen */}
+      <section className="relative">
+        <div className="relative" style={{ height: `${galleryData.length * 100}vh` }}>
+          {/* Background Images */}
+          <div className="sticky top-0 h-screen w-screen overflow-hidden">
+            {galleryData.map((item, index) => (
+              <div 
+                key={item.id}
+                className={`absolute inset-0 transition-opacity duration-1000 ${index === 0 ? 'opacity-100' : 'opacity-0'}`} 
+                id={`gallery-image-${item.id}`}
+              >
+                <img
+                  src={item.image}
+                  alt={item.alt}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, transparent 0%, transparent 20%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.9) 100%)' }}></div>
+              </div>
+            ))}
+          </div>
+          
+          {/* Text Content */}
+          <div className="absolute inset-0 flex flex-col">
+            {galleryData.map((item) => (
+              <div key={item.id} className="h-screen w-screen flex items-center justify-end pr-8 md:pr-16 lg:pr-24">
+                <div className="max-w-md text-white z-10">
+                  <h3 className="text-3xl md:text-4xl font-bold mb-6">{item.title}</h3>
+                  <p className="text-lg leading-relaxed mb-6">
+                    {item.description}
+                  </p>
+                  <div className="w-16 h-1 bg-amber-500"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <main className="max-w-6xl mx-auto px-4 py-16 flex flex-col space-y-48">
+
+        {/* About Event Section */}
+        <section className="animate-on-scroll opacity-0">
+          {/* <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-6 text-gray-800">About Durga Puja</h2>
+            <div className="w-24 h-1 bg-amber-500 mx-auto mb-8"></div>
+          </div> */}
+          
+          <div className="max-w-4xl mx-auto">
+            <div className="text-lg text-gray-700 leading-relaxed space-y-6 mb-12">
               <p>
-                We welcome volunteers and participants to join us in making this celebration memorable. Whether you'd like to perform, help with organization, or contribute in any other way, we'd love to hear from you.
+                Durga Puja is more than a religious ritual — it's a feeling, a reunion, and a deep expression of joy, identity, and community.
               </p>
+              
+              <p>
+                For those of us living far from Kolkata, it is our way of creating home away from home. In the crisp autumn breeze of Hamburg, we recreate the fragrance of shiuli, the echo of dhaak, and the warmth of community gatherings that define this beloved celebration.
+              </p>
+              
+              <p>
+                At Sanskriti Hamburg, our Durga Puja is a space where generations connect, where children witness traditions, and where language, food, music, and rituals come alive — not just remembered, but lived.
+              </p>
+              
+              <p>
+                This Puja is our tribute to heritage, inclusiveness, and the joy of coming together. Whether you are Bengali, Indian, German, or simply curious — you are part of this celebration.
+              </p>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <a
-                href="mailto:admin@sanskriti-hamburg.de" target='_blank' rel='noreferrer'
-                className="inline-block mt-4 bg-amber-600 text-white px-6 py-2 rounded-full hover:bg-amber-700 transition-colors">
-                Contact Us to Participate
+                href="mailto:admin@sanskriti-hamburg.de?subject=Volunteer%20for%20Durga%20Puja%202025"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center space-x-2 px-8 py-2 rounded-full font-semibold text-lg btn-secondary"
+              >
+                <HandHeart className="w-5 h-5" />
+                <span>Volunteer with Us</span>
+              </a>
+              
+              <a
+                href="mailto:admin@sanskriti-hamburg.de?subject=Durga%20Puja%202025%20-%20General%20Inquiry"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center space-x-2 px-8 py-2 rounded-full font-semibold text-lg btn-secondary-accent"
+              >
+                <Mail className="w-5 h-5" />
+                <span>Contact Us</span>
               </a>
             </div>
+          </div>
+        </section>
+
+        {/* Call to Action Sections */}
+        <section className="animate-on-scroll opacity-0">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-6 text-gray-800">Join Us in Making History</h2>
+            <div className="w-24 h-1 bg-amber-500 mx-auto mb-8"></div>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              This is our inaugural Durga Puja in Hamburg, and we need your support to make it extraordinary. 
+              There are many ways to contribute and be part of this historic celebration.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-8 rounded-lg shadow-lg">
+              <div className="flex items-center mb-6">
+                <HandHeart className="w-8 h-8 text-amber-600 mr-3" />
+                <h3 className="text-2xl font-semibold text-gray-800">Volunteer with Us</h3>
+              </div>
+              <p className="text-gray-600 mb-6">
+                Join our dedicated team of volunteers! Help with decoration, food preparation, event coordination, 
+                and ensuring every visitor has a memorable experience.
+              </p>
+              <ul className="text-gray-600 mb-6 space-y-2">
+                <li>• Event setup and decoration</li>
+                <li>• Food service and hospitality</li>
+                <li>• Registration and crowd management</li>
+                <li>• Photography and documentation</li>
+              </ul>
+              <a
+                href="mailto:admin@sanskriti-hamburg.de?subject=Volunteer%20for%20Durga%20Puja%202025"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-block bg-amber-600 text-white px-6 py-3 rounded-full hover:bg-amber-700 transition-colors font-semibold"
+              >
+                Volunteer Now
+              </a>
+            </div>
+            
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-8 rounded-lg shadow-lg">
+              <div className="flex items-center mb-6">
+                <Music className="w-8 h-8 text-blue-600 mr-3" />
+                <h3 className="text-2xl font-semibold text-gray-800">Showcase Your Talent</h3>
+              </div>
+              <p className="text-gray-600 mb-6">
+                Share your artistic talents with the community! We welcome performers of all ages and skill levels 
+                to participate in our cultural program.
+              </p>
+              <ul className="text-gray-600 mb-6 space-y-2">
+                <li>• Traditional and modern dance</li>
+                <li>• Vocal and instrumental music</li>
+                <li>• Poetry and storytelling</li>
+                <li>• Drama and theatrical performances</li>
+              </ul>
+              <a
+                href="mailto:admin@sanskriti-hamburg.de?subject=Cultural%20Performance%20-%20Durga%20Puja%202025"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-block bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition-colors font-semibold"
+              >
+                Register to Perform
+              </a>
+            </div>
+            
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-lg shadow-lg">
+              <div className="flex items-center mb-6">
+                <Users className="w-8 h-8 text-green-600 mr-3" />
+                <h3 className="text-2xl font-semibold text-gray-800">Community Participation</h3>
+              </div>
+              <p className="text-gray-600 mb-6">
+                Be part of our historic first Durga Puja! Whether you're Bengali or from another background, 
+                everyone is welcome to join our celebration.
+              </p>
+              <ul className="text-gray-600 mb-6 space-y-2">
+                <li>• Participate in traditional rituals</li>
+                <li>• Join community prayers and ceremonies</li>
+                <li>• Enjoy cultural programs and food</li>
+                <li>• Connect with the Hamburg Bengali community</li>
+              </ul>
+              <a
+                href="mailto:admin@sanskriti-hamburg.de?subject=Community%20Participation%20-%20Durga%20Puja%202025"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-block bg-green-600 text-white px-6 py-3 rounded-full hover:bg-green-700 transition-colors font-semibold"
+              >
+                Join the Celebration
+              </a>
+            </div>
+            
+            <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-8 rounded-lg shadow-lg">
+              <div className="flex items-center mb-6">
+                <Star className="w-8 h-8 text-purple-600 mr-3" />
+                <h3 className="text-2xl font-semibold text-gray-800">Support & Sponsor</h3>
+              </div>
+              <p className="text-gray-600 mb-6">
+                Help us create a magnificent celebration through your generous support. Your contribution will help 
+                establish this annual tradition in Hamburg.
+              </p>
+              <ul className="text-gray-600 mb-6 space-y-2">
+                <li>• Financial contributions</li>
+                <li>• Material donations</li>
+                <li>• Business sponsorship opportunities</li>
+                <li>• In-kind services and support</li>
+              </ul>
+              <a
+                href="mailto:admin@sanskriti-hamburg.de?subject=Sponsorship%20-%20Durga%20Puja%202025"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-block bg-purple-600 text-white px-6 py-3 rounded-full hover:bg-purple-700 transition-colors font-semibold"
+              >
+                Become a Sponsor
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* Final Call to Action */}
+        <section className="text-center bg-gradient-to-r from-amber-100 to-orange-100 p-12 rounded-lg shadow-lg animate-on-scroll opacity-0">
+          <h2 className="text-3xl font-bold mb-6 text-gray-800">Make This Historic Moment Unforgettable</h2>
+          <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
+            This is more than just an event—it's the beginning of a cherished tradition in Hamburg. 
+            Your participation will help us create memories that will last for generations.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <a
+              href="mailto:admin@sanskriti-hamburg.de?subject=Durga%20Puja%202025%20-%20General%20Inquiry"
+              target="_blank"
+              rel="noreferrer"
+              className="bg-amber-600 text-white px-8 py-4 rounded-full hover:bg-amber-700 transition-colors font-semibold text-lg"
+            >
+              Get Involved Today
+            </a>
+            <a
+              href="https://www.facebook.com/profile.php?id=61573798568184"
+              target="_blank"
+              rel="noreferrer"
+              className="bg-blue-600 text-white px-8 py-4 rounded-full hover:bg-blue-700 transition-colors font-semibold text-lg"
+            >
+              Follow Our Updates
+            </a>
+          </div>
         </section>
       </main>
 

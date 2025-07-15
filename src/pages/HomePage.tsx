@@ -11,6 +11,7 @@ import { SectionNavigation } from '../components/shared/SectionNavigation';
 import { DonateByPaypal } from '../components/DonateActions/DonateByPaypal';
 import { socialMediaLinks } from '../types/socialMediaLinks';
 import { NewsletterSubscribe } from '../components/shared/NewsletterSubscribe';
+import { SEOHead } from '../components/SEO/SEOHead';
 
 function HomePage() {
 
@@ -82,6 +83,14 @@ function HomePage() {
 
   return (
     <div className="w-full min-h-screen bg-inherit">
+      <SEOHead
+        title="Sanskriti e.V. Hamburg - Where Tradition Meets Togetherness"
+        description="Sanskriti e.V. is a multicultural non-profit organization in Hamburg, Germany, dedicated to celebrating Indian festivals and promoting cultural exchange. Join our vibrant community for Durga Puja, Holi, Diwali, and more cultural events."
+        keywords="Sanskriti, Hamburg, Indian culture, Bengali culture, Durga Puja, Holi, Diwali, cultural events, non-profit, community, Indian festivals Germany"
+        url="/"
+        type="website"
+        image="/images/candles-among-diwali-designs.jpg"
+      />
 
       <SectionNavigation activeSection={activeSection} sections={sections} />
 
