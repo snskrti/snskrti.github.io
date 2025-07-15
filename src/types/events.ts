@@ -23,7 +23,7 @@ export const events: Event[] = [
     },
     {
       title: "Durga Puja",
-      date: "Sep 28 - Oct 02, 2025",
+      date: "Sep 28 - Oct 01, 2025",
       description: "Annual Durga Puja Festival",
       image: "/images/ma-durga-face-right.jpg",
       link: "/events/durga-puja-2025"
