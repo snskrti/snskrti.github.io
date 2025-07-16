@@ -74,15 +74,15 @@ export const handler: Handler = async (event, context) => {
       
       // Order Details
       order: {
-        items: items.map(item => ({
+        items: items.map((item: any) => ({
           date: item.date,
           title: item.title,
           price: item.price,
           quantity: item.quantity,
           total: item.price * item.quantity,
         })),
-        subtotal: items.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-        memberDiscount: customerInfo.isMember ? items.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 0.1 : 0,
+        subtotal: items.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0),
+        memberDiscount: customerInfo.isMember ? items.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0) * 0.1 : 0,
         total: paymentDetails.amount,
       },
       

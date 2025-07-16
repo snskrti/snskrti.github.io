@@ -25,7 +25,7 @@ export const DonateByPaypal = () => {
         setDonationAmount(parseInt(e.target.value));
     }
 
-    const onCreateOrder = (data, actions) => {
+    const onCreateOrder = (data: any, actions: any) => {
         return actions.order.create({
             purchase_units: [
             {
@@ -38,8 +38,8 @@ export const DonateByPaypal = () => {
         });
     }
     
-    const onApproveOrder = async (data,actions) => {
-        return actions.order.capture().then((details) => {
+    const onApproveOrder = async (data: any, actions: any) => {
+        return actions.order.capture().then((details: any) => {
             const name = details.payment_source.paypal.name.given_name;
             const payer = details.payment_source.paypal;
             console.log("payer: ", payer);
@@ -48,12 +48,12 @@ export const DonateByPaypal = () => {
         });
     }
 
-    const onCancelOrder = (data, actions) => {
+    const onCancelOrder = (data: any, actions: any) => {
         alert("Transaction cancelled"); 
         console.error("Transaction cancelled, data: ", data); 
     }
 
-    const onErrorOrder = (err) => {
+    const onErrorOrder = (err: any) => {
         console.error("Error occured: ", err);
     }
 
