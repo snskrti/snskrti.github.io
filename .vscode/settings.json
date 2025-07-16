@@ -1,0 +1,41 @@
+{
+  "typescript.preferences.strictNullChecks": true,
+  "typescript.preferences.noImplicitAny": true,
+  "typescript.preferences.strictFunctionTypes": true,
+  "typescript.preferences.strictBindCallApply": true,
+  "typescript.preferences.strictPropertyInitialization": true,
+  "typescript.preferences.noImplicitReturns": true,
+  "typescript.preferences.noFallthroughCasesInSwitch": true,
+  "typescript.preferences.noUncheckedIndexedAccess": true,
+  "typescript.preferences.exactOptionalPropertyTypes": true,
+  "typescript.preferences.noImplicitOverride": true,
+  "typescript.preferences.useUnknownInCatchVariables": true,
+  "typescript.preferences.noPropertyAccessFromIndexSignature": true,
+  "typescript.preferences.noImplicitThis": true,
+  "typescript.preferences.alwaysStrict": true,
+  "typescript.preferences.checkJs": true,
+  "typescript.preferences.allowUnusedLabels": false,
+  "typescript.preferences.allowUnreachableCode": false,
+  "typescript.preferences.suppressExcessPropertyErrors": false,
+  "typescript.preferences.suppressImplicitAnyIndexErrors": false,
+  "typescript.problems.showExperimentalDiagnostics": true,
+  "typescript.suggest.autoImports": true,
+  "typescript.suggest.includePackageJsonAutoImports": "on",
+  "typescript.suggest.includeCompletionsForImportStatements": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/build": true,
+    "**/.git": true,
+    "**/.DS_Store": true
+  }
+}
