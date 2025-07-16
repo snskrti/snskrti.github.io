@@ -91,7 +91,7 @@ const CheckoutForm: React.FC<DinnerCheckoutProps> = ({
         clientSecret,
         {
           payment_method: {
-            card: cardElement,
+            card: cardElement as any,
             billing_details: {
               name: customerInfo.name,
               email: customerInfo.email,
