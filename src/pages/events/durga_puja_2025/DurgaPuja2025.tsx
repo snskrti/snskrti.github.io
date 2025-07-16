@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Calendar, MapPin, Users, Heart, Star, Mic, HandHeart, Music, PaintBucket, Mail, Facebook, Instagram } from 'lucide-react';
-import { Footer } from '../../components/shared/Footer';
-import { SEOHead } from '../../components/SEO/SEOHead';
-import { getEventDate } from '../../utils/eventUtils';
+import { Footer } from '../../../components/shared/Footer';
+import { SEOHead } from '../../../components/SEO/SEOHead';
+import { getEventDate } from '../../../utils/eventUtils';
 
 function DurgaPuja2025() {
 
@@ -279,6 +279,7 @@ function DurgaPuja2025() {
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              
               <a
                 href="mailto:admin@sanskriti-hamburg.de?subject=Volunteer%20for%20Durga%20Puja%202025"
                 target="_blank"
@@ -314,6 +315,7 @@ function DurgaPuja2025() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
             <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-8 rounded-lg shadow-lg">
               <div className="flex items-center mb-6">
                 <HandHeart className="w-8 h-8 text-amber-600 mr-3" />

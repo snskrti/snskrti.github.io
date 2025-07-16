@@ -12,6 +12,7 @@ import { DonateByPaypal } from '../components/DonateActions/DonateByPaypal';
 import { socialMediaLinks } from '../types/socialMediaLinks';
 import { NewsletterSubscribe } from '../components/shared/NewsletterSubscribe';
 import { SEOHead } from '../components/SEO/SEOHead';
+import { DinnerReservationBanner } from '../components/DinnerReservation/DinnerReservationBanner';
 
 function HomePage() {
 

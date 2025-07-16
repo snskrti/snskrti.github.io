@@ -1,0 +1,29 @@
+[build]
+  functions = "netlify/functions"
+  publish = "build"
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# Production context (when deploying to main branch)
+[context.production.environment]
+  NODE_ENV = "production"
+
+# Deploy preview context (for pull requests)
+[context.deploy-preview.environment]
+  NODE_ENV = "development"
+
+# Branch deploy context (for feature branches)
+[context.branch-deploy.environment]
+  NODE_ENV = "development"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

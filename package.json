@@ -6,11 +6,15 @@
   "homepage": "https://sanskriti-hamburg.de",
   "scripts": {
     "start": "react-scripts start",
+    "dev": "netlify dev",
     "build": "react-scripts build",
     "lint": "eslint ."
   },
   "dependencies": {
+    "@netlify/functions": "^4.1.11",
     "@paypal/react-paypal-js": "^8.8.2",
+    "@stripe/react-stripe-js": "^3.7.0",
+    "@stripe/stripe-js": "^7.5.0",
     "jspdf": "^3.0.0",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
@@ -18,7 +22,8 @@
     "react-helmet-async": "^2.0.5",
     "react-icons": "^5.4.0",
     "react-router-dom": "^6.22.3",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "stripe": "^18.3.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
