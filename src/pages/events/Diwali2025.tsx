@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Calendar, MapPin } from 'lucide-react';
 import { Footer } from '../../components/shared/Footer';
+import { SEOHead } from '../../components/SEO/SEOHead';
 import { getEventDate } from '../../utils/eventUtils';
 
 function Diwali2025() {
@@ -12,6 +13,24 @@ function Diwali2025() {
 
   return (
     <div className="min-h-screen bg-inherit">
+      <SEOHead
+        title="Diwali 2025 – Festival of Lights in Hamburg | Sanskriti Hamburg"
+        description="Celebrate Diwali 2025 with Sanskriti e.V. in Hamburg. Join us for the Festival of Lights with traditional puja, cultural performances, rangoli decorations, and community celebrations. Experience the joy of victory of light over darkness."
+        keywords="Diwali 2025, Hamburg, Festival of Lights, Deepavali, Indian festival, rangoli, cultural performances, Sanskriti Hamburg, diyas, Hindu festival, community celebration"
+        url="/events/diwali-2025"
+        type="event"
+        image="/images/candles-among-diwali-designs.jpg"
+        eventDate="2025-11-01"
+        eventLocation="Hamburg, Germany"
+        eventType="Cultural Festival"
+        performer="Sanskriti e.V. Hamburg Community"
+        offers={{
+          price: "0",
+          currency: "EUR",
+          availability: "https://schema.org/InStock",
+          url: "/events/diwali-2025"
+        }}
+      />
 
       {/* Hero Section */}
       <div className="relative h-[60vh]">

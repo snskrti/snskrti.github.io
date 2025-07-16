@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Calendar, MapPin } from 'lucide-react';
 import { Footer } from '../../components/shared/Footer';
+import { SEOHead } from '../../components/SEO/SEOHead';
 import { getEventDate } from '../../utils/eventUtils';
 
 function Rakhi2025() {
@@ -11,6 +12,24 @@ function Rakhi2025() {
   const eventDate = getEventDate('/events/rakhi-2025');
   return (
     <div className="min-h-screen bg-inherit">
+      <SEOHead
+        title="Raksha Bandhan 2025 – Rakhi Festival in Hamburg | Sanskriti Hamburg"
+        description="Celebrate Raksha Bandhan 2025 with Sanskriti e.V. in Hamburg. Join us for the sacred festival of brother-sister bond with traditional rakhi tying ceremonies, cultural programs, and family celebrations."
+        keywords="Raksha Bandhan 2025, Hamburg, Rakhi festival, brother sister bond, Indian festival, traditional ceremony, Sanskriti Hamburg, family celebration, cultural event"
+        url="/events/rakhi-2025"
+        type="event"
+        image="/images/rakhi_event_banner_2025.jpg"
+        eventDate="2025-08-09"
+        eventLocation="Hamburg, Germany"
+        eventType="Cultural Festival"
+        performer="Sanskriti e.V. Hamburg Community"
+        offers={{
+          price: "0",
+          currency: "EUR",
+          availability: "https://schema.org/InStock",
+          url: "/events/rakhi-2025"
+        }}
+      />
 
       {/* Hero Section */}
       <div className="relative h-[60vh]">

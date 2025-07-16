@@ -114,15 +114,23 @@ function DurgaPuja2025() {
   return (
     <div className="min-h-screen bg-inherit">
       <SEOHead
-        title="Durga Puja 2025 - Historic First Celebration | Sanskriti e.V. Hamburg"
-        description="Join Sanskriti e.V. for the historic first Durga Puja celebration in Hamburg from Sep 28 - Oct 02, 2025. Experience divine festivities, cultural performances, traditional Bengali rituals, and community bonding. Volunteers and participants welcome!"
-        keywords="Durga Puja 2025, Hamburg, Bengali festival, Maa Durga, first Durga Puja Hamburg, Indian cultural events, Sanskriti eV, Bengali community, volunteers, cultural performances"
+        title="Durga Puja 2025 – Bengali Festival in Hamburg | Sanskriti Hamburg"
+        description="Join Sanskriti e.V. for the historic first Durga Puja celebration in Hamburg from Sep 28 - Oct 01, 2025. Experience divine festivities, cultural performances, traditional Bengali rituals, and community bonding. Volunteers and participants welcome!"
+        keywords="Durga Puja 2025, Hamburg, Bengali festival, Maa Durga, Durga Puja Hamburg, Indian cultural events, Sanskriti eV, Bengali community, volunteers, cultural performances, Sanskriti Hamburg, Durga festival Hamburg"
         url="/events/durga-puja-2025"
         type="event"
         image="/images/kallol_durga_idol.jpg"
         eventDate="2025-09-28"
+        endDate="2025-10-01"
         eventLocation="Hamburg, Germany"
         eventType="Cultural Festival"
+        performer="Sanskriti e.V. Hamburg Community"
+        offers={{
+          price: "0",
+          currency: "EUR",
+          availability: "open for all",
+          url: "/events/durga-puja-2025"
+        }}
       />
 
 

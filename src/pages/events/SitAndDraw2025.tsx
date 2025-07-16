@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Calendar, MapPin } from 'lucide-react';
 import { Footer } from '../../components/shared/Footer';
+import { SEOHead } from '../../components/SEO/SEOHead';
 import { getEventDate } from '../../utils/eventUtils';
 
 function SitAndDraw2025() {
@@ -12,6 +13,24 @@ function SitAndDraw2025() {
 
   return (
     <div className="min-h-screen bg-inherit">
+      <SEOHead
+        title="Sit and Draw Competition 2025 – Art Contest in Hamburg | Sanskriti Hamburg"
+        description="Join Sanskriti e.V. for the Sit and Draw Competition 2025 in Hamburg. A creative art contest showcasing alpona, traditional designs, and artistic talents from the community. All ages welcome!"
+        keywords="Sit and Draw 2025, Hamburg, art competition, alpona, traditional art, creative contest, Sanskriti Hamburg, art event, cultural art, drawing competition"
+        url="/events/sit-and-draw-2025"
+        type="event"
+        image="/images/hand-alpona.jpg"
+        eventDate="2025-05-15"
+        eventLocation="Hamburg, Germany"
+        eventType="Art Competition"
+        performer="Sanskriti e.V. Hamburg Community"
+        offers={{
+          price: "0",
+          currency: "EUR",
+          availability: "https://schema.org/InStock",
+          url: "/events/sit-and-draw-2025"
+        }}
+      />
 
       {/* Hero Section */}
       <div className="relative h-[60vh]">
