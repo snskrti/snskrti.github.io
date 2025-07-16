@@ -53,7 +53,7 @@ export function Footer() {
                 </span>
               </div>
               <div className='flex align-center items-center'>
-                <FaWhatsapp className='w-4 h-4 inline-block mr-2 text-gray-400' />
+                <FaWhatsapp style={{ width: '16px', height: '16px', color: '#9CA3AF', marginRight: '8px' }} />
                 <span className='text-sm'>
                   +49 123 456 7890
                 </span>
