@@ -10,7 +10,7 @@ export const MembershipRequest= () => {
     const [residentialAddress, setResidentialAddress] = React.useState('');
     const [loading, setLoading] = React.useState(false);
 
-    const generatePDF = async (): Promise<File> => {
+    const generatePDF = async (): Promise<File | null> => {
         console.log("generate pdf ....");
 
         const container = document.createElement('div');
@@ -74,6 +74,7 @@ export const MembershipRequest= () => {
             return null;
         } catch (error) {
             console.error('Error generating PDF:', error);
+            return null;
         } finally {
             document.body.removeChild(container);
         }
@@ -87,6 +88,13 @@ export const MembershipRequest= () => {
         setLoading(true);
 
         const pdfFile = await generatePDF();
+        
+        if (!pdfFile) {
+            console.error("Failed to generate PDF");
+            setLoading(false);
+            return;
+        }
+        
         console.log("pdf size = ", pdfFile.size);
         
         const url = URL.createObjectURL(pdfFile);

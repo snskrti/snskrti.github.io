@@ -30,6 +30,13 @@ export const handler: Handler = async (event, context) => {
   }
 
   try {
+    if (!event.body) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Request body is required' })
+      };
+    }
+
     const { amount, currency = 'EUR', customerInfo, items } = JSON.parse(event.body);
 
     // Create payment intent

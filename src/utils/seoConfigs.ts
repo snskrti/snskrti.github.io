@@ -66,7 +66,7 @@ export const seoConfigs = {
 
 // Template for adding SEO to a page
 export const getSEOTemplate = (pageKey: string) => {
-  const config = seoConfigs[pageKey];
+  const config = (seoConfigs as Record<string, any>)[pageKey];
   if (!config) return null;
   
   return `
