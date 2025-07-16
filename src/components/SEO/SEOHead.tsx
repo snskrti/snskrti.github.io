@@ -14,6 +14,14 @@ interface SEOHeadProps {
   eventDate?: string;
   eventLocation?: string;
   eventType?: string;
+  performer?: string;
+  endDate?: string;
+  offers?: {
+    price?: string;
+    currency?: string;
+    availability?: string;
+    url?: string;
+  };
 }
 
 export const SEOHead: React.FC<SEOHeadProps> = ({
@@ -28,7 +36,10 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
   author = 'Sanskriti e.V.',
   eventDate,
   eventLocation = 'Hamburg, Germany',
-  eventType
+  eventType,
+  performer,
+  endDate,
+  offers
 }) => {
   const siteUrl = 'https://sanskriti-hamburg.de';
   const fullUrl = url ? `${siteUrl}${url}` : siteUrl;
@@ -47,7 +58,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
     };
 
     if (type === 'event' && eventDate) {
-      return {
+      const eventData: any = {
         ...baseData,
         '@type': 'Event',
         startDate: eventDate,
@@ -68,6 +79,32 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
         eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
         eventStatus: 'https://schema.org/EventScheduled'
       };
+
+      // Add end date if provided
+      if (endDate) {
+        eventData.endDate = endDate;
+      }
+
+      // Add performer if provided
+      if (performer) {
+        eventData.performer = {
+          '@type': 'Organization',
+          name: performer
+        };
+      }
+
+      // Add offers if provided
+      if (offers) {
+        eventData.offers = {
+          '@type': 'Offer',
+          price: offers.price || '0',
+          priceCurrency: offers.currency || 'EUR',
+          availability: offers.availability || 'https://schema.org/InStock',
+          url: offers.url || fullUrl
+        };
+      }
+
+      return eventData;
     }
 
     if (type === 'website' || type === 'article') {
@@ -119,6 +156,8 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       <meta property="og:description" content={description} />
       <meta property="og:image" content={fullImageUrl} />
       <meta property="og:url" content={fullUrl} />
+      
+      {/* Additional Open Graph tags for better social media sharing */}
       <meta property="og:type" content={type} />
       <meta property="og:site_name" content="Sanskriti e.V. Hamburg" />
       <meta property="og:locale" content="en_US" />
@@ -138,11 +177,6 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       )}
       {type === 'article' && (
         <meta property="article:author" content={author} />
-      )}
-      
-      {/* Event specific tags */}
-      {type === 'event' && eventDate && (
-        <meta property="event:start_time" content={eventDate} />
       )}
       
       {/* Additional SEO tags */}

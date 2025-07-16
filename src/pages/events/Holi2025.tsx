@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Calendar } from 'lucide-react';
 import { Footer } from '../../components/shared/Footer';
+import { SEOHead } from '../../components/SEO/SEOHead';
 import { getEventDate } from '../../utils/eventUtils';
 
 function Holi2025() {
@@ -13,6 +14,24 @@ function Holi2025() {
     
   return (
     <div className="min-h-screen bg-inherit">
+      <SEOHead
+        title="Holi 2025 – Festival of Colors in Hamburg | Sanskriti Hamburg"
+        description="Celebrate Holi 2025 with Sanskriti e.V. in Hamburg. Join us for the vibrant Festival of Colors with traditional celebrations, music, dance, and community joy. Experience the triumph of good over evil."
+        keywords="Holi 2025, Hamburg, Festival of Colors, Indian festival, colors, cultural celebration, Sanskriti Hamburg, spring festival, Hindu festival, community event"
+        url="/events/holi-2025"
+        type="event"
+        image="/images/holi-crowd-1.jpg"
+        eventDate="2025-03-13"
+        eventLocation="Hamburg, Germany"
+        eventType="Cultural Festival"
+        performer="Sanskriti e.V. Hamburg Community"
+        offers={{
+          price: "0",
+          currency: "EUR",
+          availability: "https://schema.org/InStock",
+          url: "/events/holi-2025"
+        }}
+      />
 
       {/* Hero Section */}
       <div className="relative h-[60vh]">

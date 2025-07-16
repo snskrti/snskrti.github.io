@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Calendar, MapPin } from 'lucide-react';
 import { Footer } from '../../components/shared/Footer';
+import { SEOHead } from '../../components/SEO/SEOHead';
 import { getEventDate } from '../../utils/eventUtils';
 
 function GrillEvent2025() {
@@ -12,6 +13,24 @@ function GrillEvent2025() {
 
   return (
     <div className="min-h-screen bg-inherit">
+      <SEOHead
+        title="Grill Event 2025 – Summer BBQ in Hamburg | Sanskriti Hamburg"
+        description="Join Sanskriti e.V. for our Summer Grill Event 2025 in Hamburg. Enjoy delicious BBQ, community bonding, games, and fun activities in a relaxed outdoor setting with the Hamburg Bengali community."
+        keywords="Grill Event 2025, Hamburg, Summer BBQ, outdoor event, community gathering, Sanskriti Hamburg, Bengali community, barbecue, family fun, social event"
+        url="/events/grill-2025"
+        type="event"
+        image="/images/grill_event_banner_2025.jpeg"
+        eventDate="2025-08-03"
+        eventLocation="Hamburg, Germany"
+        eventType="Community Event"
+        performer="Sanskriti e.V. Hamburg Community"
+        offers={{
+          price: "0",
+          currency: "EUR",
+          availability: "https://schema.org/InStock",
+          url: "/events/grill-2025"
+        }}
+      />
 
       {/* Hero Section */}
       <div className="relative h-[60vh]">
