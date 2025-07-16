@@ -48,7 +48,7 @@ export const imageOptimizations = {
 
 // Generate optimized image component
 export const generateOptimizedImage = (src: string, alt: string, className?: string) => {
-  const optimizedAlt = imageOptimizations.eventImages[src] || alt;
+  const optimizedAlt = (imageOptimizations.eventImages as Record<string, string>)[src] || alt;
   
   return {
     src,
