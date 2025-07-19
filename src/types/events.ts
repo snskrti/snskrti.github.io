@@ -11,14 +11,14 @@ export const events: Event[] = [
       title: "Summer Grill 2025",
       date: "August 03, 2025",
       description: "Summer Grill Event in Hamburg",
-      image: "/images/grill_event_banner_2025.jpeg",
+      image: "/images/grill-event-banner-2025.jpeg",
       link: "/events/grill-2025"
     },
     {
       title: "Rakhi",
       date: "August 03, 2025",
       description: "Rakhi Celebration",
-      image: "/images/rakhi_event_banner_2025.jpg",
+      image: "/images/rakhi-event-banner-2025.jpg",
       link: "/events/rakhi-2025"
     },
     {

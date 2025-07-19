@@ -19,8 +19,8 @@ function GrillEvent2025() {
         keywords="Grill Event 2025, Hamburg, Summer BBQ, outdoor event, community gathering, Sanskriti Hamburg, Bengali community, barbecue, family fun, social event"
         url="/events/grill-2025"
         type="event"
-        image="/images/grill_event_banner_2025.jpeg"
-        eventDate="2025-08-03"
+        image="/images/grill-event-banner-2025.jpeg"
+        eventStartDate="2025-08-03T00:00"
         eventLocation="Hamburg, Germany"
         eventType="Community Event"
         performer="Sanskriti e.V. Hamburg Community"
@@ -35,7 +35,7 @@ function GrillEvent2025() {
       {/* Hero Section */}
       <div className="relative h-[60vh]">
         <img
-          src="/images/grill_event_banner_2025.jpeg"
+          src="/images/grill-event-banner-2025.jpeg"
           alt="Sanskriti Grill Event"
           className="w-full h-full object-cover"
         />

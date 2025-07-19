@@ -20,7 +20,7 @@ function Diwali2025() {
         url="/events/diwali-2025"
         type="event"
         image="/images/candles-among-diwali-designs.jpg"
-        eventDate="2025-11-01"
+        eventStartDate="2025-11-01"
         eventLocation="Hamburg, Germany"
         eventType="Cultural Festival"
         performer="Sanskriti e.V. Hamburg Community"

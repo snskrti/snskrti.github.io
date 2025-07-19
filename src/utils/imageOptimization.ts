@@ -21,8 +21,8 @@ export const imageOptimizations = {
     '/images/maa-durga-boron-2.jpg': 'Maa Durga boron ceremony - Bengali Durga Puja ritual',
     '/images/vorstand_ladies_2.jpg': 'Sanskriti e.V. board members - Women-led organization Hamburg',
     '/images/welcome_to_club.jpg': 'Welcome to Sanskriti e.V. - Cultural club Hamburg',
-    '/images/grill_event_banner_2025.jpeg': 'Summer Grill Event 2025 - Community gathering Hamburg',
-    '/images/rakhi_event_banner_2025.jpg': 'Rakhi Event 2025 - Sibling celebration Hamburg',
+    '/images/grill-event-banner-2025.jpeg': 'Summer Grill Event 2025 - Community gathering Hamburg',
+    '/images/rakhi-event-banner-2025.jpg': 'Rakhi Event 2025 - Sibling celebration Hamburg',
     '/images/logo.png': 'Sanskriti e.V. Hamburg logo - Indian cultural organization'
   },
   

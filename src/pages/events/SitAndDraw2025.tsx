@@ -20,7 +20,7 @@ function SitAndDraw2025() {
         url="/events/sit-and-draw-2025"
         type="event"
         image="/images/hand-alpona.jpg"
-        eventDate="2025-05-15"
+        eventStartDate="2025-05-15"
         eventLocation="Hamburg, Germany"
         eventType="Art Competition"
         performer="Sanskriti e.V. Hamburg Community"

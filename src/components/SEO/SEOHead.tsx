@@ -11,16 +11,18 @@ interface SEOHeadProps {
   datePublished?: string;
   dateModified?: string;
   author?: string;
-  eventDate?: string;
+  eventStartDate?: string;
   eventLocation?: string;
   eventType?: string;
   performer?: string;
-  endDate?: string;
+  eventEndDate?: string;
   offers?: {
     price?: string;
     currency?: string;
     availability?: string;
     url?: string;
+    validFrom?: string;
+    availabilityEnds?: string;
   };
 }
 
@@ -28,17 +30,17 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
   title,
   description,
   keywords,
-  image = '/images/logo.png',
+  image,
   url,
   type = 'website',
   datePublished,
   dateModified,
   author = 'Sanskriti e.V.',
-  eventDate,
+  eventStartDate,
   eventLocation = 'Hamburg, Germany',
   eventType,
   performer,
-  endDate,
+  eventEndDate,
   offers
 }) => {
   const siteUrl = 'https://sanskriti-hamburg.de';
@@ -57,18 +59,19 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       image: fullImageUrl,
     };
 
-    if (type === 'event' && eventDate) {
+    if (type === 'event' && eventStartDate) {
       const eventData: any = {
         ...baseData,
         '@type': 'Event',
-        startDate: eventDate,
+        startDate: eventStartDate,
         location: {
           '@type': 'Place',
           name: eventLocation,
           address: {
             '@type': 'PostalAddress',
+            addressRegion: 'Hamburg',
             addressLocality: 'Hamburg',
-            addressCountry: 'Germany'
+            addressCountry: 'DE'
           }
         },
         organizer: {
@@ -81,8 +84,8 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       };
 
       // Add end date if provided
-      if (endDate) {
-        eventData.endDate = endDate;
+      if (eventEndDate) {
+        eventData.endDate = eventEndDate;
       }
 
       // Add performer if provided
@@ -100,7 +103,9 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
           price: offers.price || '0',
           priceCurrency: offers.currency || 'EUR',
           availability: offers.availability || 'https://schema.org/InStock',
-          url: offers.url || fullUrl
+          url: offers.url || fullUrl,
+          validFrom: offers.validFrom || eventStartDate,
+          availabilityEnds: offers.availabilityEnds || eventEndDate
         };
       }
 

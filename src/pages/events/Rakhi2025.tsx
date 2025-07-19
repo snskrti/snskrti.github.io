@@ -18,8 +18,8 @@ function Rakhi2025() {
         keywords="Raksha Bandhan 2025, Hamburg, Rakhi festival, brother sister bond, Indian festival, traditional ceremony, Sanskriti Hamburg, family celebration, cultural event"
         url="/events/rakhi-2025"
         type="event"
-        image="/images/rakhi_event_banner_2025.jpg"
-        eventDate="2025-08-09"
+        image="/images/rakhi-event-banner-2025.jpg"
+        eventStartDate="2025-08-03T00:00"
         eventLocation="Hamburg, Germany"
         eventType="Cultural Festival"
         performer="Sanskriti e.V. Hamburg Community"
@@ -34,7 +34,7 @@ function Rakhi2025() {
       {/* Hero Section */}
       <div className="relative h-[60vh]">
         <img
-          src="/images/rakhi_event_banner_2025.jpg"
+          src="/images/rakhi-event-banner-2025.jpg"
           alt="Raksha Bandhan Celebration"
           className="w-full h-full object-cover"
         />

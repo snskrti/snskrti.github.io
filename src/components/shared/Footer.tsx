@@ -52,12 +52,12 @@ export function Footer() {
                   <a href="mailto:admin@sanskriti-hamburg.de">admin@sanskriti-hamburg.de</a>
                 </span>
               </div>
-              <div className='flex align-center items-center'>
+              {/* <div className='flex align-center items-center'>
                 <FaWhatsapp className='w-4 h-4 inline-block mr-2 text-gray-400' />
                 <span className='text-sm'>
                   +49 123 456 7890
                 </span>
-              </div>
+              </div> */}
             </div>
             
           </div>

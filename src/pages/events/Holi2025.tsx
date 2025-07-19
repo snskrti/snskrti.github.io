@@ -21,7 +21,7 @@ function Holi2025() {
         url="/events/holi-2025"
         type="event"
         image="/images/holi-crowd-1.jpg"
-        eventDate="2025-03-13"
+        eventStartDate="2025-03-13"
         eventLocation="Hamburg, Germany"
         eventType="Cultural Festival"
         performer="Sanskriti e.V. Hamburg Community"

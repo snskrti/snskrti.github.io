@@ -14,7 +14,7 @@ export const seoConfigs = {
     title: 'Summer Grill Event 2025 | Sanskriti e.V. Hamburg',
     description: 'Join Sanskriti e.V. for the Summer Grill Event 2025 in Hamburg on August 03, 2025. Enjoy delicious food, outdoor games, music, and community bonding in a beautiful Hamburg park.',
     keywords: 'Summer Grill 2025, Hamburg, community event, Sanskriti eV, outdoor activities, cultural exchange',
-    image: '/images/grill_event_banner_2025.jpeg',
+    image: '/images/grill-event-banner-2025.jpeg',
     eventDate: '2025-08-03',
     eventType: 'Community Event'
   },
@@ -23,7 +23,7 @@ export const seoConfigs = {
     title: 'Raksha Bandhan 2025 - Celebrating Sibling Love | Sanskriti e.V. Hamburg',
     description: 'Celebrate Raksha Bandhan 2025 with Sanskriti e.V. in Hamburg on August 03, 2025. Traditional rakhi tying ceremony, cultural activities, and family bonding events.',
     keywords: 'Raksha Bandhan 2025, Rakhi, Hamburg, Indian festival, sibling celebration, Sanskriti eV, family events',
-    image: '/images/rakhi_event_banner_2025.jpg',
+    image: '/images/rakhi-event-banner-2025.jpg',
     eventDate: '2025-08-03',
     eventType: 'Cultural Festival'
   },
