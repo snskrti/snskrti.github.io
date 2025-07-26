@@ -8,7 +8,7 @@ import { MealReservation, MenuItem } from '../../types/mealReservation';
 
 function MealReservation2025() {
   const navigate = useNavigate();
-  const [selectedItems, setSelectedItems] = useState<{[itemId: string]: number}>({});
+  const [selectedItems, setSelectedItems] = useState<Record<string, number>>({});
   const [customerInfo, setCustomerInfo] = useState({
     name: '',
     email: '',
@@ -66,8 +66,8 @@ function MealReservation2025() {
     });
   };
 
-  const getSelectedItemsCount = () => {
-    return Object.values(selectedItems).reduce((sum, qty) => sum + qty, 0);
+  const getSelectedItemsCount = (): number => {
+    return Object.values(selectedItems).reduce((sum: number, qty: number) => sum + qty, 0);
   };
 
   const handleProceedToPayment = () => {
