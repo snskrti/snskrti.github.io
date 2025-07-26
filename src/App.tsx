@@ -12,6 +12,8 @@ import GrillEvent2025 from './pages/events/GrillEvent2025';
 import Rakhi2025 from './pages/events/Rakhi2025';
 import SitAndDraw2025 from './pages/events/SitAndDraw2025';
 import Diwali2025 from './pages/events/Diwali2025';
+import MealReservation2025 from './pages/events/MealReservation2025';
+import MealPayment2025 from './pages/events/MealPayment2025';
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
           <Route path="/events/rakhi-2025" element={<Rakhi2025 />} />
           <Route path="/events/sit-and-draw-2025" element={<SitAndDraw2025 />} />
           <Route path="/events/durga-puja-2025" element={<DurgaPuja2025 />} />
+          <Route path="/events/durga-puja-2025/meal-reservation" element={<MealReservation2025 />} />
+          <Route path="/events/durga-puja-2025/meal-payment" element={<MealPayment2025 />} />
           <Route path="/events/diwali-2025" element={<Diwali2025 />} />
           <Route path="/membership/request" element={<MembershipRequest />} />
           <Route path="/dummy" element={<DummyPage />} />
