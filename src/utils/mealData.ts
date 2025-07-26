@@ -37,20 +37,20 @@ export const MENU_DESCRIPTIONS = {
 // Day-specific pricing configuration
 export const DAILY_PRICES = {
   DAY1: {
-    VEG: 10.00,
-    NON_VEG: 14.00
+    VEG: 1.00,
+    NON_VEG: 1.00
   },
   DAY2: {
-    VEG: 12.00,
-    NON_VEG: 16.00
+    VEG: 1.00,
+    NON_VEG: 1.00
   },
   DAY3: {
-    VEG: 14.00,
-    NON_VEG: 18.00
+    VEG: 1.00,
+    NON_VEG: 1.00
   }
 } as const;
 
-export const MEMBER_DISCOUNT_PERCENTAGE = 20;
+export const MEMBER_DISCOUNT_PERCENTAGE = 5;
 
 // Helper function to get price by day number and type
 export const getPriceByDay = (dayNumber: string, isVeg: boolean): number => {

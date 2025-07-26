@@ -83,19 +83,19 @@ exports.handler = async (event, context) => {
           switch(dayNumber) {
             case '1': 
               dateDisplay = 'September 28, 2025 (Shashti)'; 
-              unitPrice = isVeg ? 10.00 : 14.00;
+              unitPrice = 1.00;
               break;
             case '2': 
               dateDisplay = 'September 29, 2025 (Saptami)'; 
-              unitPrice = isVeg ? 12.00 : 16.00;
+              unitPrice = 1.00;
               break;
             case '3': 
               dateDisplay = 'September 30, 2025 (Ashtami)'; 
-              unitPrice = isVeg ? 14.00 : 18.00;
+              unitPrice = 1.00;
               break;
             default: 
               dateDisplay = 'TBD';
-              unitPrice = isVeg ? 12.00 : 16.00;
+              unitPrice = 1.00;
           }
 
           lineItems.push({
@@ -140,7 +140,7 @@ exports.handler = async (event, context) => {
       await stripe.invoiceItems.create({
         customer: customer.id,
         invoice: invoice.id,
-        description: 'Member Discount (20%)',
+        description: 'Member Discount (5%)',
         amount: -Math.round(memberDiscountAmount * 100), // Negative amount in cents
         currency: 'eur',
       });

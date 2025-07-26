@@ -200,7 +200,7 @@ function MealReservation2025() {
           </div>
           <p className="text-sm text-gray-600 max-w-2xl mx-auto">
             Reserve your authentic Bengali thalis for the four-day Durga Puja celebration. 
-            Members enjoy a 20% discount on all meals!
+            Members enjoy a 5% discount on all meals!
           </p>
         </div>
 
@@ -292,7 +292,7 @@ function MealReservation2025() {
                     />
                     <label htmlFor="isMember" className="ml-3 text-xs font-medium text-gray-700">
                       I am a Sanskriti Hamburg member
-                      <span className="block text-xs text-orange-600 font-semibold">Get 20% discount!</span>
+                      <span className="block text-xs text-orange-600 font-semibold">Get 5% discount!</span>
                     </label>
                   </div>
                 </div>
@@ -313,7 +313,7 @@ function MealReservation2025() {
                   </div>
                   {customerInfo.isMember && discountAmount > 0 && (
                     <div className="flex justify-between text-sm text-green-600">
-                      <span>Member Discount (20%):</span>
+                      <span>Member Discount (5%):</span>
                       <span>-€{discountAmount.toFixed(2)}</span>
                     </div>
                   )}
@@ -348,7 +348,7 @@ function MealReservation2025() {
           <ul className="space-y-1 text-xs text-blue-800">
             <li>• Meal reservations are required in advance for Days 1-3</li>
             <li>• Day 4 features Anandamela style food stalls - buy on spot</li>
-            <li>• Members receive a 20% discount on all meals</li>
+            <li>• Members receive a 5% discount on all meals</li>
             <li>• You will receive a confirmation email after payment</li>
             <li>• Event venue details will be shared closer to the date</li>
             <li>• For questions, contact us at admin@sanskriti-hamburg.de</li>

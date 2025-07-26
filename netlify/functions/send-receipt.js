@@ -55,7 +55,7 @@ exports.handler = async (event, context) => {
       try {
         // Retrieve the invoice with line items
         const invoice = await stripe.invoices.retrieve(invoiceId, {
-          expand: ['lines.data.price.product']
+          expand: ['lines']
         });
 
         // Mark invoice as paid and send the detailed invoice
@@ -76,10 +76,9 @@ exports.handler = async (event, context) => {
 
         // Extract line items for detailed receipt
         const lineItems = invoice.lines.data.map(line => ({
-          description: line.price.product.name,
-          details: line.price.product.description,
-          quantity: line.quantity,
-          unitAmount: line.price.unit_amount / 100, // Convert from cents
+          description: line.description || 'Invoice Item',
+          quantity: line.quantity || 1,
+          unitAmount: line.amount / 100, // Convert from cents (this is the total amount for the line)
           totalAmount: line.amount / 100 // Convert from cents
         }));
 

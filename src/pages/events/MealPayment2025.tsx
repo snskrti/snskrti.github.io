@@ -122,17 +122,6 @@ const PaymentForm: React.FC<{ reservation: MealReservation; clientSecret: string
       if (error) {
         setPaymentError(error.message || 'Payment failed');
       } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-        // Send receipt confirmation
-        await fetch('/.netlify/functions/send-receipt', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            paymentIntentId: paymentIntent.id,
-          }),
-        });
-
         setPaymentSuccess(true);
         
         // Redirect to success page after 3 seconds
@@ -374,7 +363,7 @@ function MealPayment2025() {
                 </div>
                 {reservation.discountAmount > 0 && (
                   <div className="flex justify-between text-green-600">
-                    <span>Member Discount (20%):</span>
+                    <span>Member Discount (5%):</span>
                     <span>-€{reservation.discountAmount.toFixed(2)}</span>
                   </div>
                 )}
