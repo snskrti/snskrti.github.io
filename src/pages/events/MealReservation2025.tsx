@@ -67,7 +67,7 @@ function MealReservation2025() {
   };
 
   const getSelectedItemsCount = (): number => {
-    return Object.values(selectedItems).reduce((sum: number, qty: number) => sum + qty, 0);
+    return (Object.values(selectedItems) as number[]).reduce((sum: number, qty: number) => sum + qty, 0);
   };
 
   const handleProceedToPayment = () => {
