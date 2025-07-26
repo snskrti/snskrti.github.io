@@ -45,7 +45,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
 }) => {
   const siteUrl = 'https://sanskriti-hamburg.de';
   const fullUrl = url ? `${siteUrl}${url}` : siteUrl;
-  const fullImageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`;
+  const fullImageUrl = image ? (image.startsWith('http') ? image : `${siteUrl}${image}`) : `${siteUrl}/images/logo.png`;
   const fullTitle = title.includes('Sanskriti') ? title : `${title} | Sanskriti e.V. Hamburg`;
 
   // Generate structured data based on type
