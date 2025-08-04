@@ -97,11 +97,11 @@ function DonationsPage() {
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <div>
                     <p className="text-sm text-gray-500">Donation Amount</p>
-                    <p className="font-medium">€100.00</p>
+                    <p className="font-medium">€50.00</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Processing Fee</p>
-                    <p className="font-medium">€{calculateStripeOffset(100)}</p>
+                    <p className="font-medium">€{calculateStripeOffset(50)}</p>
                   </div>
                 </div>
                 <p className="text-sm text-gray-600">
