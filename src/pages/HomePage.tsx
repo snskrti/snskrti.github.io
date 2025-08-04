@@ -194,7 +194,7 @@ function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="prose lg:prose-xl">
                 <p className="text-lg font-semibold text-gray-700 animate-hero-fade-in opacity-0 text-center">
-                  Sanskriti is a proud women-led non-profit organization dedicated to preserving and promoting Indian culture in Hamburg. <br /> 
+                  Sanskriti is a non-profit organization dedicated to preserving and promoting Indian culture in Hamburg. <br /> 
                   Our mission is to create a vibrant community that celebrates our rich heritage while fostering cultural exchange and understanding.
                 </p>
               </div>

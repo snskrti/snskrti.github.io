@@ -19,7 +19,7 @@ export const imageOptimizations = {
     '/images/lamps-cultural-event.jpg': 'Traditional lamps at cultural event - Sanskriti e.V. Hamburg',
     '/images/ma-durga-face-right.jpg': 'Maa Durga face - Sacred Hindu goddess celebration',
     '/images/maa-durga-boron-2.jpg': 'Maa Durga boron ceremony - Bengali Durga Puja ritual',
-    '/images/vorstand_ladies_2.jpg': 'Sanskriti e.V. board members - Women-led organization Hamburg',
+    '/images/vorstand_ladies_2.jpg': 'Sanskriti e.V. board members - Hamburg',
     '/images/welcome_to_club.jpg': 'Welcome to Sanskriti e.V. - Cultural club Hamburg',
     '/images/grill-event-banner-2025.jpeg': 'Summer Grill Event 2025 - Community gathering Hamburg',
     '/images/rakhi-event-banner-2025.jpg': 'Rakhi Event 2025 - Sibling celebration Hamburg',
