@@ -12,7 +12,6 @@
     "netlify:build": "npm run build"
   },
   "dependencies": {
-    "@paypal/react-paypal-js": "^8.8.2",
     "@stripe/react-stripe-js": "^3.8.0",
     "@stripe/stripe-js": "^7.6.1",
     "jspdf": "^3.0.0",
