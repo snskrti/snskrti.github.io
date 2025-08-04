@@ -4,6 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import SponsorsPartners from './pages/SponsorsPartners';
 import DurgaPuja2025 from './pages/events/DurgaPuja2025';
 import HomePage from './pages/HomePage';
+import DonationsPage from './pages/DonationsPage';
 import PageNotFound from './pages/PageNotFound';
 import Holi2025 from './pages/events/Holi2025';
 import { MembershipRequest } from './pages/MembershipRequest';
@@ -31,6 +32,7 @@ function App() {
           <Route path="/events/durga-puja-2025/meal-payment" element={<MealPayment2025 />} />
           <Route path="/events/diwali-2025" element={<Diwali2025 />} />
           <Route path="/membership/request" element={<MembershipRequest />} />
+          <Route path="/donations" element={<DonationsPage />} />
           <Route path="/dummy" element={<DummyPage />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { Facebook, Instagram, Youtube, Mail, Navigation } from 'lucide-react';
+import { Facebook, Instagram, Youtube, Mail, Navigation, Heart } from 'lucide-react';
 import { Footer } from '../components/shared/Footer';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
@@ -8,7 +8,6 @@ import { Home, Calendar, Users, Info } from 'lucide-react';
 import { NavigationSection } from '../types/navigation_section';
 import { events } from '../types/events';
 import { SectionNavigation } from '../components/shared/SectionNavigation';
-import { DonateByPaypal } from '../components/DonateActions/DonateByPaypal';
 import { socialMediaLinks } from '../types/socialMediaLinks';
 import { NewsletterSubscribe } from '../components/shared/NewsletterSubscribe';
 import { SEOHead } from '../components/SEO/SEOHead';
@@ -194,7 +193,7 @@ function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="prose lg:prose-xl">
                 <p className="text-lg font-semibold text-gray-700 animate-hero-fade-in opacity-0 text-center">
-                  Sanskriti is a proud women-led non-profit organization dedicated to preserving and promoting Indian culture in Hamburg. <br /> 
+                  Sanskriti is a non-profit organization dedicated to preserving and promoting Indian culture in Hamburg. <br /> 
                   Our mission is to create a vibrant community that celebrates our rich heritage while fostering cultural exchange and understanding.
                 </p>
               </div>
@@ -210,7 +209,13 @@ function HomePage() {
                   <span>Become a Member</span>
                 </button>
 
-                <DonateByPaypal />
+                <button 
+                  onClick={() => window.location.href = '/donations'}
+                  className="w-full sm:w-auto bg-blue-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-blue-700 transition-colors duration-300 flex items-center justify-center space-x-2"
+                >
+                  <Heart className="w-6 h-6" />
+                  <span>Support Sanskriti</span>
+                </button>
 
                 </div>
             </div>
