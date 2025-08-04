@@ -122,6 +122,17 @@ const PaymentForm: React.FC<{ reservation: MealReservation; clientSecret: string
       if (error) {
         setPaymentError(error.message || 'Payment failed');
       } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+        // Mark the invoice as paid since our payment succeeded
+        await fetch('/.netlify/functions/send-receipt', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            paymentIntentId: paymentIntent.id,
+          }),
+        });
+
         setPaymentSuccess(true);
         
         // Redirect to success page after 3 seconds
