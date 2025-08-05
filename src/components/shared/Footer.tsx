@@ -18,7 +18,7 @@ export function Footer() {
               Verein Nummer: VR 25931
               <br /><br />
               Bank Account: <br />
-              IBAN: DE xx xx xx xx xx xx xx xx <br />
+              IBAN: DE82200400000350026100 <br />
               Kontoinhaber: Sanskriti e.V. <br />
             </p>
           </div>
