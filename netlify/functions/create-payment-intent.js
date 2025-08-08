@@ -107,12 +107,11 @@ exports.handler = async (event, context) => {
       });
     }
 
-    // Create invoice
+    // Create invoice with charge_automatically to ensure payment intent is created
     const invoice = await stripe.invoices.create({
       customer: customer.id,
-      auto_advance: false, // Don't auto-finalize
-      collection_method: 'send_invoice',
-      days_until_due: 1,
+      auto_advance: false, // Don't auto-finalize, we'll do it manually
+      collection_method: 'charge_automatically', // This ensures a payment intent is created
       metadata: {
         customerName: customerInfo.name,
         customerEmail: customerInfo.email,
@@ -146,36 +145,34 @@ exports.handler = async (event, context) => {
       });
     }
 
-    // Finalize the invoice
+    // Finalize the invoice - this creates the payment intent automatically
     const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id);
 
-    // Create payment intent from the invoice
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100), // Convert to cents
-      currency,
-      automatic_payment_methods: {
-        enabled: true,
-      },
-      customer: customer.id,
-      metadata: {
-        invoiceId: finalizedInvoice.id,
-        customerName: customerInfo.name,
-        customerEmail: customerInfo.email,
-        isMember: customerInfo.isMember.toString(),
-        event: 'Durga Puja 2025 - Meal Reservation',
-      },
-      // Remove receipt_email to prevent generic receipt, we'll send detailed invoice instead
-      description: `Durga Puja 2025 Meal Reservation - See detailed invoice ${finalizedInvoice.number}`,
-      statement_descriptor_suffix: 'DURGA PUJA', // Limited to 22 characters for card payments
-      shipping: {
-        address: {
-          line1: 'Event Venue TBD',
-          city: 'Hamburg',
-          country: 'DE',
-        },
-        name: customerInfo.name,
-      },
-    });
+    // Only send the invoice email if collection_method is 'send_invoice'
+    if (finalizedInvoice.collection_method === 'send_invoice') {
+      await stripe.invoices.sendInvoice(finalizedInvoice.id);
+    }
+
+    // The payment intent is now automatically created by the invoice (for charge_automatically)
+    let paymentIntent = null;
+    if (finalizedInvoice.payment_intent) {
+      paymentIntent = await stripe.paymentIntents.retrieve(finalizedInvoice.payment_intent);
+    }
+
+    if (!paymentIntent || !paymentIntent.client_secret) {
+      // Defensive: This should not happen for charge_automatically, but handle gracefully
+      console.error('No payment intent found for finalized invoice:', finalizedInvoice.id);
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({
+          error: 'No payment intent found for finalized invoice',
+          invoiceId: finalizedInvoice.id,
+          invoiceNumber: finalizedInvoice.number,
+          invoiceUrl: finalizedInvoice.hosted_invoice_url,
+        }),
+      };
+    }
 
     return {
       statusCode: 200,
