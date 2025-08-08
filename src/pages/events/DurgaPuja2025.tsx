@@ -1,10 +1,61 @@
-import React, { useEffect } from 'react';
-import { Calendar, MapPin, Users, Heart, Star, Mic, HandHeart, Music, PaintBucket, Mail, Facebook, Instagram } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Calendar, MapPin, Users, Heart, Star, Mic, HandHeart, Music, PaintBucket, Mail, Facebook, Instagram, TicketX } from 'lucide-react';
 import { Footer } from '../../components/shared/Footer';
 import { SEOHead } from '../../components/SEO/SEOHead';
 import { getEventDate } from '../../utils/eventUtils';
+import { socialMediaLinks } from '../../types/socialMediaLinks';
 
 function DurgaPuja2025() {
+  // Typewriter component for bilingual translation
+  const TypewriterTranslation: React.FC = () => {
+    const messages = [
+      'মা আসছে',
+      'Durga Puja'
+    ];
+    const [displayText, setDisplayText] = useState('');
+    const [phase, setPhase] = useState<'typing'|'pause'|'deleting'|'done'>('typing');
+    const [msgIndex, setMsgIndex] = useState(0);
+    const [charIndex, setCharIndex] = useState(0);
+
+    const typingSpeed = 55; // ms per char
+    const deletingSpeed = 30; // ms per char when deleting
+    const pauseAfterTyping = 1600; // pause before deleting
+
+    useEffect(() => {
+      if (phase === 'typing') {
+        if (charIndex < messages[msgIndex].length) {
+          const timeout = setTimeout(() => {
+            setDisplayText(messages[msgIndex].slice(0, charIndex + 1));
+            setCharIndex(charIndex + 1);
+          }, typingSpeed + (messages[msgIndex][charIndex] === '\n' ? 200 : 0));
+          return () => clearTimeout(timeout);
+        } else {
+          const timeout = setTimeout(() => setPhase(msgIndex === 0 ? 'deleting' : 'done'), pauseAfterTyping);
+          return () => clearTimeout(timeout);
+        }
+      }
+      if (phase === 'deleting') {
+        if (charIndex > 0) {
+          const timeout = setTimeout(() => {
+            setDisplayText(messages[msgIndex].slice(0, charIndex - 1));
+            setCharIndex(charIndex - 1);
+          }, deletingSpeed);
+          return () => clearTimeout(timeout);
+        } else {
+          // move to next message
+            setMsgIndex(1);
+            setPhase('typing');
+        }
+      }
+    }, [phase, charIndex, msgIndex, messages]);
+
+    return (
+      <h1 className="text-8xl md:text-9xl font-bold mb-12">
+        {displayText}
+        {phase !== 'done' && <span className="animate-pulse">|</span>}
+      </h1>
+    );
+  };
 
   // Gallery data
   const galleryData = [
@@ -151,8 +202,12 @@ function DurgaPuja2025() {
               <p className="text-xl font-light">{eventDate}</p>
             </div>
             
-            <h1 className="text-8xl md:text-9xl font-bold mb-12">Durga Puja</h1>
-            
+            {/* <h1 className="text-8xl md:text-9xl font-bold mb-12">Durga Puja</h1> */}
+            <div className="pt-6 mt-6">
+              {/* Replaced static translation with animated bilingual typewriter */}
+              <TypewriterTranslation />
+            </div>
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <a 
                 href="https://www.google.com/maps/place/B%C3%BCrgerverein+Waldenau-Datum+e.V./@53.6211916,9.7977995,17z/data=!3m2!4b1!5s0x47b1811264d608b1:0x1d2d3e834f7f79f0!4m6!3m5!1s0x47b1811264ab5c7b:0xec3cd5b12fe9e60e!8m2!3d53.6211884!4d9.8003744!16s%2Fg%2F1tdmjjnt?entry=ttu&g_ep=EgoyMDI1MDcwOS4wIKXMDSoASAFQAw%3D%3D"
@@ -164,21 +219,12 @@ function DurgaPuja2025() {
               </a>
               
               <a
-                href="https://www.instagram.com/snskrtiham?igsh=Z3Njajl5bXZsbW1u"
+                href="https://www.desipass.com/events/events-details?eventId=01K206DZB1DAGBX15RZV6SAH52"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center space-x-2 px-6 py-3 rounded-full border-2 font-semibold btn-secondary-accent">
-                <Instagram className="w-5 h-5" />
-                <span>Follow Us</span>
-              </a>
-
-              <a
-                href="https://www.facebook.com/profile.php?id=61573798568184"
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center space-x-2 px-6 py-3 rounded-full border-2 font-semibold btn-secondary-accent">
-                <Facebook className="w-5 h-5" />
-                <span>Stay Connected</span>
+                className="flex items-center space-x-2 px-6 py-3 rounded-full border-2 font-semibold btn-secondary">
+                <TicketX className="w-5 h-5" />
+                <span>Get your Entry ticket</span>
               </a>
 
             </div>
@@ -199,12 +245,6 @@ function DurgaPuja2025() {
                   <p className="text-4xl md:text-5xl font-bold text-amber-800 mb-8 leading-relaxed tracking-wide">
                     या देवी सर्वभूतेषु मातृरूपेण संस्थिता<br/>
                     नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः
-                  </p>
-                </div>
-                <div className="border-t-2 border-amber-300 pt-6 mt-6">
-                  <p className="text-xl text-gray-700 italic font-light">
-                    To the Divine Mother who dwells in all beings as the Universal Mother,<br/>
-                    we offer our deepest reverence, again and again.
                   </p>
                 </div>
               </div>
@@ -267,6 +307,40 @@ function DurgaPuja2025() {
               <p className='pt-8'>
                 This is more than just an event—it's the beginning of a cherished tradition in Hamburg. Your participation will help us create memories that will last for generations.
               </p>
+          </div>
+          <div className="max-w-4xl mx-auto flex flex-col md:flex-row md:items-center">
+            <p className="text-gray-700 text-base md:text-lg flex-1 md:pr-4 text-center md:text-left">
+              Follow us for event updates, photos, and community stories. Join our growing family online!
+            </p>
+            <div className="flex justify-center md:justify-start gap-10">
+              <a
+                href={socialMediaLinks.instagram}
+                target="_blank"
+                rel="noreferrer"
+                className="flex flex-col items-center group"
+              >
+                <Instagram className="w-10 h-10 text-pink-600 group-hover:text-pink-800 transition-colors" />
+                <span className="text-sm mt-2 text-pink-700">Instagram</span>
+              </a>
+              <a
+                href={socialMediaLinks.youtube}
+                target="_blank"
+                rel="noreferrer"
+                className="flex flex-col items-center group"
+              >
+                <Mail className="w-10 h-10 text-red-600 group-hover:text-red-800 transition-colors" />
+                <span className="text-sm mt-2 text-red-700">YouTube</span>
+              </a>
+              <a
+                href={socialMediaLinks.facebook}
+                target="_blank"
+                rel="noreferrer"
+                className="flex flex-col items-center group"
+              >
+                <Facebook className="w-10 h-10 text-blue-600 group-hover:text-blue-800 transition-colors" />
+                <span className="text-sm mt-2 text-blue-700">Facebook</span>
+              </a>
+            </div>
           </div>
         </section>
 

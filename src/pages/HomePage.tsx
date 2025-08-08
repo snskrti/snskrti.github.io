@@ -113,6 +113,10 @@ function HomePage() {
                 className="transform hover:scale-110 transition-transform">
                   <Facebook size={32} />
               </a>
+              <a href={socialMediaLinks.instagram} target='_blank'
+                className="transform hover:scale-110 transition-transform">
+                  <Instagram size={32} />
+              </a>
               <a href={socialMediaLinks.youtube} target='_blank'
                 className="transform hover:scale-110 transition-transform">
                   <Youtube size={32} />
