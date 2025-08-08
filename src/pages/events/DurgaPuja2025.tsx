@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { Calendar, MapPin, Users, Heart, Star, Mic, HandHeart, Music, PaintBucket, Mail, Facebook, Instagram } from 'lucide-react';
+import { Calendar, MapPin, Users, Heart, Star, Mic, HandHeart, Music, PaintBucket, Mail, Facebook, Instagram, TicketX } from 'lucide-react';
 import { Footer } from '../../components/shared/Footer';
 import { SEOHead } from '../../components/SEO/SEOHead';
 import { getEventDate } from '../../utils/eventUtils';
+import { socialMediaLinks } from '../../types/socialMediaLinks';
 
 function DurgaPuja2025() {
 
@@ -164,21 +165,12 @@ function DurgaPuja2025() {
               </a>
               
               <a
-                href="https://www.instagram.com/snskrtiham?igsh=Z3Njajl5bXZsbW1u"
+                href="https://www.desipass.com/events/events-details?eventId=01K206DZB1DAGBX15RZV6SAH52"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center space-x-2 px-6 py-3 rounded-full border-2 font-semibold btn-secondary-accent">
-                <Instagram className="w-5 h-5" />
-                <span>Follow Us</span>
-              </a>
-
-              <a
-                href="https://www.facebook.com/profile.php?id=61573798568184"
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center space-x-2 px-6 py-3 rounded-full border-2 font-semibold btn-secondary-accent">
-                <Facebook className="w-5 h-5" />
-                <span>Stay Connected</span>
+                className="flex items-center space-x-2 px-6 py-3 rounded-full border-2 font-semibold btn-secondary">
+                <TicketX className="w-5 h-5" />
+                <span>Get your Entry ticket</span>
               </a>
 
             </div>
@@ -267,6 +259,40 @@ function DurgaPuja2025() {
               <p className='pt-8'>
                 This is more than just an event—it's the beginning of a cherished tradition in Hamburg. Your participation will help us create memories that will last for generations.
               </p>
+          </div>
+          <div className="max-w-4xl mx-auto flex flex-col md:flex-row md:items-center">
+            <p className="text-gray-700 text-base md:text-lg flex-1 md:pr-4 text-center md:text-left">
+              Follow us for event updates, photos, and community stories. Join our growing family online!
+            </p>
+            <div className="flex justify-center md:justify-start gap-10">
+              <a
+                href={socialMediaLinks.instagram}
+                target="_blank"
+                rel="noreferrer"
+                className="flex flex-col items-center group"
+              >
+                <Instagram className="w-10 h-10 text-pink-600 group-hover:text-pink-800 transition-colors" />
+                <span className="text-sm mt-2 text-pink-700">Instagram</span>
+              </a>
+              <a
+                href={socialMediaLinks.youtube}
+                target="_blank"
+                rel="noreferrer"
+                className="flex flex-col items-center group"
+              >
+                <Mail className="w-10 h-10 text-red-600 group-hover:text-red-800 transition-colors" />
+                <span className="text-sm mt-2 text-red-700">YouTube</span>
+              </a>
+              <a
+                href={socialMediaLinks.facebook}
+                target="_blank"
+                rel="noreferrer"
+                className="flex flex-col items-center group"
+              >
+                <Facebook className="w-10 h-10 text-blue-600 group-hover:text-blue-800 transition-colors" />
+                <span className="text-sm mt-2 text-blue-700">Facebook</span>
+              </a>
+            </div>
           </div>
         </section>
 
