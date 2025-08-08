@@ -13,7 +13,7 @@ function DurgaPuja2025() {
       'Durga Puja'
     ];
     const [displayText, setDisplayText] = useState('');
-    const [phase, setPhase] = useState<'typing'|'pause'|'deleting'|'done'>('typing');
+    const [phase, setPhase] = useState<'idle'|'typing'|'pause'|'deleting'|'done'>('idle');
     const [msgIndex, setMsgIndex] = useState(0);
     const [charIndex, setCharIndex] = useState(0);
 
@@ -21,7 +21,14 @@ function DurgaPuja2025() {
     const deletingSpeed = 30; // ms per char when deleting
     const pauseAfterTyping = 1600; // pause before deleting
 
+    // Start after 1s delay
     useEffect(() => {
+      const startTimer = setTimeout(() => setPhase('typing'), 1000);
+      return () => clearTimeout(startTimer);
+    }, []);
+
+    useEffect(() => {
+      if (phase === 'idle') return; // wait until started
       if (phase === 'typing') {
         if (charIndex < messages[msgIndex].length) {
           const timeout = setTimeout(() => {
@@ -42,7 +49,6 @@ function DurgaPuja2025() {
           }, deletingSpeed);
           return () => clearTimeout(timeout);
         } else {
-          // move to next message
             setMsgIndex(1);
             setPhase('typing');
         }
