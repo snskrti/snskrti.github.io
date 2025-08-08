@@ -21,6 +21,12 @@ function DurgaPuja2025() {
     const deletingSpeed = 30; // ms per char when deleting
     const pauseAfterTyping = 1600; // pause before deleting
 
+    // Start after 1s delay
+    useEffect(() => {
+      const startTimer = setTimeout(() => setPhase('typing'), 1000);
+      return () => clearTimeout(startTimer);
+    }, []);
+    
     useEffect(() => {
       if (phase === 'typing') {
         if (charIndex < messages[msgIndex].length) {
