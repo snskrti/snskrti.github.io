@@ -39,6 +39,12 @@ function DurgaPuja2025() {
       };
     }, []);
 
+    // Start after 1s delay
+    useEffect(() => {
+      const startTimer = setTimeout(() => setPhase('typing'), 1000);
+      return () => clearTimeout(startTimer);
+    }, []);
+
     useEffect(() => {
       if (phase === 'idle') return; // wait until started
       if (phase === 'typing') {
