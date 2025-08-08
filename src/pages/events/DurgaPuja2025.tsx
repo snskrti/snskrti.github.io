@@ -20,11 +20,23 @@ function DurgaPuja2025() {
     const typingSpeed = 55; // ms per char
     const deletingSpeed = 30; // ms per char when deleting
     const pauseAfterTyping = 1600; // pause before deleting
+    const startDelayAfterLoad = 2000; // 2s after full page load
 
-    // Start after 1s delay
+    // Start only after full window load + delay
     useEffect(() => {
-      const startTimer = setTimeout(() => setPhase('typing'), 1000);
-      return () => clearTimeout(startTimer);
+      let startTimer: number | undefined;
+      const startIfReady = () => {
+        startTimer = window.setTimeout(() => setPhase('typing'), startDelayAfterLoad);
+      };
+      if (document.readyState === 'complete') {
+        startIfReady();
+      } else {
+        window.addEventListener('load', startIfReady, { once: true });
+      }
+      return () => {
+        if (startTimer) clearTimeout(startTimer);
+        window.removeEventListener('load', startIfReady);
+      };
     }, []);
 
     useEffect(() => {
