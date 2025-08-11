@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { Facebook, Instagram, Youtube, Mail, Navigation, Heart } from 'lucide-react';
+import { Facebook, Instagram, Youtube, Mail, Navigation, Heart, BookCopy } from 'lucide-react';
 import { Footer } from '../components/shared/Footer';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
@@ -184,7 +184,14 @@ function HomePage() {
                 <br /><br />
                 We welcome you to join our vibrant community by subscribing to our newsletters. Stay updated with our latest events and activities.
               </p>
-              <NewsletterSubscribe />
+              
+              <button 
+                  onClick={() => window.location.href = '/donations'}
+                  className="w-full sm:w-auto bg-blue-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-blue-700 transition-colors duration-300 flex items-center justify-center space-x-2">
+                  <Heart className="w-6 h-6" />
+                  <span>Support Sanskriti</span>
+                </button>
+
             </div>
         </div>
         
@@ -213,14 +220,13 @@ function HomePage() {
                   <span>Become a Member</span>
                 </button>
 
-                <button 
-                  onClick={() => window.location.href = '/donations'}
-                  className="w-full sm:w-auto bg-blue-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-blue-700 transition-colors duration-300 flex items-center justify-center space-x-2"
+                <button
+                  onClick={() => window.open('https://sanskriti-hamburg.medium.com/', '_blank')}
+                  className="w-full sm:w-auto bg-orange-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-orange-600 transition-colors duration-300 flex items-center justify-center space-x-2"
                 >
-                  <Heart className="w-6 h-6" />
-                  <span>Support Sanskriti</span>
+                  <BookCopy className="w-6 h-6" />
+                  <span>Read Our Blogs</span>
                 </button>
-
                 </div>
             </div>
           </div>
