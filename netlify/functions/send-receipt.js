@@ -58,15 +58,12 @@ exports.handler = async (event, context) => {
           expand: ['lines']
         });
 
-        // Mark invoice as paid and send the detailed invoice
-        if (invoice.status === 'open') {
-          await stripe.invoices.pay(invoice.id, {
-            paid_out_of_band: true
-          });
-        }
+        // Since we're using the invoice's own payment intent, 
+        // the invoice should automatically be marked as paid when payment succeeds
+        console.log('Invoice status after payment:', invoice.status, 'for invoice:', invoice.number);
 
-        // Send the detailed invoice email
-        const sentInvoice = await stripe.invoices.sendInvoice(invoice.id);
+        // The invoice email was already sent when created
+        console.log('Payment confirmed for invoice:', invoice.number);
 
         console.log('Detailed invoice sent:', {
           invoiceNumber: invoice.number,
