@@ -5,31 +5,27 @@ export const MENU_DESCRIPTIONS = {
   DAY1: {
     VEG: {
       name: 'Vegetarian Thali',
-      description: 'Luchi, Alur Dum, Cholar Dal, Dhoka, Labra, Rice, Kheer & Papad'
+      description: 'Shahi Veg Kabab, Royal Fried Rice, Fulkopir Dorma, Paneer-e-Khaas, Aam Madhuri, Rasmalai Royale'
     },
     NON_VEG: {
       name: 'Non-Vegetarian Thali',
-      description: 'Rice, Kosha Mangsho, Macher Jhol, Dal, Vegetable, Chutney & Sweet'
+      description: 'Golden Bay Fish Fry, Royal Fried Rice, Fulkopir Dorma, Shahi Mutton Kosha, Aam Madhuri, Rasmalai Royale'
     }
   },
   DAY2: {
     VEG: {
       name: 'Vegetarian Thali',
-      description: 'Pulao, Paneer Curry, Aloo Posto, Begun Bhaja, Dal, Raita & Mishti'
+      description: 'Heritage Veg Chop, Basanti Pulao, Kashmiri Sada Aloo Dum, Paneer Kaju Masala, Anaras Madhuri, Kalakand Delight'
     },
     NON_VEG: {
       name: 'Non-Vegetarian Thali',
-      description: 'Pulao, Ilish Mach Bhapa, Prawn Malai Curry, Dal, Vegetable & Sweet'
+      description: 'Golden Bay Fish Fry, Basanti Pulao, Kashmiri Sada Aloo Dum, Chingri Malaikari, Anaras Madhuri, Kalakand Delight'
     }
   },
   DAY3: {
     VEG: {
       name: 'Vegetarian Thali',
-      description: 'Vegetable Biryani, Mixed Dal, Raita, Papad, Sandesh & Mishti Doi'
-    },
-    NON_VEG: {
-      name: 'Non-Vegetarian Thali',
-      description: 'Mutton Biryani, Fish Fry, Egg Curry, Raita, Papad & Traditional Sweets'
+      description: 'Crispy Beguni, Shahi Veg Kabab, Royal Khichuri, Bangali Labra, Fruit Symphony Chutney, Nolen Gurer Payesh'
     }
   }
 } as const;
@@ -37,16 +33,16 @@ export const MENU_DESCRIPTIONS = {
 // Day-specific pricing configuration
 export const DAILY_PRICES = {
   DAY1: {
-    VEG: 1.00,
-    NON_VEG: 1.00
+    VEG: 15.00,
+    NON_VEG: 18.00
   },
   DAY2: {
-    VEG: 1.00,
-    NON_VEG: 1.00
+    VEG: 15.00,
+    NON_VEG: 17.00
   },
   DAY3: {
-    VEG: 1.00,
-    NON_VEG: 1.00
+    VEG: 15.00,
+    NON_VEG: 0.00
   }
 } as const;
 
@@ -56,7 +52,7 @@ export const MEMBER_DISCOUNT_PERCENTAGE = 5;
 export const getPriceByDay = (dayNumber: string, isVeg: boolean): number => {
   const key = `DAY${dayNumber}` as keyof typeof DAILY_PRICES;
   if (key in DAILY_PRICES) {
-    return isVeg ? DAILY_PRICES[key].VEG : DAILY_PRICES[key].NON_VEG;
+    return !isVeg ? DAILY_PRICES[key].NON_VEG : DAILY_PRICES[key].VEG;
   }
   return 0;
 };
@@ -120,16 +116,6 @@ export const durgaPujaMeals2025: DayMenu[] = [
         description: MENU_DESCRIPTIONS.DAY3.VEG.description,
         price: DAILY_PRICES.DAY3.VEG,
         category: 'veg',
-        available: true
-      }
-    ],
-    nonVegItems: [
-      {
-        id: 'nonveg-day3',
-        name: MENU_DESCRIPTIONS.DAY3.NON_VEG.name,
-        description: MENU_DESCRIPTIONS.DAY3.NON_VEG.description,
-        price: DAILY_PRICES.DAY3.NON_VEG,
-        category: 'non-veg',
         available: true
       }
     ]
