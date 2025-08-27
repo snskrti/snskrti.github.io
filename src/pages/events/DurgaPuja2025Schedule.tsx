@@ -3,8 +3,9 @@ import { Calendar, MapPin, Heart, TicketX, Leaf, Utensils } from 'lucide-react';
 import { Footer } from '../../components/shared/Footer';
 import { SEOHead } from '../../components/SEO/SEOHead';
 import { getEventDate } from '../../utils/eventUtils';
-import { durgaPujaMeals2025 } from '../../utils/mealData';
+import { durgaPujaMeals2025, FOOD_ITEMS } from '../../utils/mealData';
 import { durgaPujaSchedule2025 } from '../../utils/eventScheduleData';
+import { FoodMenuItem } from '../../types/mealReservation';
 
 function DurgaPuja2025Schedule() {
   useEffect(() => {
@@ -127,9 +128,12 @@ function DurgaPuja2025Schedule() {
                         {item.name}
                       </h4>
                       <div className="text-gray-700">
-                        {item.description.split(',').map((menuItem, index) => (
+                        {FOOD_ITEMS.day1VegItems.map((menuItem, index) => (
                           <div key={index} className="py-1 border-b border-gray-100 last:border-b-0">
-                            {menuItem.trim()}
+                            <div className="font-medium">{menuItem.title}</div>
+                            <div className="text-sm text-gray-600 italic pl-2">
+                              {menuItem.description}
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -143,9 +147,12 @@ function DurgaPuja2025Schedule() {
                         {item.name}
                       </h4>
                       <div className="text-gray-700">
-                        {item.description.split(',').map((menuItem, index) => (
+                        {FOOD_ITEMS.day1NonVegItems.map((menuItem, index) => (
                           <div key={index} className="py-1 border-b border-gray-100 last:border-b-0">
-                            {menuItem.trim()}
+                            <div className="font-medium">{menuItem.title}</div>
+                            <div className="text-sm text-gray-600 italic pl-2">
+                              {menuItem.description}
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -202,9 +209,12 @@ function DurgaPuja2025Schedule() {
                         {item.name}
                       </h4>
                       <div className="text-gray-700">
-                        {item.description.split(',').map((menuItem, index) => (
+                        {FOOD_ITEMS.day2VegItems.map((menuItem, index) => (
                           <div key={index} className="py-1 border-b border-gray-100 last:border-b-0">
-                            {menuItem.trim()}
+                            <div className="font-medium">{menuItem.title}</div>
+                            <div className="text-sm text-gray-600 italic pl-2">
+                              {menuItem.description}
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -218,9 +228,12 @@ function DurgaPuja2025Schedule() {
                         {item.name}
                       </h4>
                       <div className="text-gray-700">
-                        {item.description.split(',').map((menuItem, index) => (
+                        {FOOD_ITEMS.day2NonVegItems.map((menuItem, index) => (
                           <div key={index} className="py-1 border-b border-gray-100 last:border-b-0">
-                            {menuItem.trim()}
+                            <div className="font-medium">{menuItem.title}</div>
+                            <div className="text-sm text-gray-600 italic pl-2">
+                              {menuItem.description}
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -277,9 +290,12 @@ function DurgaPuja2025Schedule() {
                         {item.name}
                       </h4>
                       <div className="text-gray-700">
-                        {item.description.split(',').map((menuItem, index) => (
+                        {FOOD_ITEMS.day3VegItems.map((menuItem, index) => (
                           <div key={index} className="py-1 border-b border-gray-100 last:border-b-0">
-                            {menuItem.trim()}
+                            <div className="font-medium">{menuItem.title}</div>
+                            <div className="text-sm text-gray-600 italic pl-2">
+                              {menuItem.description}
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -293,11 +309,7 @@ function DurgaPuja2025Schedule() {
                         {item.name}
                       </h4>
                       <div className="text-gray-700">
-                        {item.description.split(',').map((menuItem, index) => (
-                          <div key={index} className="py-1 border-b border-gray-100 last:border-b-0">
-                            {menuItem.trim()}
-                          </div>
-                        ))}
+                        {/* No non-veg items for Day 3 */}
                       </div>
                     </div>
                   ))}
@@ -354,9 +366,9 @@ function DurgaPuja2025Schedule() {
                             Anandamela Style
                           </span>
                         </div>
-                        <h4 className="font-semibold text-gray-800 text-lg mb-2">{item.name}</h4>
+                        <h4 className="font-semibold text-gray-800 text-lg mb-2">{FOOD_ITEMS.day4Items[0].title}</h4>
                         <p className="text-gray-700 mb-4 leading-relaxed">
-                          {item.description}
+                          {FOOD_ITEMS.day4Items[0].description}
                         </p>
                       </div>
                     </div>
