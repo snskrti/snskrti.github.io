@@ -367,13 +367,23 @@ function DurgaPuja2025Schedule() {
             
             <div className="mt-10 text-center">
               
-                  <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-md max-w-lg mx-auto">
-                    <div className="flex items-center justify-center">
-                      <TicketX className="h-5 w-5 text-yellow-600 mr-2" />
-                      <p className="font-medium text-yellow-700">Food registration will be opened soon</p>
-                    </div>
-                    <p className="text-yellow-600 mt-1 text-center">We'll notify all members when the meal registration system is available.</p>
-                  </div>
+                <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-md max-w-lg mx-auto">
+                <div className="flex items-center justify-center">
+                  <TicketX className="h-5 w-5 text-yellow-600 mr-2" />
+                  <p className="font-medium text-yellow-700">Register for food now!</p>
+                </div>
+                <p className="text-yellow-600 mt-1 text-center">Please fill out our meal registration form to reserve your food for the event.</p>
+                <div className="mt-4 text-center">
+                  <a 
+                    href="https://forms.fillout.com/t/grq8oAVDuFus" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-block bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
+                    >
+                    Register for Food
+                  </a>
+                </div>
+                </div>
               
               <p className="text-sm text-gray-600 mt-4">
                 Reserve your meals in advance for Days 1-3. For Day 4, food will be available at various stalls on the spot.
