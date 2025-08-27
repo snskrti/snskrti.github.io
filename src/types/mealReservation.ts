@@ -11,7 +11,7 @@ export interface DayMenu {
   date: string;
   day: string;
   vegItems: MenuItem[];
-  nonVegItems: MenuItem[];
+  nonVegItems?: MenuItem[];
 }
 
 export interface MealReservation {

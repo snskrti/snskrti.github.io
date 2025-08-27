@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import SponsorsPartners from './pages/SponsorsPartners';
 import DurgaPuja2025 from './pages/events/DurgaPuja2025';
+import DurgaPuja2025Schedule from './pages/events/DurgaPuja2025Schedule';
 import HomePage from './pages/HomePage';
 import DonationsPage from './pages/DonationsPage';
 import PageNotFound from './pages/PageNotFound';
@@ -28,6 +29,7 @@ function App() {
           <Route path="/events/rakhi-2025" element={<Rakhi2025 />} />
           <Route path="/events/sit-and-draw-2025" element={<SitAndDraw2025 />} />
           <Route path="/events/durga-puja-2025" element={<DurgaPuja2025 />} />
+          <Route path="/events/durga-puja-2025/schedule" element={<DurgaPuja2025Schedule />} />
           <Route path="/events/durga-puja-2025/meal-reservation" element={<MealReservation2025 />} />
           <Route path="/events/durga-puja-2025/meal-payment" element={<MealPayment2025 />} />
           <Route path="/events/diwali-2025" element={<Diwali2025 />} />
