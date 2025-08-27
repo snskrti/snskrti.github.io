@@ -389,7 +389,12 @@ function DurgaPuja2025() {
                   </p>
                 </div>
                 <div className="flex justify-center mt-6">
-                  <span className="text-gray-500 text-sm italic">Coming soon ...</span>
+                  <a
+                  href="/events/durga-puja-2025/schedule"
+                  className="inline-block bg-amber-600 text-white px-6 py-3 rounded-full hover:bg-amber-700 transition-colors font-semibold"
+                  >
+                  View Schedule
+                  </a>
                 </div>
               </div>
               {/* Food Menu Item */}
@@ -406,7 +411,12 @@ function DurgaPuja2025() {
                   </p>
                 </div>
                 <div className="flex justify-center mt-6">
-                  <span className="text-gray-500 text-sm italic">Coming soon ...</span>
+                  <a
+                    href="/events/durga-puja-2025/schedule"
+                    className="inline-block bg-amber-600 text-white px-6 py-3 rounded-full hover:bg-amber-700 transition-colors font-semibold"
+                    >
+                    View Schedule
+                  </a>
                 </div>
               </div>
             </div>

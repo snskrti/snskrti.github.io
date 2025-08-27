@@ -7,6 +7,11 @@ export interface MenuItem {
   available: boolean;
 }
 
+export interface FoodMenuItem {
+  title: string;
+  description: string;
+}
+
 export interface DayMenu {
   date: string;
   day: string;

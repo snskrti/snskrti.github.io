@@ -1,5 +1,59 @@
 import { DayMenu } from '../types/mealReservation';
 
+// Simple food items with title and description
+export const FOOD_ITEMS = {
+  // Day 1 Menu Items
+  day1VegItems: [
+    { title: 'Shahi Veg Kabab', description: 'Fragrant spiced vegetarian kebabs, grilled to perfection' },
+    { title: 'Royal Fried Rice', description: 'Aromatic basmati rice tossed with vegetables and mild spices' },
+    { title: 'Fulkopir Dorma', description: 'Cauliflower florets stuffed and simmered in a rich Bengali-style curry' },
+    { title: 'Paneer-e-Khaas', description: 'Cottage cheese cooked in a silky, flavorful gravy' },
+    { title: 'Aam Madhuri', description: 'Traditional sweet mango chutney with a tangy twist' },
+    { title: 'Rasmalai Royale', description: 'Soft cottage cheese dumplings soaked in saffron milk' }
+  ],
+  day1NonVegItems: [
+    { title: 'Machher Ruchi Pathuri', description: 'Bengali-style fish wrapped in banana leaves and steamed to perfection' },
+    { title: 'Royal Fried Rice', description: 'Fluffy basmati rice tossed with garden-fresh vegetables' },
+    { title: 'Fulkopir Dorma', description: 'Cauliflower stuffed and slow-cooked in a spiced Bengali-style curry' },
+    { title: 'Shahi Mutton Kosha', description: 'Succulent mutton, slow-braised in rich, bold gravy' },
+    { title: 'Aam Madhuri', description: 'A traditional sweet and tangy mango chutney' },
+    { title: 'Rasmalai Royale', description: 'Soft cottage cheese dumplings in saffron-infused milk' }
+  ],
+  
+  // Day 2 Menu Items
+  day2VegItems: [
+    { title: 'Heritage Veg Chop', description: 'Crispy spiced vegetable croquettes, a timeless Bengali favorite' },
+    { title: 'Basanti Pulao', description: 'Fragrant golden rice with a touch of sweetness and saffron glow' },
+    { title: 'Kashmiri Sada Aloo Dum', description: 'Baby potatoes simmered in light Kashmiri-style spices' },
+    { title: 'Paneer Kaju Masala', description: 'Cottage cheese in a rich cashew-kissed gravy' },
+    { title: 'Anaras Madhuri', description: 'Pineapple chutney with a sweet-tangy charm' },
+    { title: 'Kalakand Delight', description: 'Soft, melt-in-mouth milk fudge with a festive touch' }
+  ],
+  day2NonVegItems: [
+    { title: 'Golden Bay Fish Fry', description: 'Crispy Pangasius fillet, delicately spiced and golden fried' },
+    { title: 'Basanti Pulao', description: 'Fragrant saffron rice with a hint of sweetness' },
+    { title: 'Kashmiri Sada Aloo Dum', description: 'Baby potatoes in a light, flavorful Kashmiri-style gravy' },
+    { title: 'Chingri Malaikari', description: 'Prawns simmered in a luxurious coconut-milk curry' },
+    { title: 'Anaras Madhuri', description: 'Sweet-tangy pineapple chutney, a refreshing touch' },
+    { title: 'Kalakand Delight', description: 'Soft, grainy milk fudge that melts in the mouth' }
+  ],
+  
+  // Day 3 Menu Items
+  day3VegItems: [
+    { title: 'Crispy Beguni', description: 'Golden fried eggplant, light and flavorful' },
+    { title: 'Shahi Veg Kabab', description: 'Soft, spiced vegetable patties grilled to perfection' },
+    { title: 'Royal Khichuri', description: 'Fragrant Bengali rice and lentil blend, comfort on a plate' },
+    { title: 'Bangali Labra', description: 'Seasonal vegetables slow-cooked with gentle spices' },
+    { title: 'Fruit Symphony Chutney', description: 'A sweet and tangy medley of mixed fruits' },
+    { title: 'Nolen Gurer Payesh', description: 'Traditional Bengali rice pudding enriched with date palm jaggery' }
+  ],
+  
+  // Day 4 Menu Items
+  day4Items: [
+    { title: 'Anandamela Food Arrangement', description: 'Visit various food stalls and buy fresh food on the spot - Bengali street food, sweets, snacks and more!' }
+  ]
+};
+
 // Menu descriptions configuration
 export const MENU_DESCRIPTIONS = {
   DAY1: {

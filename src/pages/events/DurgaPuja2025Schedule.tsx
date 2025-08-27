@@ -3,8 +3,9 @@ import { Calendar, MapPin, Heart, TicketX, Leaf, Utensils } from 'lucide-react';
 import { Footer } from '../../components/shared/Footer';
 import { SEOHead } from '../../components/SEO/SEOHead';
 import { getEventDate } from '../../utils/eventUtils';
-import { durgaPujaMeals2025 } from '../../utils/mealData';
+import { durgaPujaMeals2025, FOOD_ITEMS } from '../../utils/mealData';
 import { durgaPujaSchedule2025 } from '../../utils/eventScheduleData';
+import { FoodMenuItem } from '../../types/mealReservation';
 
 function DurgaPuja2025Schedule() {
   useEffect(() => {
@@ -127,9 +128,12 @@ function DurgaPuja2025Schedule() {
                         {item.name}
                       </h4>
                       <div className="text-gray-700">
-                        {item.description.split(',').map((menuItem, index) => (
+                        {FOOD_ITEMS.day1VegItems.map((menuItem, index) => (
                           <div key={index} className="py-1 border-b border-gray-100 last:border-b-0">
-                            {menuItem.trim()}
+                            <div className="font-medium">{menuItem.title}</div>
+                            <div className="text-sm text-gray-600 italic pl-2">
+                              {menuItem.description}
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -143,9 +147,12 @@ function DurgaPuja2025Schedule() {
                         {item.name}
                       </h4>
                       <div className="text-gray-700">
-                        {item.description.split(',').map((menuItem, index) => (
+                        {FOOD_ITEMS.day1NonVegItems.map((menuItem, index) => (
                           <div key={index} className="py-1 border-b border-gray-100 last:border-b-0">
-                            {menuItem.trim()}
+                            <div className="font-medium">{menuItem.title}</div>
+                            <div className="text-sm text-gray-600 italic pl-2">
+                              {menuItem.description}
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -202,9 +209,12 @@ function DurgaPuja2025Schedule() {
                         {item.name}
                       </h4>
                       <div className="text-gray-700">
-                        {item.description.split(',').map((menuItem, index) => (
+                        {FOOD_ITEMS.day2VegItems.map((menuItem, index) => (
                           <div key={index} className="py-1 border-b border-gray-100 last:border-b-0">
-                            {menuItem.trim()}
+                            <div className="font-medium">{menuItem.title}</div>
+                            <div className="text-sm text-gray-600 italic pl-2">
+                              {menuItem.description}
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -218,9 +228,12 @@ function DurgaPuja2025Schedule() {
                         {item.name}
                       </h4>
                       <div className="text-gray-700">
-                        {item.description.split(',').map((menuItem, index) => (
+                        {FOOD_ITEMS.day2NonVegItems.map((menuItem, index) => (
                           <div key={index} className="py-1 border-b border-gray-100 last:border-b-0">
-                            {menuItem.trim()}
+                            <div className="font-medium">{menuItem.title}</div>
+                            <div className="text-sm text-gray-600 italic pl-2">
+                              {menuItem.description}
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -277,9 +290,12 @@ function DurgaPuja2025Schedule() {
                         {item.name}
                       </h4>
                       <div className="text-gray-700">
-                        {item.description.split(',').map((menuItem, index) => (
+                        {FOOD_ITEMS.day3VegItems.map((menuItem, index) => (
                           <div key={index} className="py-1 border-b border-gray-100 last:border-b-0">
-                            {menuItem.trim()}
+                            <div className="font-medium">{menuItem.title}</div>
+                            <div className="text-sm text-gray-600 italic pl-2">
+                              {menuItem.description}
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -293,11 +309,7 @@ function DurgaPuja2025Schedule() {
                         {item.name}
                       </h4>
                       <div className="text-gray-700">
-                        {item.description.split(',').map((menuItem, index) => (
-                          <div key={index} className="py-1 border-b border-gray-100 last:border-b-0">
-                            {menuItem.trim()}
-                          </div>
-                        ))}
+                        {/* No non-veg items for Day 3 */}
                       </div>
                     </div>
                   ))}
@@ -354,9 +366,9 @@ function DurgaPuja2025Schedule() {
                             Anandamela Style
                           </span>
                         </div>
-                        <h4 className="font-semibold text-gray-800 text-lg mb-2">{item.name}</h4>
+                        <h4 className="font-semibold text-gray-800 text-lg mb-2">{FOOD_ITEMS.day4Items[0].title}</h4>
                         <p className="text-gray-700 mb-4 leading-relaxed">
-                          {item.description}
+                          {FOOD_ITEMS.day4Items[0].description}
                         </p>
                       </div>
                     </div>
@@ -367,13 +379,23 @@ function DurgaPuja2025Schedule() {
             
             <div className="mt-10 text-center">
               
-                  <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-md max-w-lg mx-auto">
-                    <div className="flex items-center justify-center">
-                      <TicketX className="h-5 w-5 text-yellow-600 mr-2" />
-                      <p className="font-medium text-yellow-700">Food registration will be opened soon</p>
-                    </div>
-                    <p className="text-yellow-600 mt-1 text-center">We'll notify all members when the meal registration system is available.</p>
-                  </div>
+                <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-md max-w-lg mx-auto">
+                <div className="flex items-center justify-center">
+                  <TicketX className="h-5 w-5 text-yellow-600 mr-2" />
+                  <p className="font-medium text-yellow-700">Register for food now!</p>
+                </div>
+                <p className="text-yellow-600 mt-1 text-center">Please fill out our meal registration form to reserve your food for the event.</p>
+                <div className="mt-4 text-center">
+                  <a 
+                    href="https://forms.fillout.com/t/grq8oAVDuFus" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-block bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
+                    >
+                    Register for Food
+                  </a>
+                </div>
+                </div>
               
               <p className="text-sm text-gray-600 mt-4">
                 Reserve your meals in advance for Days 1-3. For Day 4, food will be available at various stalls on the spot.
