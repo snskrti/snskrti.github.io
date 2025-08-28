@@ -50,7 +50,7 @@ export const FOOD_ITEMS = {
   
   // Day 4 Menu Items
   day4Items: [
-    { title: 'Anandamela Food Arrangement', description: 'Visit various food stalls and buy fresh food on the spot - Bengali street food, sweets, snacks and more!' }
+    { title: 'Anandamela Food Arrangement', description: 'Visit various food stalls and buy fresh food on the spot - Indian street food, sweets, snacks and more! Please carry cash for buying snacks at the venue.' }
   ]
 };
 
@@ -181,7 +181,7 @@ export const durgaPujaMeals2025: DayMenu[] = [
       {
         id: 'anandamela-info',
         name: 'Anandamela Food Arrangement',
-        description: 'Visit various food stalls and buy fresh food on the spot - Bengali street food, sweets, snacks and more!',
+        description: 'Visit various food stalls and buy fresh food on the spot - Indian street food, sweets, snacks and more! Please carry cash for buying snacks at the venue.',
         price: 0,
         category: 'veg',
         available: false

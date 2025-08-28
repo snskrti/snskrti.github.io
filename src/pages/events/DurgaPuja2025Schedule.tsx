@@ -114,11 +114,11 @@ function DurgaPuja2025Schedule() {
                   </ul>
                 </div>
                 
-                {/* Food Menu for Day 1 */}
+                {/* Dinner Menu for Day 1 */}
                 <div className="bg-white rounded-lg shadow p-6">
                   <div className="flex items-center mb-4">
                     <Heart className="w-6 h-6 text-amber-600 mr-3" />
-                    <h3 className="text-xl font-semibold text-amber-800">Food Menu</h3>
+                    <h3 className="text-xl font-semibold text-amber-800">Dinner Menu</h3>
                   </div>
                   
                   {durgaPujaMeals2025[0].vegItems.map((item) => (
@@ -158,6 +158,13 @@ function DurgaPuja2025Schedule() {
                       </div>
                     </div>
                   ))}
+                  
+                  <div className="bg-amber-50 p-3 rounded-md mt-6 border border-amber-200">
+                    <p className="text-amber-700 text-sm font-medium">
+                      <span className="font-bold">Please Note:</span> Snacks will be available for purchase in the early evening hours. 
+                      We request guests to carry cash for buying snacks at the venue.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -195,11 +202,11 @@ function DurgaPuja2025Schedule() {
                   </ul>
                 </div>
                 
-                {/* Food Menu for Day 2 */}
+                {/* Dinner Menu for Day 2 */}
                 <div className="bg-white rounded-lg shadow p-6">
                   <div className="flex items-center mb-4">
                     <Heart className="w-6 h-6 text-amber-600 mr-3" />
-                    <h3 className="text-xl font-semibold text-amber-800">Food Menu</h3>
+                    <h3 className="text-xl font-semibold text-amber-800">Dinner Menu</h3>
                   </div>
                   
                   {durgaPujaMeals2025[1].vegItems.map((item) => (
@@ -239,6 +246,13 @@ function DurgaPuja2025Schedule() {
                       </div>
                     </div>
                   ))}
+                  
+                  <div className="bg-amber-50 p-3 rounded-md mt-6 border border-amber-200">
+                    <p className="text-amber-700 text-sm font-medium">
+                      <span className="font-bold">Please Note:</span> Snacks will be available for purchase in the early evening hours. 
+                      We request guests to carry cash for buying snacks at the venue.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -276,11 +290,11 @@ function DurgaPuja2025Schedule() {
                   </ul>
                 </div>
                 
-                {/* Food Menu for Day 3 */}
+                {/* Dinner Menu for Day 3 */}
                 <div className="bg-white rounded-lg shadow p-6">
                   <div className="flex items-center mb-4">
                     <Heart className="w-6 h-6 text-amber-600 mr-3" />
-                    <h3 className="text-xl font-semibold text-amber-800">Food Menu</h3>
+                    <h3 className="text-xl font-semibold text-amber-800">Dinner Menu</h3>
                   </div>
                   
                   {durgaPujaMeals2025[2].vegItems.map((item) => (
@@ -313,6 +327,13 @@ function DurgaPuja2025Schedule() {
                       </div>
                     </div>
                   ))}
+                  
+                  <div className="bg-amber-50 p-3 rounded-md mt-6 border border-amber-200">
+                    <p className="text-amber-700 text-sm font-medium">
+                      <span className="font-bold">Please Note:</span> Snacks will be available for purchase in the early evening hours. 
+                      We request guests to carry cash for buying snacks at the venue.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -350,11 +371,11 @@ function DurgaPuja2025Schedule() {
                   </ul>
                 </div>
                 
-                {/* Food Menu for Day 4 */}
+                {/* Dinner Menu for Day 4 */}
                 <div className="bg-white rounded-lg shadow p-6">
                   <div className="flex items-center mb-4">
                     <Heart className="w-6 h-6 text-amber-600 mr-3" />
-                    <h3 className="text-xl font-semibold text-amber-800">Food Menu</h3>
+                    <h3 className="text-xl font-semibold text-amber-800">Dinner Menu</h3>
                   </div>
                   
                   {durgaPujaMeals2025[3].vegItems.map((item) => (
@@ -379,23 +400,24 @@ function DurgaPuja2025Schedule() {
             
             <div className="mt-10 text-center">
               
-                <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-md max-w-lg mx-auto">
+              <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-md max-w-lg mx-auto">
                 <div className="flex items-center justify-center">
-                  <TicketX className="h-5 w-5 text-yellow-600 mr-2" />
-                  <p className="font-medium text-yellow-700">Register for food now!</p>
+                <TicketX className="h-5 w-5 text-yellow-600 mr-2" />
+                <p className="font-medium text-yellow-700">Register for food now!</p>
                 </div>
-                <p className="text-yellow-600 mt-1 text-center">Please fill out our meal registration form to reserve your food for the event.</p>
-                <div className="mt-4 text-center">
-                  <a 
-                    href="https://forms.fillout.com/t/grq8oAVDuFus" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="inline-block bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
-                    >
-                    Register for Food
-                  </a>
-                </div>
-                </div>
+              <p className="text-yellow-600 mt-1 text-center">Please fill out our meal registration form to reserve your food for the event.</p>
+              <p className="text-yellow-600 mt-1 text-center font-medium">Limited tickets available on a first-come, first-served basis!</p>
+              <div className="mt-4 text-center">
+                <a 
+                href="https://forms.fillout.com/t/grq8oAVDuFus" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-block bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
+                >
+                Register for Food
+                </a>
+              </div>
+              </div>
               
               <p className="text-sm text-gray-600 mt-4">
                 Reserve your meals in advance for Days 1-3. For Day 4, food will be available at various stalls on the spot.
