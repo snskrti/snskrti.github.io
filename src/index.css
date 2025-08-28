@@ -43,6 +43,8 @@ html, body, #root {
 
 .animate-fade-in {
   animation: fadeIn 1s ease-out forwards;
+  /* Ensure this is fully visible on mobile without needing JavaScript */
+  opacity: 1;
 }
 
 .animate-hero-fade-in {

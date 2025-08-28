@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 import { Calendar, MapPin, Heart, TicketX, Leaf, Utensils } from 'lucide-react';
 import { Footer } from '../../components/shared/Footer';
 import { SEOHead } from '../../components/SEO/SEOHead';
@@ -8,31 +8,36 @@ import { durgaPujaSchedule2025 } from '../../utils/eventScheduleData';
 import { FoodMenuItem } from '../../types/mealReservation';
 
 function DurgaPuja2025Schedule() {
+  const [isContentVisible, setIsContentVisible] = useState(true); // Start with visible content by default
+
   useEffect(() => {
     window.scrollTo(0, 0);
     
-    // Add scroll animations
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('animate-fade-in');
-          entry.target.classList.remove('opacity-0');
-        }
+    // Make content visible immediately to prevent blank screens on mobile
+    setIsContentVisible(true);
+    
+    // Fallback animation approach that works on both desktop and mobile
+    const animateElements = () => {
+      const elements = document.querySelectorAll('.animate-on-scroll');
+      elements.forEach(element => {
+        element.classList.add('animate-fade-in');
       });
-    }, observerOptions);
-
-    document.querySelectorAll('.animate-on-scroll').forEach((element) => {
-      observer.observe(element);
-    });
-
+    };
+    
+    // Small delay to ensure DOM is ready
+    setTimeout(animateElements, 100);
+    
+    // Add a fallback in case JavaScript fails to execute properly on mobile
+    const fallbackTimer = setTimeout(() => {
+      const mainContent = document.querySelector('section.animate-on-scroll');
+      if (mainContent && mainContent.classList.contains('opacity-0')) {
+        mainContent.classList.remove('opacity-0');
+        mainContent.classList.add('animate-fade-in');
+      }
+    }, 1000);
+    
     return () => {
-      observer.disconnect();
+      clearTimeout(fallbackTimer);
     };
   }, []);
 
@@ -60,6 +65,9 @@ function DurgaPuja2025Schedule() {
           src="/images/ma-durga-face-right.jpg"
           alt="Durga Puja Celebration"
           className="w-full h-full object-cover blur-sm opacity-90"
+          loading="eager"
+          width="1200"
+          height="800"
         />
         <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
           <div className="text-center text-white">
@@ -76,7 +84,7 @@ function DurgaPuja2025Schedule() {
 
       <main className="max-w-6xl mx-auto px-4 py-12">
         {/* Schedule and Food Menu Section */}
-        <section className="animate-on-scroll opacity-0">
+        <section className={`animate-on-scroll ${isContentVisible ? 'animate-fade-in' : ''}`}>
           <div className="bg-gradient-to-r from-orange-50 to-amber-100 p-10 rounded-lg shadow-lg max-w-5xl mx-auto">
             <h2 className="text-3xl font-bold text-amber-800 mb-6 text-center">Program Schedule & Food Menu</h2>
             <div className="w-20 h-1 bg-amber-500 mx-auto mb-10"></div>
