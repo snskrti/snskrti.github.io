@@ -8,13 +8,6 @@ export interface Event {
 
 export const events: Event[] = [
     {
-      title: "Summer Grill 2025",
-      date: "August 03, 2025",
-      description: "Summer Grill Event in Hamburg",
-      image: "/images/grill-event-banner-2025.jpeg",
-      link: "/events/grill-2025"
-    },
-    {
       title: "Rakhi",
       date: "August 03, 2025",
       description: "Rakhi Celebration",

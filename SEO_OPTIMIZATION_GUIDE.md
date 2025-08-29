@@ -49,7 +49,6 @@
 You need to add SEO components to:
 
 - [ ] `Holi2025.tsx`
-- [ ] `GrillEvent2025.tsx`
 - [ ] `Rakhi2025.tsx`
 - [ ] `SitAndDraw2025.tsx`
 - [ ] `Diwali2025.tsx`
