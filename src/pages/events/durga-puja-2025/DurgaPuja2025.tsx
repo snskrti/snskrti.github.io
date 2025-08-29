@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar, MapPin, Users, Heart, Star, Mic, HandHeart, Music, PaintBucket, Mail, Facebook, Instagram, TicketX, Leaf, Utensils } from 'lucide-react';
-import { Footer } from '../../components/shared/Footer';
-import { SEOHead } from '../../components/SEO/SEOHead';
-import { getEventDate } from '../../utils/eventUtils';
-import { socialMediaLinks } from '../../types/socialMediaLinks';
+import { Footer } from '../../../components/shared/Footer';
+import { SEOHead } from '../../../components/SEO/SEOHead';
+import { getEventDate } from '../../../utils/eventUtils';
+import { socialMediaLinks } from '../../../types/socialMediaLinks';
 
 function DurgaPuja2025() {
   // Typewriter component for bilingual translation
@@ -372,7 +372,7 @@ function DurgaPuja2025() {
 
         <section className="animate-on-scroll opacity-0">
           <div className="bg-gradient-to-r from-orange-50 to-amber-100 p-10 rounded-lg shadow-lg max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-amber-800 mb-6 text-center">Program Schedule & Food Menu</h2>
+            <h2 className="text-3xl font-bold text-amber-800 mb-6 text-center">Food & Schedule</h2>
             <div className="w-20 h-1 bg-amber-500 mx-auto mb-10"></div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Program Schedule Item */}
