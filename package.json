@@ -6,10 +6,10 @@
   "homepage": "./",
   "scripts": {
     "start": "react-scripts start",
-    "build": "CI=false TSC_COMPILE_ON_ERROR=true react-scripts build",
+    "build": "CI=false TSC_COMPILE_ON_ERROR=true PUBLIC_URL=/ NODE_ENV=production react-scripts build",
+    "postbuild": "cp public/_redirects build/_redirects",
     "lint": "eslint .",
-    "netlify:dev": "netlify dev",
-    "netlify:build": "npm run build"
+    "netlify:dev": "netlify dev"
   },
   "dependencies": {
     "@stripe/react-stripe-js": "^3.8.0",
