@@ -73,6 +73,7 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
         ).then(() => {
           setDbSaveStatus('success');
         }).catch((err) => {
+          console.error('Error saving reservation data:', err);
           setDbSaveStatus('error');
         }).finally(() => {
           setIsLoading(false);

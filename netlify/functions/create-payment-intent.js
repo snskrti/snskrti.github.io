@@ -222,14 +222,7 @@ exports.handler = async (event, context) => {
       // Remove receipt_email to prevent generic receipt, we'll send detailed invoice instead
       description: description || `Durga Puja 2025 Meal Reservation - See detailed invoice ${finalizedInvoice.number}`,
       statement_descriptor_suffix: 'DURGA PUJA', // Limited to 22 characters for card payments
-      shipping: {
-        address: {
-          line1: 'Event Venue TBD',
-          city: 'Hamburg',
-          country: 'DE',
-        },
-        name: customerInfo.name,
-      },
+      receipt_email: customerInfo.email,
     });
 
     return {
