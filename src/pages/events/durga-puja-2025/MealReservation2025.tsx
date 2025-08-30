@@ -485,7 +485,7 @@ function MealReservation2025() {
                     />
                   </div>
 
-                  <div className="flex items-center p-3 bg-orange-50 rounded-lg">
+                  {/* <div className="flex items-center p-3 bg-orange-50 rounded-lg">
                     <input
                       type="checkbox"
                       id="isMember"
@@ -496,7 +496,7 @@ function MealReservation2025() {
                     <label htmlFor="isMember" className="ml-3 text-xs font-medium text-gray-700">
                       I declare that I and every adult in this reservation is a registered member of Sanskriti e.V.
                     </label>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
