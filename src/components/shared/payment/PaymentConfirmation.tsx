@@ -106,14 +106,14 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
     console.log('📦 Current location state:', location.state);
     
     try {
-      // Determine the base URL for Netlify Functions
-      const isLocalDev = window.location.hostname === 'localhost';
-      const functionsBaseUrl = isLocalDev && window.location.port === '3000' 
+      // Determine the base URL for Netlify Functions based on NODE_ENV
+      const isLocalDev = process.env.NODE_ENV === 'development';
+      const functionsBaseUrl = isLocalDev
         ? 'http://localhost:8888/.netlify/functions' 
         : '/.netlify/functions';
       
       console.log(`🔍 Fetching payment details for ID: ${paymentIntentId}`);
-      console.log(`🌐 Using functions base URL: ${functionsBaseUrl}`);
+      console.log(`🌐 Using functions base URL: ${functionsBaseUrl} (NODE_ENV: ${process.env.NODE_ENV})`);
       
       const response = await fetch(`${functionsBaseUrl}/get-payment-details`, {
         method: 'POST',
