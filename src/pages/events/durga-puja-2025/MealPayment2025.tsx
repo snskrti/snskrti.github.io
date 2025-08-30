@@ -26,7 +26,7 @@ const PaymentWrapper: React.FC<{ reservation: MealReservation }> = ({ reservatio
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            amount: reservation.finalAmount,
+            amount: reservation.totalAmount,
             currency: 'eur',
             customerInfo: reservation.customerInfo,
             reservationData: reservation,
@@ -200,7 +200,7 @@ const PaymentForm: React.FC<{ reservation: MealReservation; clientSecret: string
         ) : (
           <>
             <Lock className="w-5 h-5 mr-2" />
-            Pay €{(reservation.finalAmount || 0).toFixed(2)}
+            Pay €{(reservation.totalAmount || 0).toFixed(2)}
           </>
         )}
       </button>
@@ -447,19 +447,8 @@ function MealPayment2025() {
 
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <span>Subtotal:</span>
-                  <span>€{(reservation.totalAmount || 0).toFixed(2)}</span>
-                </div>
-                {(reservation.discountAmount || 0) > 0 && (
-                  <div className="flex justify-between text-green-600">
-                    <span>Member Discount (5%):</span>
-                    <span>-€{(reservation.discountAmount || 0).toFixed(2)}</span>
-                  </div>
-                )}
-                <hr />
-                <div className="flex justify-between text-lg font-bold">
                   <span>Total:</span>
-                  <span className="text-orange-600">€{(reservation.finalAmount || 0).toFixed(2)}</span>
+                  <span className="text-orange-600 font-bold">€{(reservation.totalAmount || 0).toFixed(2)}</span>
                 </div>
               </div>
             </div>

@@ -16,8 +16,6 @@ function MealReservation2025() {
   });
   const [isFormValid, setIsFormValid] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
-  const [discountAmount, setDiscountAmount] = useState(0);
-  const [finalAmount, setFinalAmount] = useState(0);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -76,10 +74,8 @@ function MealReservation2025() {
       }
     });
 
-    // No discount calculation needed as prices are already member-specific
+    // Set the total amount
     setTotalAmount(total);
-    setDiscountAmount(0); // No discount since we're using flat pricing
-    setFinalAmount(total);
     
     console.log(`Final total: ${total}`);
   }, [selectedItems, customerInfo.isMember]);
@@ -157,12 +153,37 @@ function MealReservation2025() {
   const handleProceedToPayment = () => {
     if (!isFormValid) return;
 
+    // Organize selected items by day for the new structure
+    const daySelections: Record<string, SelectedItemWithAge[]> = {};
+    
+    Object.entries(selectedItems).forEach(([compositeKey, itemDetails]) => {
+      if (!compositeKey.includes('anandamela')) {
+        try {
+          // Parse item details to get the day number
+          const parts = compositeKey.split('-');
+          const itemId = parts[0] + (parts.length > 2 ? `-${parts[1]}` : '');
+          const dayNumber = itemId.match(/day(\d+)/)?.[1] || '1';
+          
+          // Initialize the day array if it doesn't exist
+          if (!daySelections[dayNumber]) {
+            daySelections[dayNumber] = [];
+          }
+          
+          // Add the item to the day's selections
+          daySelections[dayNumber].push({
+            ...itemDetails
+          });
+        } catch (error) {
+          console.error(`Error organizing item ${compositeKey}:`, error);
+        }
+      }
+    });
+
     const reservationData: MealReservation = {
       selectedItems,
+      daySelections,
       customerInfo,
-      totalAmount,
-      discountAmount,
-      finalAmount
+      totalAmount
     };
 
     navigate('/events/durga-puja-2025/meal-payment', { state: reservationData });
@@ -591,7 +612,7 @@ function MealReservation2025() {
                   <hr className="my-2" />
                   <div className="flex justify-between text-lg font-bold">
                     <span>Total:</span>
-                    <span className="text-orange-600">€{finalAmount.toFixed(2)}</span>
+                    <span className="text-orange-600">€{totalAmount.toFixed(2)}</span>
                   </div>
                 </div>
 

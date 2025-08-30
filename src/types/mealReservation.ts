@@ -24,18 +24,21 @@ export interface SelectedItemWithAge {
   ageGroup: 'adult' | 'child' | 'infant';
 }
 
+export interface DaySelections {
+  [dayNumber: string]: SelectedItemWithAge[];
+}
+
 export interface MealReservation {
   selectedItems: {
     [itemId: string]: SelectedItemWithAge;
   };
+  daySelections?: DaySelections; // Optional for backward compatibility
   customerInfo: {
     name: string;
     email: string;
     isMember: boolean;
   };
   totalAmount: number;
-  discountAmount: number;
-  finalAmount: number;
 }
 
 export interface PaymentIntent {
