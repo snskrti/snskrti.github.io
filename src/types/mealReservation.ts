@@ -65,3 +65,16 @@ export interface PaymentIntent {
     reservation: string;
   };
 }
+
+export interface PaymentIntent {
+  id: string;
+  client_secret: string;
+  amount: number;
+  currency: string;
+  metadata: {
+    customerName: string;
+    customerEmail: string;
+    isMember: string;
+    reservation: string;
+  };
+}
