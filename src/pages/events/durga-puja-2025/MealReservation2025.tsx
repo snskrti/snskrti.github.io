@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Calendar, MapPin, Plus, Minus, ShoppingCart, User, Mail, Utensils, Leaf, Users } from 'lucide-react';
+import { Calendar, MapPin, Plus, Minus, ShoppingCart, User, Mail, Utensils, Leaf, Users, EuroIcon } from 'lucide-react';
 import { Footer } from '../../../components/shared/Footer';
 import { SEOHead } from '../../../components/SEO/SEOHead';
 import { durgaPujaMeals2025, getPriceByDay, AGE_GROUPS } from '../../../utils/mealData';
@@ -234,13 +234,11 @@ function MealReservation2025() {
               
               <div className="bg-green-50 p-3 rounded-lg border border-green-100 mb-3">
                 <p className="text-xs text-green-700">
-                  <span className="font-semibold">Free Registration</span> - No payment required
+                  <span className="font-semibold pb-2">Free Registration</span> - No payment required <br />
+                  Buy Fresh Food on Spot - Pay at Stalls in Person
                 </p>
               </div>
               
-              <div className="inline-flex items-center px-3 py-2 bg-orange-600 text-white rounded-lg text-xs font-medium">
-                Buy Fresh Food on Spot - Pay at Stalls in Person
-              </div>
             </div>
           </div>
         </div>
