@@ -302,12 +302,10 @@ function DurgaPuja2025Schedule() {
                   <p className="text-yellow-600 mt-1 text-center font-medium text-xs sm:text-sm">Limited tickets available on a first-come, first-served basis!</p>
                   <div className="mt-3 sm:mt-4 text-center">
                     <a 
-                      href="https://forms.fillout.com/t/grq8oAVDuFus" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
+                      href="/events/durga-puja-2025/meal-reservation" 
                       className="inline-block bg-amber-600 hover:bg-amber-700 text-white font-medium py-1.5 sm:py-2 px-3 sm:px-4 rounded-md transition-colors text-sm sm:text-base"
                     >
-                      Register for Food
+                      Secure Your Dining Experience
                     </a>
                   </div>
                 </div>
