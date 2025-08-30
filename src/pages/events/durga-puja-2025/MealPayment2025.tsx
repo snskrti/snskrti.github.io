@@ -34,7 +34,9 @@ function MealPayment2025() {
           eventName: "Durga Puja 2025 Meal Reservation",
           eventPath: "/events/durga-puja-2025",
           returnToEventText: "Back to Durga Puja Event"
-        }
+        },
+        // Pass the full reservation data for database saving
+        reservationData: reservation
       } 
     });
   };

@@ -2,6 +2,13 @@
   publish = "build"
   functions = "netlify/functions"
 
+# Development settings
+[dev]
+  command = "npm start"
+  port = 8888
+  targetPort = 3000
+  envFiles = [".env.development"]  # Specifies to use .env.development during netlify dev
+
 # Redirect all routes to index.html for client-side routing
 [[redirects]]
   from = "/*"

@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircle, Download, Calendar, ArrowLeft, Mail } from 'lucide-react';
 import { Footer } from '../Footer';
 import { SEOHead } from '../../SEO/SEOHead';
+import { db } from '../../../firebase/clientApp';
+import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
 
 interface PaymentDetails {
   paymentIntentId?: string;
@@ -87,11 +89,12 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
       });
 
       const data = await response.json();
-      console.log(data);
+      
       if (!response.ok) {
         throw new Error(data.error || 'Failed to retrieve payment details');
       }
 
+      // Set payment details
       setPaymentDetails({
         paymentIntentId,
         status: data.status,
@@ -102,6 +105,59 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
         invoiceNumber: data.invoiceNumber,
         invoiceUrl: data.invoiceUrl,
       });
+      
+      // If this is a new successful payment, try to save the reservation data
+      // This provides a backup mechanism in case the webhook doesn't trigger
+      if (data.status === 'succeeded' && location.state?.reservationData) {
+        try {
+          // First try to save via serverless function
+          const serverResponse = await fetch(`${functionsBaseUrl}/save-meal-reservation`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              paymentIntentId,
+              reservationData: location.state.reservationData,
+              event: eventInfo?.eventName || 'Event Payment'
+            }),
+          });
+          
+          if (!serverResponse.ok) {
+            throw new Error('Server-side save failed');
+          }
+          
+          console.log('Reservation data saved successfully via server');
+        } catch (serverSaveError) {
+          console.error('Failed to save reservation data via server:', serverSaveError);
+          
+          // Fallback: Try to save using client-side Firebase
+          try {
+            // First check if a reservation with this payment intent already exists
+            const reservationsRef = collection(db, 'mealReservations');
+            const q = query(reservationsRef, where('paymentIntentId', '==', paymentIntentId));
+            const existingReservations = await getDocs(q);
+            
+            if (!existingReservations.empty) {
+              console.log(`Reservation with paymentIntentId ${paymentIntentId} already exists in Firestore, skipping client-side save`);
+            } else {
+              const reservationToSave = {
+                ...location.state.reservationData,
+                paymentIntentId,
+                paymentStatus: 'succeeded',
+                createdAt: serverTimestamp(),
+                eventType: eventInfo?.eventName || 'Event Payment',
+                source: 'client-side-fallback'
+              };
+              
+              await addDoc(collection(db, 'mealReservations'), reservationToSave);
+              console.log('Reservation data saved via client-side Firebase (fallback)');
+            }
+          } catch (clientSaveError) {
+            console.error('Failed to save reservation data via client-side:', clientSaveError);
+          }
+        }
+      }
     } catch (err) {
       console.error('Error retrieving payment details:', err);
       setError('Could not retrieve payment details. Please contact support.');

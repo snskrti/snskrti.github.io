@@ -217,6 +217,8 @@ exports.handler = async (event, context) => {
         customerEmail: customerInfo.email,
         isMember: customerInfo.isMember.toString(),
         event: 'Durga Puja 2025 - Meal Reservation',
+        // Include stringified reservation data for later retrieval
+        reservation: JSON.stringify(reservationData)
       },
       // Remove receipt_email to prevent generic receipt, we'll send detailed invoice instead
       description: description || `Durga Puja 2025 Meal Reservation - See detailed invoice ${finalizedInvoice.number}`,
