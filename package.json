@@ -3,11 +3,11 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "homepage": "./",
+  "homepage": "/",
   "scripts": {
     "start": "react-scripts start",
     "build": "CI=false TSC_COMPILE_ON_ERROR=true PUBLIC_URL=/ NODE_ENV=production react-scripts build",
-    "postbuild": "cp public/_redirects build/_redirects",
+    "postbuild": "echo 'Build completed successfully'",
     "lint": "eslint .",
     "netlify:dev": "netlify dev"
   },
