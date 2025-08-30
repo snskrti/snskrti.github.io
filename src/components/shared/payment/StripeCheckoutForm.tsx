@@ -55,6 +55,7 @@ const StripeCheckoutForm: React.FC<StripeCheckoutFormProps> = ({
     setPaymentError(null);
 
     try {
+      console.log('🔄 Starting payment confirmation with Stripe');
       // Use confirmPayment with the clientSecret and Elements instance
       const result = await stripe.confirmPayment({
         elements,
@@ -73,12 +74,18 @@ const StripeCheckoutForm: React.FC<StripeCheckoutFormProps> = ({
         redirect: 'if_required',
       });
 
+      console.log('🔄 Stripe payment result:', result);
+      
       if (result.error) {
+        console.error('❌ Payment error:', result.error);
         setPaymentError(result.error.message || 'Payment failed');
         if (onError) onError(result.error.message || 'Payment failed');
       } else if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
+        console.log('✅ Payment succeeded without redirect, calling onSuccess');
         setPaymentSuccess(true);
         if (onSuccess) onSuccess(result.paymentIntent.id);
+      } else {
+        console.log('ℹ️ Payment requires redirect or is incomplete');
       }
     } catch (error) {
       console.error('Payment error:', error);

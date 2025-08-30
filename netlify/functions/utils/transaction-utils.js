@@ -17,7 +17,7 @@ async function createReservationWithTransaction(db, paymentIntentId, reservation
     // Attempt to create a lock
     await db.runTransaction(async (transaction) => {
       // Check if a reservation already exists
-      const reservationsQuery = db.collection('mealReservations')
+      const reservationsQuery = db.collection('durga_puja_2025-mealReservations')
         .where('paymentIntentId', '==', paymentIntentId);
       
       const reservationSnapshot = await transaction.get(reservationsQuery);
@@ -47,7 +47,7 @@ async function createReservationWithTransaction(db, paymentIntentId, reservation
       });
       
       // Now add the actual reservation
-      const newReservationRef = db.collection('mealReservations').doc();
+      const newReservationRef = db.collection('durga_puja_2025-mealReservations').doc();
       transaction.set(newReservationRef, reservationData);
       
       return newReservationRef.id;

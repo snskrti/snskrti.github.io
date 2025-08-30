@@ -111,7 +111,7 @@ function MealReservation2025() {
         
         // Calculate the new quantity
         const newQuantity = Math.max(0, currentItem.quantity + change);
-        console.log(`New quantity: ${newQuantity}`);
+        // console.log(`New quantity: ${newQuantity}`);
         
         if (newQuantity === 0) {
           // Remove the item completely if quantity is 0

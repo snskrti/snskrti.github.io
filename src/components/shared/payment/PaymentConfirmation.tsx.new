@@ -5,7 +5,6 @@ import { Footer } from '../Footer';
 import { SEOHead } from '../../SEO/SEOHead';
 import { db } from '../../../firebase/clientApp';
 import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
-import { MealReservation } from '../../../types/mealReservation';
 
 interface PaymentDetails {
   paymentIntentId?: string;
@@ -39,7 +38,7 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
   const [eventInfo, setEventInfo] = useState<EventInfo | null>(null);
 
   // Function to save reservation data to Firestore
-  const saveReservationToFirestore = async (paymentIntentId: string, reservationData: any) => {
+  const saveReservationToFirestore = async (paymentIntentId: string, reservationData: any, eventType?: string) => {
     console.log('💾 Starting to save reservation to Firestore');
     setIsSavingToDb(true);
     
@@ -59,13 +58,14 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
       
       console.log('🆕 No existing reservation found, creating new document');
       
-      // Create the reservation document with the proper type
-      const reservationToSave: MealReservation = {
+      // Create the reservation document
+      const reservationToSave = {
         ...reservationData,
         paymentIntentId,
         paymentStatus: 'succeeded',
         createdAt: serverTimestamp(),
-        eventType: "Durga Puja 2025"
+        eventType: eventType || 'Durga Puja 2025',
+        source: 'client-side'
       };
       
       // Log the keys being saved
@@ -83,7 +83,6 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
       throw error;
     } finally {
       setIsSavingToDb(false);
-      console.log('📊 Save operation completed, isSavingToDb set to false');
     }
   };
 
@@ -128,15 +127,13 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
         console.log('💾 Will try to save reservation from state data');
         saveReservationToFirestore(
           location.state.paymentDetails.paymentIntentId as string,
-          location.state.reservationData
+          location.state.reservationData,
+          location.state.eventInfo?.eventName
         ).catch(err => {
           console.error('Failed to save reservation:', err);
-        }).finally(() => {
-          console.log('✅ Save operation completed (success or error), ending loading state');
           setIsLoading(false);
         });
       } else {
-        console.log('❌ No need to save reservation data, ending loading state');
         setIsLoading(false);
       }
     } 
@@ -145,7 +142,6 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
       console.log('❌ No payment data found in URL or state');
       setError('No payment information found');
       setIsLoading(false);
-      console.log('❌ No payment data, ending loading state');
     }
   }, [location, event]);
 
@@ -202,7 +198,8 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
         try {
           await saveReservationToFirestore(
             paymentIntentId, 
-            location.state.reservationData
+            location.state.reservationData, 
+            eventInfo?.eventName
           );
         } catch (error) {
           console.error('Failed to save reservation:', error);
@@ -210,15 +207,13 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
           setIsLoading(false);
         }
       } else {
-        // If no reservation data to save or we got here from a redirect, we're done loading
-        console.log('⚠️ No reservation data to save or came from redirect. Ending loading state.');
+        // If no reservation data to save, we're done loading
         setIsLoading(false);
       }
     } catch (err) {
       console.error('Error retrieving payment details:', err);
       setError('Could not retrieve payment details. Please contact support.');
       setIsLoading(false);
-      console.log('⚠️ Error occurred, ending loading state.');
     }
   };
 

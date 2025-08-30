@@ -29,6 +29,7 @@ export interface DaySelections {
 }
 
 export interface MealReservation {
+  // Basic customer info
   selectedItems: {
     [itemId: string]: SelectedItemWithAge;
   };
@@ -39,6 +40,17 @@ export interface MealReservation {
     isMember: boolean;
   };
   totalAmount: number;
+  
+  // Payment details (added for Firestore storage)
+  paymentIntentId?: string;
+  paymentStatus?: "succeeded" | "processing" | "failed";
+  invoiceId?: string;
+  invoiceNumber?: string;
+  invoiceUrl?: string;
+  
+  // Event metadata
+  eventType?: "Durga Puja 2025";
+  createdAt?: any; // Firestore Timestamp
 }
 
 export interface PaymentIntent {

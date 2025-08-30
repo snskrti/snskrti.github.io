@@ -22,6 +22,15 @@ function MealPayment2025() {
   }, [reservation, navigate]);
 
   const handlePaymentSuccess = (paymentId: string, invoiceDetails?: any) => {
+    console.log('💰 Payment success handler called with ID:', paymentId);
+    console.log('📝 Invoice details:', invoiceDetails);
+    console.log('🛒 Reservation data available:', !!reservation);
+    
+    // Log reservation data structure without sensitive details
+    if (reservation) {
+      console.log('🛒 Reservation keys:', Object.keys(reservation));
+    }
+    
     // Navigate to the shared payment confirmation page with payment details
     navigate('/payment-confirmation', { 
       state: { 
@@ -39,6 +48,8 @@ function MealPayment2025() {
         reservationData: reservation
       } 
     });
+    
+    console.log('🧭 Navigation to payment confirmation initiated');
   };
 
   const handlePaymentError = (error: string) => {

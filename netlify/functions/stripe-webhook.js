@@ -26,56 +26,6 @@ const initializeFirebase = () => {
   return firebaseApp;
 };
 
-// Save reservation data to Firestore
-const saveMealReservation = async (paymentIntent) => {
-  try {
-    // Extract reservation data from payment intent metadata
-    const reservationData = paymentIntent.metadata.reservation ? 
-      JSON.parse(paymentIntent.metadata.reservation) : null;
-    
-    if (!reservationData) {
-      console.log('No reservation data found in payment intent metadata');
-      return;
-    }
-
-    // Initialize Firebase and get Firestore instance
-    initializeFirebase();
-    const db = admin.firestore();
-    
-    // Check if a reservation with this payment intent already exists
-    const existingReservations = await db.collection('mealReservations')
-      .where('paymentIntentId', '==', paymentIntent.id)
-      .get();
-    
-    // If it exists, return early
-    if (!existingReservations.empty) {
-      console.log(`Reservation with paymentIntentId ${paymentIntent.id} already exists, skipping save`);
-      return existingReservations.docs[0].id;
-    }
-    
-    // Add payment information to the reservation data
-    const reservationToSave = {
-      ...reservationData,
-      paymentIntentId: paymentIntent.id,
-      paymentStatus: paymentIntent.status,
-      amount: paymentIntent.amount,
-      currency: paymentIntent.currency,
-      createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      eventType: paymentIntent.metadata.event || 'Durga Puja 2025',
-      source: 'webhook'
-    };
-    
-    // Save to Firestore
-    const docRef = await db.collection('mealReservations').add(reservationToSave);
-    console.log(`Meal reservation saved to Firestore with ID: ${docRef.id}`);
-    
-    return docRef.id;
-  } catch (error) {
-    console.error('Error saving meal reservation:', error);
-    throw error;
-  }
-};
-
 exports.handler = async (event, context) => {
   const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -115,10 +65,9 @@ exports.handler = async (event, context) => {
         const paymentIntent = stripeEvent.data.object;
         console.log(`PaymentIntent ${paymentIntent.id} succeeded`);
         
-        // Save meal reservation if this payment is for a meal reservation
-        if (paymentIntent.metadata.reservation) {
-          await saveMealReservation(paymentIntent);
-        }
+        // Payment is successful, but reservation data is handled by the frontend
+        // through the save-meal-reservation endpoint
+        console.log(`Payment for ${paymentIntent.metadata.event || 'event'} by ${paymentIntent.metadata.customerName || 'customer'}`);
         break;
         
       case 'charge.succeeded':

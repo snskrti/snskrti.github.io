@@ -59,6 +59,16 @@ export const StripePayment: React.FC<StripePaymentProps> = (props) => {
         ? 'http://localhost:8888/.netlify/functions' 
         : '/.netlify/functions';
       
+      console.log('💰 Creating payment intent...');
+      console.log('🌐 Using functions base URL:', functionsBaseUrl);
+      console.log('💵 Amount:', props.amount);
+      console.log('💰 Currency:', props.currency);
+      console.log('👤 Customer:', {
+        name: props.customerInfo.name,
+        email: props.customerInfo.email,
+        isMember: props.customerInfo.isMember
+      });
+      
       const response = await fetch(`${functionsBaseUrl}/create-payment-intent`, {
         method: 'POST',
         headers: {
@@ -73,9 +83,18 @@ export const StripePayment: React.FC<StripePaymentProps> = (props) => {
         }),
       });
 
+      console.log('🔄 Payment intent response status:', response.status);
       const data = await response.json();
+      console.log('🔄 Payment intent response data:', {
+        clientSecret: data.clientSecret ? '✓ Present' : '✗ Missing',
+        paymentIntentId: data.paymentIntentId,
+        invoiceId: data.invoiceId,
+        invoiceNumber: data.invoiceNumber,
+        hasInvoiceUrl: !!data.invoiceUrl
+      });
 
       if (!response.ok) {
+        console.error('❌ Payment intent creation failed:', data);
         throw new Error(data.error || 'Failed to create payment intent');
       }
 
@@ -91,9 +110,10 @@ export const StripePayment: React.FC<StripePaymentProps> = (props) => {
       });
 
       // Log success message with invoice details
-      console.log(`Payment intent created. Invoice #${data.invoiceNumber} available at: ${data.invoiceUrl}`);
+      console.log(`✅ Payment intent created. Invoice #${data.invoiceNumber} available at: ${data.invoiceUrl}`);
     } catch (err) {
-      console.error('Error creating payment intent:', err);
+      console.error('❌ Error creating payment intent:', err);
+      console.error('❌ Error details:', JSON.stringify(err, Object.getOwnPropertyNames(err)));
       const errorMessage = err instanceof Error ? err.message : 'Failed to initialize payment';
       setError(errorMessage);
       if (props.onError) props.onError(errorMessage);
