@@ -1,0 +1,9 @@
+{
+    "name": "sanskriti-netlify-functions",
+    "version": "1.0.0",
+    "description": "Netlify functions for Sanskriti website",
+    "dependencies": {
+        "firebase-admin": "^11.10.1",
+        "stripe": "^13.2.0"
+    }
+}

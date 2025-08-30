@@ -26,7 +26,7 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    const { amount, currency = 'eur', customerInfo, reservationData } = JSON.parse(event.body);
+    const { amount, currency = 'eur', customerInfo, reservationData, description = 'Food - Durga Puja 2025(Sanskriti eV)' } = JSON.parse(event.body);
 
     if (!amount || amount <= 0) {
       return {
@@ -69,41 +69,95 @@ exports.handler = async (event, context) => {
     const isMember = customerInfo.isMember;
     const memberDiscountAmount = reservationData.discountAmount || 0;
     
+    // Track Anandamela attendees separately
+    const anandamelaAttendees = {
+      adult: 0,
+      child: 0,
+      infant: 0,
+      total: 0
+    };
+    
     if (reservationData && reservationData.selectedItems) {
-      Object.entries(reservationData.selectedItems).forEach(([itemId, quantity]) => {
-        if (quantity > 0) {
-          // Parse item details
-          const isVeg = itemId.includes('veg-') && !itemId.includes('nonveg');
-          const dayNumber = itemId.match(/day(\d+)/)?.[1];
-          const thaliType = isVeg ? 'Vegetarian Thali' : 'Non-Vegetarian Thali';
-          
-          // Get date and price based on day number
-          let dateDisplay = '';
-          let unitPrice = 0;
-          switch(dayNumber) {
-            case '1': 
-              dateDisplay = 'September 28, 2025 (Shashti)'; 
-              unitPrice = 1.00;
-              break;
-            case '2': 
-              dateDisplay = 'September 29, 2025 (Saptami)'; 
-              unitPrice = 1.00;
-              break;
-            case '3': 
-              dateDisplay = 'September 30, 2025 (Ashtami)'; 
-              unitPrice = 1.00;
-              break;
-            default: 
-              dateDisplay = 'TBD';
-              unitPrice = 1.00;
-          }
-
-          lineItems.push({
-            description: `${thaliType} - ${dateDisplay}`,
-            quantity: quantity,
-            unitPrice: unitPrice,
-          });
+      Object.entries(reservationData.selectedItems).forEach(([itemId, itemDetails]) => {
+        if (itemDetails.quantity === 0) return;
+        
+        // Handle Anandamela attendance separately
+        if (itemId.includes('anandamela')) {
+          const ageGroup = itemId.split('-')[1] || 'adult';
+          anandamelaAttendees[ageGroup] += itemDetails.quantity;
+          anandamelaAttendees.total += itemDetails.quantity;
+          return; // Skip adding to line items as these are free
         }
+        
+        // Parse item details
+        const isVeg = itemId.includes('veg-') && !itemId.includes('nonveg');
+        const dayNumber = itemId.match(/day(\d+)/)?.[1];
+        const thaliType = isVeg ? 'Vegetarian Thali' : 'Non-Vegetarian Thali';
+        
+        // Get the age group
+        const ageGroup = itemDetails.ageGroup || 'adult';
+        let ageGroupDisplay = 'Adult (12+ years)';
+        if (ageGroup === 'child') ageGroupDisplay = 'Child (8-12 years)';
+        if (ageGroup === 'infant') ageGroupDisplay = 'Infant (0-8 years)';
+        
+        // Get date based on day number
+        let dateDisplay = '';
+        let unitPrice = 0;
+        switch(dayNumber) {
+          case '1': 
+            dateDisplay = 'September 28, 2025 (Shashti)'; 
+            break;
+          case '2': 
+            dateDisplay = 'September 29, 2025 (Saptami)'; 
+            break;
+          case '3': 
+            dateDisplay = 'September 30, 2025 (Ashtami)'; 
+            break;
+          default: 
+            dateDisplay = 'TBD';
+        }
+        
+        // Determine price based on age group and meal type
+        if (ageGroup === 'infant') {
+          unitPrice = 0; // Free for infants
+        } else if (ageGroup === 'child') {
+          unitPrice = isVeg ? 6.00 : 8.00; // Discounted for children
+        } else {
+          // Adult prices
+          switch(dayNumber) {
+            case '1':
+              unitPrice = isVeg ? 11.00 : 14.00;
+              break;
+            case '2':
+              unitPrice = isVeg ? 12.00 : 15.00;
+              break;
+            case '3':
+              unitPrice = isVeg ? 12.00 : 15.00;
+              break;
+            default:
+              unitPrice = isVeg ? 10.00 : 13.00;
+          }
+        }
+
+        lineItems.push({
+          description: `${thaliType} - ${dateDisplay} - ${ageGroupDisplay}`,
+          quantity: itemDetails.quantity,
+          unitPrice: unitPrice,
+        });
+      });
+    }
+    
+    // Add Anandamela attendance as a free item if there are attendees
+    if (anandamelaAttendees.total > 0) {
+      const attendeeDetails = [];
+      if (anandamelaAttendees.adult > 0) attendeeDetails.push(`${anandamelaAttendees.adult} Adult`);
+      if (anandamelaAttendees.child > 0) attendeeDetails.push(`${anandamelaAttendees.child} Child`);
+      if (anandamelaAttendees.infant > 0) attendeeDetails.push(`${anandamelaAttendees.infant} Infant`);
+      
+      lineItems.push({
+        description: `Anandamela Attendance - October 1, 2025 (Navami) - ${attendeeDetails.join(', ')}`,
+        quantity: 1,
+        unitPrice: 0,
       });
     }
 
@@ -162,10 +216,11 @@ exports.handler = async (event, context) => {
         customerName: customerInfo.name,
         customerEmail: customerInfo.email,
         isMember: customerInfo.isMember.toString(),
-        event: 'Durga Puja 2025 - Meal Reservation',
+        event: 'Durga Puja 2025 - Meal Reservation'
+        // Complete reservation data is saved separately via the save-meal-reservation endpoint
       },
       // Remove receipt_email to prevent generic receipt, we'll send detailed invoice instead
-      description: `Durga Puja 2025 Meal Reservation - See detailed invoice ${finalizedInvoice.number}`,
+      description: description || `Durga Puja 2025 Meal Reservation - See detailed invoice ${finalizedInvoice.number}`,
       statement_descriptor_suffix: 'DURGA PUJA', // Limited to 22 characters for card payments
       shipping: {
         address: {

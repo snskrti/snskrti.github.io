@@ -13,8 +13,11 @@ import { DummyPage } from './pages/DummyPage';
 import Rakhi2025 from './pages/events/Rakhi2025';
 import SitAndDraw2025 from './pages/events/SitAndDraw2025';
 import Diwali2025 from './pages/events/Diwali2025';
-import MealReservation2025 from './pages/events/MealReservation2025';
-import MealPayment2025 from './pages/events/MealPayment2025';
+import MealReservation2025 from './pages/events/durga-puja-2025/MealReservation2025';
+import MealPayment2025 from './pages/events/durga-puja-2025/MealPayment2025';
+import PaymentConfirmation from './pages/events/durga-puja-2025/PaymentConfirmation';
+// Import the shared payment confirmation component
+import SharedPaymentConfirmation from './components/shared/payment/PaymentConfirmation';
 
 function App() {
   return (
@@ -30,10 +33,13 @@ function App() {
           <Route path="/events/durga-puja-2025/schedule" element={<DurgaPuja2025Schedule />} />
           <Route path="/events/durga-puja-2025/meal-reservation" element={<MealReservation2025 />} />
           <Route path="/events/durga-puja-2025/meal-payment" element={<MealPayment2025 />} />
+          <Route path="/events/durga-puja-2025/payment-confirmation" element={<PaymentConfirmation />} />
           <Route path="/events/diwali-2025" element={<Diwali2025 />} />
           <Route path="/membership/request" element={<MembershipRequest />} />
           <Route path="/donations" element={<DonationsPage />} />
           <Route path="/dummy" element={<DummyPage />} />
+          {/* Generic payment confirmation route that can be used by any event */}
+          <Route path="/payment-confirmation" element={<SharedPaymentConfirmation />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Router>
