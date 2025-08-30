@@ -3,8 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircle, Download, Calendar, ArrowLeft, Mail } from 'lucide-react';
 import { Footer } from '../Footer';
 import { SEOHead } from '../../SEO/SEOHead';
-import { db } from '../../../firebase/clientApp';
-import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
+import { saveMealReservationToFirestore } from '../../../firebase/firestoreOperations';
 import { MealReservation } from '../../../types/mealReservation';
 
 interface PaymentDetails {
@@ -37,55 +36,6 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
   const [dbSaveStatus, setDbSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [error, setError] = useState<string | null>(null);
   const [eventInfo, setEventInfo] = useState<EventInfo | null>(null);
-
-  // Function to save reservation data to Firestore
-  const saveReservationToFirestore = async (paymentIntentId: string, reservationData: any) => {
-    console.log('💾 Starting to save reservation to Firestore');
-    setIsSavingToDb(true);
-    
-    try {
-      // First check if a reservation with this payment intent already exists
-      const reservationsRef = collection(db, 'durga_puja_2025-mealReservations');
-      const q = query(reservationsRef, where('paymentIntentId', '==', paymentIntentId));
-      console.log('🔍 Checking if reservation already exists in Firestore');
-      
-      const existingReservations = await getDocs(q);
-      
-      if (!existingReservations.empty) {
-        console.log(`✅ Reservation with paymentIntentId ${paymentIntentId} already exists in Firestore (${existingReservations.docs[0].id})`);
-        setDbSaveStatus('success');
-        return existingReservations.docs[0].id;
-      }
-      
-      console.log('🆕 No existing reservation found, creating new document');
-      
-      // Create the reservation document with the proper type
-      const reservationToSave: MealReservation = {
-        ...reservationData,
-        paymentIntentId,
-        paymentStatus: 'succeeded',
-        createdAt: serverTimestamp(),
-        eventType: "Durga Puja 2025"
-      };
-      
-      // Log the keys being saved
-      console.log('📋 Saving reservation with keys:', Object.keys(reservationToSave));
-      
-      // Save to Firestore
-      const docRef = await addDoc(collection(db, 'durga_puja_2025-mealReservations'), reservationToSave);
-      console.log('✅ Reservation saved to Firestore with ID:', docRef.id);
-      
-      setDbSaveStatus('success');
-      return docRef.id;
-    } catch (error) {
-      console.error('❌ Error saving reservation to Firestore:', error);
-      setDbSaveStatus('error');
-      throw error;
-    } finally {
-      setIsSavingToDb(false);
-      console.log('📊 Save operation completed, isSavingToDb set to false');
-    }
-  };
 
   useEffect(() => {
     console.log('🔄 PaymentConfirmation component mounted/updated');
@@ -126,13 +76,15 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
       // Check if we should save reservation data
       if (location.state.paymentDetails.status === 'succeeded' && location.state.reservationData) {
         console.log('💾 Will try to save reservation from state data');
-        saveReservationToFirestore(
-          location.state.paymentDetails.paymentIntentId as string,
+        saveMealReservationToFirestore(
+          location.state.paymentDetails.paymentIntentId || '',
           location.state.reservationData
-        ).catch(err => {
-          console.error('Failed to save reservation:', err);
+        ).then(() => {
+          setDbSaveStatus('success');
+        }).catch((err) => {
+          console.error('Error saving reservation:', err);
+          setDbSaveStatus('error');
         }).finally(() => {
-          console.log('✅ Save operation completed (success or error), ending loading state');
           setIsLoading(false);
         });
       } else {
@@ -200,7 +152,7 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
       // If this is a successful payment, save the reservation data to Firestore
       if (data.status === 'succeeded' && location.state?.reservationData) {
         try {
-          await saveReservationToFirestore(
+          await saveMealReservationToFirestore(
             paymentIntentId, 
             location.state.reservationData
           );
