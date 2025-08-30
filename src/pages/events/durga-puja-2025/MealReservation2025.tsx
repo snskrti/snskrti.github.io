@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, MapPin, Plus, Minus, ShoppingCart, User, Mail, Utensils, Leaf, Users } from 'lucide-react';
-import { Footer } from '../../components/shared/Footer';
-import { SEOHead } from '../../components/SEO/SEOHead';
-import { durgaPujaMeals2025, getPriceByDay, AGE_GROUPS } from '../../utils/mealData';
-import { MealReservation, MenuItem, SelectedItemWithAge } from '../../types/mealReservation';
+import { Footer } from '../../../components/shared/Footer';
+import { SEOHead } from '../../../components/SEO/SEOHead';
+import { durgaPujaMeals2025, getPriceByDay, AGE_GROUPS } from '../../../utils/mealData';
+import { MealReservation, MenuItem, SelectedItemWithAge } from '../../../types/mealReservation';
 
 function MealReservation2025() {
   const navigate = useNavigate();
@@ -31,30 +31,57 @@ function MealReservation2025() {
   const calculateTotal = useCallback(() => {
     let total = 0;
     
-    Object.entries(selectedItems).forEach(([itemId, itemDetails]) => {
+    Object.entries(selectedItems).forEach(([compositeKey, itemDetails]) => {
       // Skip Anandamela items as they're free and just for headcount
-      if (itemId.includes('anandamela')) {
+      if (compositeKey.includes('anandamela')) {
         return;
       }
       
-      // Parse item details from the ID
-      const isVeg = itemId.includes('veg-');
-      const dayNumber = itemId.match(/day(\d+)/)?.[1] || '1';
-      
-      // Get the price based on day, type, age group, and membership status
-      const price = getPriceByDay(
-        dayNumber, 
-        isVeg && !itemId.includes('nonveg'), 
-        itemDetails.ageGroup,
-        customerInfo.isMember
-      );
-      total += price * itemDetails.quantity;
+      try {
+        // Parse item details from the composite key
+        const parts = compositeKey.split('-');
+        const itemId = parts[0] + (parts.length > 2 ? `-${parts[1]}` : '');
+        const ageGroup = parts[parts.length - 1] as keyof typeof AGE_GROUPS;
+        
+        // Ensure we have a valid age group
+        if (!AGE_GROUPS[ageGroup]) {
+          console.error(`Invalid age group in key ${compositeKey}`);
+          return;
+        }
+        
+        // Parse day number from item ID
+        const isVeg = itemId.includes('veg-');
+        const dayNumber = itemId.match(/day(\d+)/)?.[1] || '1';
+        
+        // Get the price based on day, type, age group, and membership status
+        const price = getPriceByDay(
+          dayNumber, 
+          isVeg && !itemId.includes('nonveg'), 
+          ageGroup,
+          customerInfo.isMember
+        );
+        
+        // Make sure price is a valid number
+        if (isNaN(price)) {
+          console.error(`Invalid price calculated for ${compositeKey}`);
+          return;
+        }
+        
+        const itemTotal = price * itemDetails.quantity;
+        total += itemTotal;
+        
+        console.log(`Item: ${compositeKey}, Price: ${price}, Qty: ${itemDetails.quantity}, Total: ${itemTotal}`);
+      } catch (error) {
+        console.error(`Error calculating price for ${compositeKey}:`, error);
+      }
     });
 
     // No discount calculation needed as prices are already member-specific
     setTotalAmount(total);
     setDiscountAmount(0); // No discount since we're using flat pricing
     setFinalAmount(total);
+    
+    console.log(`Final total: ${total}`);
   }, [selectedItems, customerInfo.isMember]);
 
   const validateForm = useCallback(() => {
@@ -62,12 +89,12 @@ function MealReservation2025() {
     const hasSelectedItems = Object.entries(selectedItems).some(([_, item]) => item.quantity > 0);
     
     // For Anandamela-only registration, we still need customer info
-    const anandamelaOnly = Object.entries(selectedItems).every(([itemId, item]) => 
-      itemId.includes('anandamela') || item.quantity === 0
+    const anandamelaOnly = Object.entries(selectedItems).every(([compositeKey, item]) => 
+      compositeKey.includes('anandamela') || item.quantity === 0
     );
     
     const hasAnandamelaAttendees = Object.entries(selectedItems)
-      .filter(([itemId]) => itemId.includes('anandamela'))
+      .filter(([compositeKey]) => compositeKey.includes('anandamela'))
       .some(([_, item]) => item.quantity > 0);
       
     const hasValidCustomerInfo = customerInfo.name.trim() !== '' && 
@@ -79,41 +106,52 @@ function MealReservation2025() {
 
   const updateQuantity = (itemId: string, change: number, ageGroup: keyof typeof AGE_GROUPS) => {
     setSelectedItems(prev => {
-      const currentItem = prev[itemId] || { quantity: 0, ageGroup: 'adult' };
-      
-      // If we're adding to a different age group, create/update that entry
-      if (ageGroup !== currentItem.ageGroup || !(itemId in prev)) {
+      try {
+        // Create a composite key that combines itemId and ageGroup
+        const compositeKey = `${itemId}-${ageGroup}`;
+        // console.log(`Updating item: ${compositeKey}, change: ${change}`);
+        
+        const currentItem = prev[compositeKey] || { quantity: 0, ageGroup };
+        
+        // Calculate the new quantity
+        const newQuantity = Math.max(0, currentItem.quantity + change);
+        console.log(`New quantity: ${newQuantity}`);
+        
+        if (newQuantity === 0) {
+          // Remove the item completely if quantity is 0
+          const newItems = { ...prev };
+          delete newItems[compositeKey];
+          console.log(`Removed item: ${compositeKey}`);
+          return newItems;
+        }
+        
+        // Update or add the item with the composite key
         return {
           ...prev,
-          [itemId]: {
-            quantity: Math.max(0, change),
+          [compositeKey]: {
+            quantity: newQuantity,
             ageGroup
           }
         };
+      } catch (error) {
+        console.error('Error updating quantity:', error);
+        return prev;
       }
-      
-      // Otherwise just update the quantity for the existing age group
-      const newQuantity = Math.max(0, currentItem.quantity + change);
-      
-      if (newQuantity === 0) {
-        // Remove the item completely if quantity is 0
-        const newItems = { ...prev };
-        delete newItems[itemId];
-        return newItems;
-      }
-      
-      return {
-        ...prev,
-        [itemId]: {
-          ...currentItem,
-          quantity: newQuantity
-        }
-      };
     });
   };
 
   const getSelectedItemsCount = (): number => {
-    return Object.values(selectedItems).reduce((sum, item) => sum + item.quantity, 0);
+    try {
+      return Object.values(selectedItems).reduce((sum, item) => {
+        if (typeof item.quantity === 'number') {
+          return sum + item.quantity;
+        }
+        return sum;
+      }, 0);
+    } catch (error) {
+      console.error('Error calculating selected items count:', error);
+      return 0;
+    }
   };
 
   const handleProceedToPayment = () => {
@@ -150,10 +188,11 @@ function MealReservation2025() {
                 <p className="text-sm font-medium text-gray-700 mb-2">How many people will attend Anandamela?</p>
                 <p className="text-xs text-gray-500 mb-3">Free attendance - Please indicate expected attendees to help us plan</p>
                 <div className="flex justify-center space-x-4">
-                  {Object.entries(AGE_GROUPS).map(([ageKey, ageInfo]) => {
+                                      {Object.entries(AGE_GROUPS).map(([ageKey, ageInfo]) => {
                     const ageGroupKey = ageKey as keyof typeof AGE_GROUPS;
                     const anandamelaKey = `anandamela-${ageGroupKey}`;
-                    const selectedItem = selectedItems[anandamelaKey];
+                    const compositeKey = `${anandamelaKey}-${ageGroupKey}`;
+                    const selectedItem = selectedItems[compositeKey];
                     const quantity = selectedItem ? selectedItem.quantity : 0;
                     
                     return (
@@ -226,8 +265,9 @@ function MealReservation2025() {
               {Object.entries(AGE_GROUPS).map(([ageKey, ageInfo]) => {
                 const ageGroupKey = ageKey as keyof typeof AGE_GROUPS;
                 const price = getPriceByDay(dayNumber, isVeg, ageGroupKey, customerInfo.isMember);
-                const selectedItem = selectedItems[item.id];
-                const isSelected = selectedItem && selectedItem.ageGroup === ageGroupKey && selectedItem.quantity > 0;
+                const compositeKey = `${item.id}-${ageGroupKey}`;
+                const selectedItem = selectedItems[compositeKey];
+                const isSelected = selectedItem && selectedItem.quantity > 0;
                 
                 return (
                   <li key={ageKey} className="mr-2">
@@ -254,8 +294,9 @@ function MealReservation2025() {
           <div className="space-y-3">
             {Object.entries(AGE_GROUPS).map(([ageKey, ageInfo]) => {
               const ageGroupKey = ageKey as keyof typeof AGE_GROUPS;
-              const selectedItem = selectedItems[item.id];
-              const quantity = (selectedItem && selectedItem.ageGroup === ageGroupKey) ? selectedItem.quantity : 0;
+              const compositeKey = `${item.id}-${ageGroupKey}`;
+              const selectedItem = selectedItems[compositeKey];
+              const quantity = selectedItem ? selectedItem.quantity : 0;
               const price = getPriceByDay(dayNumber, isVeg, ageGroupKey, customerInfo.isMember);
               
               return (
@@ -464,7 +505,7 @@ function MealReservation2025() {
                   <div className="border-t border-b border-gray-200 py-3 space-y-2">
                     {/* Anandamela attendance - show first if selected */}
                     {Object.entries(selectedItems)
-                      .filter(([itemId]) => itemId.includes('anandamela'))
+                      .filter(([compositeKey]) => compositeKey.includes('anandamela'))
                       .some(([_, itemDetails]) => itemDetails.quantity > 0) && (
                         <div className="bg-orange-50 p-3 rounded-lg mb-2 border border-orange-100">
                           <div className="font-medium text-sm text-orange-800 mb-1">Anandamela Attendance</div>
@@ -472,19 +513,20 @@ function MealReservation2025() {
                             <span>Expected Attendees:</span>
                             <span className="font-medium">
                               {Object.entries(selectedItems)
-                                .filter(([itemId]) => itemId.includes('anandamela'))
+                                .filter(([compositeKey]) => compositeKey.includes('anandamela'))
                                 .reduce((sum, [_, itemDetails]) => sum + itemDetails.quantity, 0)}
                             </span>
                           </div>
                           {Object.entries(selectedItems)
-                            .filter(([itemId]) => itemId.includes('anandamela'))
-                            .map(([itemId, itemDetails]) => {
+                            .filter(([compositeKey]) => compositeKey.includes('anandamela'))
+                            .map(([compositeKey, itemDetails]) => {
                               if (itemDetails.quantity === 0) return null;
-                              const ageGroupKey = itemId.split('-')[1] as keyof typeof AGE_GROUPS;
+                              // Extract age group from composite key
+                              const ageGroupKey = compositeKey.split('-')[2] as keyof typeof AGE_GROUPS;
                               const ageGroupInfo = AGE_GROUPS[ageGroupKey];
                               
                               return (
-                                <div key={itemId} className="text-xs text-orange-600 flex justify-between">
+                                <div key={compositeKey} className="text-xs text-orange-600 flex justify-between">
                                   <span>{ageGroupInfo.name}:</span>
                                   <span>{itemDetails.quantity}</span>
                                 </div>
@@ -499,11 +541,12 @@ function MealReservation2025() {
                     
                     {/* Meal items with pricing */}
                     {Object.entries(selectedItems)
-                      .filter(([itemId]) => !itemId.includes('anandamela'))
-                      .map(([itemId, itemDetails]) => {
+                      .filter(([compositeKey]) => !compositeKey.includes('anandamela'))
+                      .map(([compositeKey, itemDetails]) => {
                         if (itemDetails.quantity === 0) return null;
                         
-                        // Parse item details
+                        // Parse item details from composite key
+                        const [itemId, ageGroupKey] = compositeKey.split('-');
                         const isVeg = itemId.includes('veg-');
                         const dayNumber = itemId.match(/day(\d+)/)?.[1] || '1';
                         const dayIndex = parseInt(dayNumber) - 1;
@@ -514,11 +557,11 @@ function MealReservation2025() {
                         
                         if (!item) return null;
                         
-                        const ageGroupInfo = AGE_GROUPS[itemDetails.ageGroup];
-                        const price = getPriceByDay(dayNumber, isVeg && !itemId.includes('nonveg'), itemDetails.ageGroup, customerInfo.isMember);
+                        const ageGroupInfo = AGE_GROUPS[ageGroupKey as keyof typeof AGE_GROUPS];
+                        const price = getPriceByDay(dayNumber, isVeg && !itemId.includes('nonveg'), ageGroupKey as keyof typeof AGE_GROUPS, customerInfo.isMember);
                         
                         return (
-                          <div key={`${itemId}-${itemDetails.ageGroup}`} className="text-xs bg-white p-2 rounded">
+                          <div key={compositeKey} className="text-xs bg-white p-2 rounded">
                             <div className="flex justify-between mb-1">
                               <span className="font-medium">{item.name}</span>
                               <span className="text-gray-600">{day.day}</span>

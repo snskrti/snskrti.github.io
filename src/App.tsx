@@ -13,8 +13,8 @@ import { DummyPage } from './pages/DummyPage';
 import Rakhi2025 from './pages/events/Rakhi2025';
 import SitAndDraw2025 from './pages/events/SitAndDraw2025';
 import Diwali2025 from './pages/events/Diwali2025';
-import MealReservation2025 from './pages/events/MealReservation2025';
-import MealPayment2025 from './pages/events/MealPayment2025';
+import MealReservation2025 from './pages/events/durga-puja-2025/MealReservation2025';
+import MealPayment2025 from './pages/events/durga-puja-2025/MealPayment2025';
 
 function App() {
   return (
