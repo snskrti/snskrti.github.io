@@ -202,7 +202,7 @@ exports.handler = async (event, context) => {
 
     // Finalize the invoice
     const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id);
-
+    
     // Create payment intent from the invoice
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount * 100), // Convert to cents
@@ -222,14 +222,7 @@ exports.handler = async (event, context) => {
       // Remove receipt_email to prevent generic receipt, we'll send detailed invoice instead
       description: description || `Durga Puja 2025 Meal Reservation - See detailed invoice ${finalizedInvoice.number}`,
       statement_descriptor_suffix: 'DURGA PUJA', // Limited to 22 characters for card payments
-      shipping: {
-        address: {
-          line1: 'Event Venue TBD',
-          city: 'Hamburg',
-          country: 'DE',
-        },
-        name: customerInfo.name,
-      },
+      receipt_email: customerInfo.email,
     });
 
     return {

@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircle, Download, Calendar, ArrowLeft, Mail } from 'lucide-react';
 import { Footer } from '../Footer';
 import { SEOHead } from '../../SEO/SEOHead';
-import { saveMealReservationToFirestore } from '../../../firebase/firestoreOperations';
 import { MealReservation } from '../../../types/mealReservation';
 
 interface PaymentDetails {
@@ -67,14 +66,39 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
       
       // Check if we should save reservation data
       if (location.state.paymentDetails.status === 'succeeded' && location.state.reservationData) {
-        saveMealReservationToFirestore(
-          location.state.paymentDetails.paymentIntentId || '',
-          location.state.reservationData
-        ).then(() => {
-          setDbSaveStatus('success');
-        }).catch((err) => {
+        // Determine the base URL for Netlify Functions based on NODE_ENV
+        const isLocalDev = process.env.NODE_ENV === 'development';
+        const functionsBaseUrl = isLocalDev
+          ? 'http://localhost:8888/.netlify/functions' 
+          : '/.netlify/functions';
+        
+        setIsSavingToDb(true);
+        
+        fetch(`${functionsBaseUrl}/reservation-confirmation`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            paymentIntentId: location.state.paymentDetails.paymentIntentId || '',
+            reservationData: location.state.reservationData
+          }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            setDbSaveStatus('success');
+          } else {
+            console.error('Error from reservation-confirmation function:', data.error);
+            setDbSaveStatus('error');
+          }
+        })
+        .catch((err) => {
+          console.error('Error saving reservation data:', err);
           setDbSaveStatus('error');
-        }).finally(() => {
+        })
+        .finally(() => {
+          setIsSavingToDb(false);
           setIsLoading(false);
         });
       } else {
@@ -127,13 +151,38 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
       // If this is a successful payment, save the reservation data to Firestore
       if (data.status === 'succeeded' && location.state?.reservationData) {
         try {
-          await saveMealReservationToFirestore(
-            paymentIntentId, 
-            location.state.reservationData
-          );
+          setIsSavingToDb(true);
+          
+          // Determine the base URL for Netlify Functions
+          const isLocalDev = process.env.NODE_ENV === 'development';
+          const functionsBaseUrl = isLocalDev
+            ? 'http://localhost:8888/.netlify/functions' 
+            : '/.netlify/functions';
+          
+          const response = await fetch(`${functionsBaseUrl}/reservation-confirmation`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              paymentIntentId,
+              reservationData: location.state.reservationData
+            }),
+          });
+          
+          const saveResult = await response.json();
+          
+          if (saveResult.success) {
+            setDbSaveStatus('success');
+          } else {
+            console.error('Error from reservation-confirmation function:', saveResult.error);
+            setDbSaveStatus('error');
+          }
         } catch (error) {
+          console.error('Error saving reservation data:', error);
           setDbSaveStatus('error');
         } finally {
+          setIsSavingToDb(false);
           setIsLoading(false);
         }
       } else {
