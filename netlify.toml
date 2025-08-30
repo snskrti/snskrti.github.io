@@ -1,6 +1,12 @@
 [build]
   publish = "build"
   functions = "netlify/functions"
+  command = "npm ci && npm run build"
+
+[build.environment]
+  NODE_VERSION = "16"
+  TSC_COMPILE_ON_ERROR = "true"
+  CI = "false"
 
 # Development settings
 [dev]
