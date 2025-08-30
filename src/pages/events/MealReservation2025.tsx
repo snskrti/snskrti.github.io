@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Calendar, MapPin, Plus, Minus, ShoppingCart, User, Mail, Utensils, Leaf } from 'lucide-react';
+import { Calendar, MapPin, Plus, Minus, ShoppingCart, User, Mail, Utensils, Leaf, Users } from 'lucide-react';
 import { Footer } from '../../components/shared/Footer';
 import { SEOHead } from '../../components/SEO/SEOHead';
-import { durgaPujaMeals2025, MEMBER_DISCOUNT_PERCENTAGE, getPriceByDay } from '../../utils/mealData';
-import { MealReservation, MenuItem } from '../../types/mealReservation';
+import { durgaPujaMeals2025, MEMBER_DISCOUNT_PERCENTAGE, getPriceByDay, AGE_GROUPS } from '../../utils/mealData';
+import { MealReservation, MenuItem, SelectedItemWithAge } from '../../types/mealReservation';
 
 function MealReservation2025() {
   const navigate = useNavigate();
-  const [selectedItems, setSelectedItems] = useState<Record<string, number>>({});
+  const [selectedItems, setSelectedItems] = useState<Record<string, SelectedItemWithAge>>({});
   const [customerInfo, setCustomerInfo] = useState({
     name: '',
     email: '',
@@ -31,11 +31,19 @@ function MealReservation2025() {
   const calculateTotal = useCallback(() => {
     let total = 0;
     
-    durgaPujaMeals2025.forEach(day => {
-      [...day.vegItems, ...day.nonVegItems].forEach(item => {
-        const quantity = selectedItems[item.id] || 0;
-        total += item.price * quantity;
-      });
+    Object.entries(selectedItems).forEach(([itemId, itemDetails]) => {
+      // Skip Anandamela items as they're free and just for headcount
+      if (itemId.includes('anandamela')) {
+        return;
+      }
+      
+      // Parse item details from the ID
+      const isVeg = itemId.includes('veg-');
+      const dayNumber = itemId.match(/day(\d+)/)?.[1] || '1';
+      
+      // Get the price based on day, type, and age group
+      const price = getPriceByDay(dayNumber, isVeg && !itemId.includes('nonveg'), itemDetails.ageGroup);
+      total += price * itemDetails.quantity;
     });
 
     const discount = customerInfo.isMember ? (total * MEMBER_DISCOUNT_PERCENTAGE / 100) : 0;
@@ -47,7 +55,18 @@ function MealReservation2025() {
   }, [selectedItems, customerInfo.isMember]);
 
   const validateForm = useCallback(() => {
-    const hasSelectedItems = Object.values(selectedItems).some(qty => qty > 0);
+    // Check if any items are selected (either meals or Anandamela attendees)
+    const hasSelectedItems = Object.entries(selectedItems).some(([_, item]) => item.quantity > 0);
+    
+    // For Anandamela-only registration, we still need customer info
+    const anandamelaOnly = Object.entries(selectedItems).every(([itemId, item]) => 
+      itemId.includes('anandamela') || item.quantity === 0
+    );
+    
+    const hasAnandamelaAttendees = Object.entries(selectedItems)
+      .filter(([itemId]) => itemId.includes('anandamela'))
+      .some(([_, item]) => item.quantity > 0);
+      
     const hasValidCustomerInfo = customerInfo.name.trim() !== '' && 
                                 customerInfo.email.trim() !== '' && 
                                 customerInfo.email.includes('@');
@@ -55,19 +74,43 @@ function MealReservation2025() {
     setIsFormValid(hasSelectedItems && hasValidCustomerInfo);
   }, [selectedItems, customerInfo.name, customerInfo.email]);
 
-  const updateQuantity = (itemId: string, change: number) => {
+  const updateQuantity = (itemId: string, change: number, ageGroup: keyof typeof AGE_GROUPS) => {
     setSelectedItems(prev => {
-      const currentQty = prev[itemId] || 0;
-      const newQty = Math.max(0, currentQty + change);
+      const currentItem = prev[itemId] || { quantity: 0, ageGroup: 'adult' };
+      
+      // If we're adding to a different age group, create/update that entry
+      if (ageGroup !== currentItem.ageGroup || !(itemId in prev)) {
+        return {
+          ...prev,
+          [itemId]: {
+            quantity: Math.max(0, change),
+            ageGroup
+          }
+        };
+      }
+      
+      // Otherwise just update the quantity for the existing age group
+      const newQuantity = Math.max(0, currentItem.quantity + change);
+      
+      if (newQuantity === 0) {
+        // Remove the item completely if quantity is 0
+        const newItems = { ...prev };
+        delete newItems[itemId];
+        return newItems;
+      }
+      
       return {
         ...prev,
-        [itemId]: newQty
+        [itemId]: {
+          ...currentItem,
+          quantity: newQuantity
+        }
       };
     });
   };
 
   const getSelectedItemsCount = (): number => {
-    return (Object.values(selectedItems) as number[]).reduce((sum: number, qty: number) => sum + qty, 0);
+    return Object.values(selectedItems).reduce((sum, item) => sum + item.quantity, 0);
   };
 
   const handleProceedToPayment = () => {
@@ -85,8 +128,6 @@ function MealReservation2025() {
   };
 
   const renderMenuItem = (item: MenuItem, isVeg: boolean) => {
-    const quantity = selectedItems[item.id] || 0;
-    
     // Special handling for Anandamela
     if (item.id === 'anandamela-info') {
       return (
@@ -101,14 +142,59 @@ function MealReservation2025() {
               </div>
               <h4 className="font-semibold text-gray-800 text-sm mb-2">{item.name}</h4>
               <p className="text-xs text-gray-600 mb-4 leading-relaxed">{item.description}</p>
+              
+              <div className="mb-4 bg-white p-4 rounded-lg border border-orange-100">
+                <p className="text-sm font-medium text-gray-700 mb-2">How many people will attend Anandamela?</p>
+                <p className="text-xs text-gray-500 mb-3">Free attendance - Please indicate expected attendees to help us plan</p>
+                <div className="flex justify-center space-x-4">
+                  {Object.entries(AGE_GROUPS).map(([ageKey, ageInfo]) => {
+                    const ageGroupKey = ageKey as keyof typeof AGE_GROUPS;
+                    const anandamelaKey = `anandamela-${ageGroupKey}`;
+                    const selectedItem = selectedItems[anandamelaKey];
+                    const quantity = selectedItem ? selectedItem.quantity : 0;
+                    
+                    return (
+                      <div key={ageKey} className="inline-block">
+                        <div className="text-xs mb-1 font-medium text-gray-600">{ageInfo.name}</div>
+                        <div className="flex items-center space-x-2">
+                          <button
+                            onClick={() => updateQuantity(anandamelaKey, -1, ageGroupKey)}
+                            disabled={quantity === 0}
+                            className="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
+                          >
+                            <Minus className="w-3 h-3 text-gray-600" />
+                          </button>
+                          <span className="w-7 text-center font-semibold text-sm">{quantity}</span>
+                          <button
+                            onClick={() => updateQuantity(anandamelaKey, 1, ageGroupKey)}
+                            className="w-7 h-7 rounded-full bg-orange-100 hover:bg-orange-200 text-orange-600 flex items-center justify-center transition-colors"
+                          >
+                            <Plus className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              
+              <div className="bg-green-50 p-3 rounded-lg border border-green-100 mb-3">
+                <p className="text-xs text-green-700">
+                  <span className="font-semibold">Free Registration</span> - No payment required
+                </p>
+              </div>
+              
               <div className="inline-flex items-center px-3 py-2 bg-orange-600 text-white rounded-lg text-xs font-medium">
-                Buy Fresh Food on Spot - No Pre-booking Required
+                Buy Fresh Food on Spot - Pay at Stalls in Person
               </div>
             </div>
           </div>
         </div>
       );
     }
+
+    // Parse item details from the ID to get day number
+    const dayNumber = item.id.match(/day(\d+)/)?.[1] || '1';
     
     return (
       <div key={item.id} className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200 overflow-hidden">
@@ -126,42 +212,83 @@ function MealReservation2025() {
                 {isVeg ? 'Vegetarian' : 'Non-Vegetarian'}
               </span>
             </div>
-            <div className="text-right">
-              <div className="text-lg font-bold text-orange-600">€{item.price.toFixed(2)}</div>
-              {quantity > 0 && (
-                <div className="text-sm text-gray-500">
-                  €{(item.price * quantity).toFixed(2)} total
-                </div>
-              )}
-            </div>
           </div>
           
           <h4 className="font-semibold text-gray-800 text-sm mb-2">{item.name}</h4>
           <p className="text-xs text-gray-600 mb-4 leading-relaxed">{item.description}</p>
           
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <button
-                onClick={() => updateQuantity(item.id, -1)}
-                disabled={quantity === 0}
-                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
-              >
-                <Minus className="w-4 h-4 text-gray-600" />
-              </button>
-              <span className="w-8 text-center font-semibold text-sm">{quantity}</span>
-              <button
-                onClick={() => updateQuantity(item.id, 1)}
-                className="w-8 h-8 rounded-full bg-orange-100 hover:bg-orange-200 text-orange-600 flex items-center justify-center transition-colors"
-              >
-                <Plus className="w-4 h-4" />
-              </button>
-            </div>
-            
-            {quantity > 0 && (
-              <div className="text-xs font-medium text-orange-600">
-                {quantity} thali{quantity > 1 ? 's' : ''}
-              </div>
-            )}
+          {/* Age Group Tabs */}
+          <div className="mb-4 border-b border-gray-200">
+            <ul className="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500">
+              {Object.entries(AGE_GROUPS).map(([ageKey, ageInfo]) => {
+                const ageGroupKey = ageKey as keyof typeof AGE_GROUPS;
+                const price = getPriceByDay(dayNumber, isVeg, ageGroupKey);
+                const selectedItem = selectedItems[item.id];
+                const isSelected = selectedItem && selectedItem.ageGroup === ageGroupKey && selectedItem.quantity > 0;
+                
+                return (
+                  <li key={ageKey} className="mr-2">
+                    <div className={`inline-block p-3 rounded-t-lg border-b-2 ${
+                      isSelected 
+                        ? 'text-orange-600 border-orange-600' 
+                        : 'border-transparent hover:text-gray-600 hover:border-gray-300'
+                    }`}>
+                      <div className="flex flex-col items-center">
+                        <span>{ageInfo.name}</span>
+                        <span className="text-xs text-gray-500">{ageInfo.description}</span>
+                        <span className={`font-bold mt-1 ${price > 0 ? 'text-orange-600' : 'text-green-600'}`}>
+                          {price > 0 ? `€${price.toFixed(2)}` : 'Free'}
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+          
+          {/* Quantity Selection for Each Age Group */}
+          <div className="space-y-3">
+            {Object.entries(AGE_GROUPS).map(([ageKey, ageInfo]) => {
+              const ageGroupKey = ageKey as keyof typeof AGE_GROUPS;
+              const selectedItem = selectedItems[item.id];
+              const quantity = (selectedItem && selectedItem.ageGroup === ageGroupKey) ? selectedItem.quantity : 0;
+              const price = getPriceByDay(dayNumber, isVeg, ageGroupKey);
+              
+              return (
+                <div key={ageKey} className={`p-2 rounded-lg ${quantity > 0 ? 'bg-orange-50' : 'bg-gray-50'}`}>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-sm font-medium">{ageInfo.name}</span>
+                      <span className="text-xs text-gray-500 block">{price > 0 ? `€${price.toFixed(2)}` : 'Free'}</span>
+                    </div>
+                    
+                    <div className="flex items-center space-x-3">
+                      <button
+                        onClick={() => updateQuantity(item.id, -1, ageGroupKey)}
+                        disabled={quantity === 0}
+                        className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
+                      >
+                        <Minus className="w-4 h-4 text-gray-600" />
+                      </button>
+                      <span className="w-8 text-center font-semibold text-sm">{quantity}</span>
+                      <button
+                        onClick={() => updateQuantity(item.id, 1, ageGroupKey)}
+                        className="w-8 h-8 rounded-full bg-orange-100 hover:bg-orange-200 text-orange-600 flex items-center justify-center transition-colors"
+                      >
+                        <Plus className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                  
+                  {quantity > 0 && (
+                    <div className="text-xs text-right mt-1 text-orange-600 font-medium">
+                      Subtotal: €{(price * quantity).toFixed(2)}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -199,9 +326,31 @@ function MealReservation2025() {
             </div>
           </div>
           <p className="text-sm text-gray-600 max-w-2xl mx-auto">
-            Reserve your authentic Bengali thalis for the four-day Durga Puja celebration. 
-            Members enjoy a 5% discount on all meals!
+            Reserve your authentic Bengali thalis for the four-day Durga Puja celebration.
           </p>
+        </div>
+
+        {/* Age Group Information */}
+        <div className="max-w-4xl mx-auto mb-8 bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+          <div className="flex items-center mb-4">
+            <Users className="w-5 h-5 text-orange-600 mr-2" />
+            <h2 className="text-xl font-semibold text-gray-800">Age-Based Pricing</h2>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-4">
+            {Object.entries(AGE_GROUPS).map(([key, info]) => (
+              <div key={key} className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-medium text-lg mb-1">{info.name}</h3>
+                <p className="text-sm text-gray-600 mb-2">{info.description}</p>
+                <div className="space-y-1 text-sm">
+                  <p className={key === 'infant' ? 'text-green-600 font-semibold' : ''}>
+                    {key === 'infant' ? 'Free admission' : ''}
+                    {key === 'child' ? 'Discounted price' : ''}
+                    {key === 'adult' ? 'Full price' : ''}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Menu for each day */}
@@ -228,7 +377,7 @@ function MealReservation2025() {
                 </div>
 
                 {/* Non-Vegetarian Menu */}
-                {day.nonVegItems.length > 0 && (
+                {day.nonVegItems && day.nonVegItems.length > 0 && (
                   <div>
                     {day.nonVegItems.map(item => renderMenuItem(item, false))}
                   </div>
@@ -304,9 +453,84 @@ function MealReservation2025() {
                 
                 <div className="bg-gray-50 p-4 rounded-xl space-y-3">
                   <div className="flex justify-between text-sm">
-                    <span>Total Thalis:</span>
+                    <span>Total Items:</span>
                     <span className="font-semibold">{getSelectedItemsCount()}</span>
                   </div>
+                  
+                  {/* Detailed breakdown of selected items */}
+                  <div className="border-t border-b border-gray-200 py-3 space-y-2">
+                    {/* Anandamela attendance - show first if selected */}
+                    {Object.entries(selectedItems)
+                      .filter(([itemId]) => itemId.includes('anandamela'))
+                      .some(([_, itemDetails]) => itemDetails.quantity > 0) && (
+                        <div className="bg-orange-50 p-3 rounded-lg mb-2 border border-orange-100">
+                          <div className="font-medium text-sm text-orange-800 mb-1">Anandamela Attendance</div>
+                          <div className="text-xs text-orange-700 flex justify-between">
+                            <span>Expected Attendees:</span>
+                            <span className="font-medium">
+                              {Object.entries(selectedItems)
+                                .filter(([itemId]) => itemId.includes('anandamela'))
+                                .reduce((sum, [_, itemDetails]) => sum + itemDetails.quantity, 0)}
+                            </span>
+                          </div>
+                          {Object.entries(selectedItems)
+                            .filter(([itemId]) => itemId.includes('anandamela'))
+                            .map(([itemId, itemDetails]) => {
+                              if (itemDetails.quantity === 0) return null;
+                              const ageGroupKey = itemId.split('-')[1] as keyof typeof AGE_GROUPS;
+                              const ageGroupInfo = AGE_GROUPS[ageGroupKey];
+                              
+                              return (
+                                <div key={itemId} className="text-xs text-orange-600 flex justify-between">
+                                  <span>{ageGroupInfo.name}:</span>
+                                  <span>{itemDetails.quantity}</span>
+                                </div>
+                              );
+                            })}
+                          <div className="text-xs mt-2 text-orange-600 italic">
+                            Free registration - Pay for food at stalls
+                          </div>
+                        </div>
+                      )
+                    }
+                    
+                    {/* Meal items with pricing */}
+                    {Object.entries(selectedItems)
+                      .filter(([itemId]) => !itemId.includes('anandamela'))
+                      .map(([itemId, itemDetails]) => {
+                        if (itemDetails.quantity === 0) return null;
+                        
+                        // Parse item details
+                        const isVeg = itemId.includes('veg-');
+                        const dayNumber = itemId.match(/day(\d+)/)?.[1] || '1';
+                        const dayIndex = parseInt(dayNumber) - 1;
+                        const itemType = isVeg && !itemId.includes('nonveg') ? 'vegItems' : 'nonVegItems';
+                        const day = durgaPujaMeals2025[dayIndex];
+                        const items = itemType === 'vegItems' ? day.vegItems : day.nonVegItems || [];
+                        const item = items.find(i => i.id === itemId);
+                        
+                        if (!item) return null;
+                        
+                        const ageGroupInfo = AGE_GROUPS[itemDetails.ageGroup];
+                        const price = getPriceByDay(dayNumber, isVeg && !itemId.includes('nonveg'), itemDetails.ageGroup);
+                        
+                        return (
+                          <div key={`${itemId}-${itemDetails.ageGroup}`} className="text-xs bg-white p-2 rounded">
+                            <div className="flex justify-between mb-1">
+                              <span className="font-medium">{item.name}</span>
+                              <span className="text-gray-600">{day.day}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-gray-600">
+                                {ageGroupInfo.name} • {itemDetails.quantity} × {price > 0 ? `€${price.toFixed(2)}` : 'Free'}
+                              </span>
+                              <span className="font-medium">{price > 0 ? `€${(price * itemDetails.quantity).toFixed(2)}` : 'Free'}</span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+                  
                   <div className="flex justify-between text-sm">
                     <span>Subtotal:</span>
                     <span>€{totalAmount.toFixed(2)}</span>
@@ -348,9 +572,8 @@ function MealReservation2025() {
           <ul className="space-y-1 text-xs text-blue-800">
             <li>• Meal reservations are required in advance for Days 1-3</li>
             <li>• Day 4 features Anandamela style food stalls - buy on spot</li>
-            <li>• Members receive a 5% discount on all meals</li>
+            <li>• Children 0-8 years eat for free, 8-12 years at reduced price</li>
             <li>• You will receive a confirmation email after payment</li>
-            <li>• Event venue details will be shared closer to the date</li>
             <li>• For questions, contact us at admin@sanskriti-hamburg.de</li>
           </ul>
         </div>

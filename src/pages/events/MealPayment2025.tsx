@@ -5,8 +5,8 @@ import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-
 import { CreditCard, Lock, ArrowLeft, CheckCircle } from 'lucide-react';
 import { Footer } from '../../components/shared/Footer';
 import { SEOHead } from '../../components/SEO/SEOHead';
-import { MealReservation } from '../../types/mealReservation';
-import { getPriceByDay } from '../../utils/mealData';
+import { MealReservation, SelectedItemWithAge } from '../../types/mealReservation';
+import { getPriceByDay, AGE_GROUPS } from '../../utils/mealData';
 
 // Initialize Stripe
 const stripePublishableKey = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || '';
@@ -309,50 +309,97 @@ function MealPayment2025() {
               <div className="border-b pb-4">
                 <h3 className="font-semibold text-gray-700 mb-2 text-sm">Selected Meals</h3>
                 <div className="space-y-3">
-                  {Object.entries(reservation.selectedItems).map(([itemId, quantity]) => {
-                    if (quantity === 0) return null;
-                    
-                    // Parse item details from the ID
-                    const isVeg = itemId.includes('veg-');
-                    const dayNumber = itemId.match(/day(\d+)/)?.[1];
-                    const thaliType = isVeg && !itemId.includes('nonveg') ? 'Veg Thali' : 'Non-Veg Thali';
-                    
-                    // Get the date based on day number
-                    let dateDisplay = '';
-                    switch(dayNumber) {
-                      case '1': dateDisplay = 'Sept 28 - Shashti'; break;
-                      case '2': dateDisplay = 'Sept 29 - Saptami'; break;
-                      case '3': dateDisplay = 'Sept 30 - Ashtami'; break;
-                      default: dateDisplay = 'TBD';
-                    }
-                    
-                    // Get price based on day and type using helper function
-                    const pricePerItem = getPriceByDay(dayNumber || '1', isVeg && !itemId.includes('nonveg'));
-                    const totalPrice = pricePerItem * quantity;
-                    
-                    return (
-                      <div key={itemId} className="bg-gray-50 p-3 rounded">
-                        <div className="flex justify-between items-start">
-                          <div className="flex-1">
-                            <div className="font-medium text-gray-800 text-sm">
-                              {thaliType} ({dateDisplay})
+                  {/* Anandamela attendance - show first if selected */}
+                  {Object.entries(reservation.selectedItems)
+                    .filter(([itemId]) => itemId.includes('anandamela'))
+                    .some(([_, itemDetails]) => itemDetails.quantity > 0) && (
+                      <div className="bg-orange-50 p-3 rounded-lg mb-2 border border-orange-100">
+                        <div className="font-medium text-sm text-orange-800 mb-1">Anandamela Attendance</div>
+                        <div className="text-xs text-orange-700 flex justify-between">
+                          <span>Expected Attendees:</span>
+                          <span className="font-medium">
+                            {Object.entries(reservation.selectedItems)
+                              .filter(([itemId]) => itemId.includes('anandamela'))
+                              .reduce((sum, [_, itemDetails]) => sum + itemDetails.quantity, 0)}
+                          </span>
+                        </div>
+                        {Object.entries(reservation.selectedItems)
+                          .filter(([itemId]) => itemId.includes('anandamela'))
+                          .map(([itemId, itemDetails]) => {
+                            if (itemDetails.quantity === 0) return null;
+                            const ageGroupKey = itemId.split('-')[1] as keyof typeof AGE_GROUPS;
+                            const ageGroupInfo = AGE_GROUPS[ageGroupKey];
+                            
+                            return (
+                              <div key={itemId} className="text-xs text-orange-600 flex justify-between">
+                                <span>{ageGroupInfo.name}:</span>
+                                <span>{itemDetails.quantity}</span>
+                              </div>
+                            );
+                          })}
+                        <div className="text-xs mt-2 text-orange-600 italic">
+                          Free registration - Pay for food at stalls
+                        </div>
+                      </div>
+                    )
+                  }
+                  
+                  {/* Meal items with pricing */}
+                  {Object.entries(reservation.selectedItems)
+                    .filter(([itemId, itemDetails]) => !itemId.includes('anandamela') && itemDetails.quantity > 0)
+                    .map(([itemId, itemDetails]) => {
+                      // Parse item details from the ID
+                      const isVeg = itemId.includes('veg-');
+                      const dayNumber = itemId.match(/day(\d+)/)?.[1];
+                      const thaliType = isVeg && !itemId.includes('nonveg') ? 'Veg Thali' : 'Non-Veg Thali';
+                      
+                      // Get the date based on day number
+                      let dateDisplay = '';
+                      switch(dayNumber) {
+                        case '1': dateDisplay = 'Sept 28 - Shashti'; break;
+                        case '2': dateDisplay = 'Sept 29 - Saptami'; break;
+                        case '3': dateDisplay = 'Sept 30 - Ashtami'; break;
+                        default: dateDisplay = 'TBD';
+                      }
+                      
+                      // Get price based on day, type, and age group using helper function
+                      const pricePerItem = getPriceByDay(dayNumber || '1', isVeg && !itemId.includes('nonveg'), itemDetails.ageGroup);
+                      const totalPrice = pricePerItem * itemDetails.quantity;
+                      
+                      // Get the age group display name
+                      let ageGroupDisplay = 'Adult';
+                      switch(itemDetails.ageGroup) {
+                        case 'child': ageGroupDisplay = 'Child (8-12 years)'; break;
+                        case 'infant': ageGroupDisplay = 'Infant (0-8 years)'; break;
+                        default: ageGroupDisplay = 'Adult (12+ years)';
+                      }
+                      
+                      return (
+                        <div key={`${itemId}-${itemDetails.ageGroup}`} className="bg-gray-50 p-3 rounded">
+                          <div className="flex justify-between items-start">
+                            <div className="flex-1">
+                              <div className="font-medium text-gray-800 text-sm">
+                                {thaliType} ({dateDisplay})
+                              </div>
+                              <div className="text-xs text-gray-600 mt-1">
+                                Age Group: {ageGroupDisplay}
+                              </div>
+                              <div className="text-xs text-gray-500 mt-1">
+                                {pricePerItem > 0 ? `€${pricePerItem.toFixed(2)} per plate` : 'Free'}
+                              </div>
                             </div>
-                            <div className="text-xs text-gray-500 mt-1">
-                              €{pricePerItem.toFixed(2)} per plate
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-sm text-gray-600">
-                              {quantity} × €{pricePerItem.toFixed(2)}
-                            </div>
-                            <div className="font-semibold text-gray-800">
-                              €{totalPrice.toFixed(2)}
+                            <div className="text-right">
+                              <div className="text-sm text-gray-600">
+                                {itemDetails.quantity} × {pricePerItem > 0 ? `€${pricePerItem.toFixed(2)}` : 'Free'}
+                              </div>
+                              <div className="font-semibold text-gray-800">
+                                {totalPrice > 0 ? `€${totalPrice.toFixed(2)}` : 'Free'}
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
                 </div>
               </div>
 

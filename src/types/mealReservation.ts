@@ -19,9 +19,14 @@ export interface DayMenu {
   nonVegItems?: MenuItem[];
 }
 
+export interface SelectedItemWithAge {
+  quantity: number;
+  ageGroup: 'adult' | 'child' | 'infant';
+}
+
 export interface MealReservation {
   selectedItems: {
-    [itemId: string]: number; // itemId -> quantity
+    [itemId: string]: SelectedItemWithAge;
   };
   customerInfo: {
     name: string;
