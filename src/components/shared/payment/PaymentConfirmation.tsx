@@ -74,7 +74,7 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
         
         setIsSavingToDb(true);
         
-        fetch(`${functionsBaseUrl}/save-meal-reservation`, {
+        fetch(`${functionsBaseUrl}/reservation-confirmation`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
           if (data.success) {
             setDbSaveStatus('success');
           } else {
-            console.error('Error from save-meal-reservation function:', data.error);
+            console.error('Error from reservation-confirmation function:', data.error);
             setDbSaveStatus('error');
           }
         })
@@ -159,7 +159,7 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
             ? 'http://localhost:8888/.netlify/functions' 
             : '/.netlify/functions';
           
-          const response = await fetch(`${functionsBaseUrl}/save-meal-reservation`, {
+          const response = await fetch(`${functionsBaseUrl}/reservation-confirmation`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -175,7 +175,7 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
           if (saveResult.success) {
             setDbSaveStatus('success');
           } else {
-            console.error('Error from save-meal-reservation function:', saveResult.error);
+            console.error('Error from reservation-confirmation function:', saveResult.error);
             setDbSaveStatus('error');
           }
         } catch (error) {

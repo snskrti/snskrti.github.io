@@ -494,8 +494,7 @@ function MealReservation2025() {
                       className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded focus:ring-orange-500"
                     />
                     <label htmlFor="isMember" className="ml-3 text-xs font-medium text-gray-700">
-                      I am a Sanskriti Hamburg member
-                      <span className="block text-xs text-orange-600 font-semibold">Special member pricing available!</span>
+                      I declare that I and every adult in this reservation is a registered member of Sanskriti e.V.
                     </label>
                   </div>
                 </div>

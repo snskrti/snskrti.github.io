@@ -202,7 +202,7 @@ exports.handler = async (event, context) => {
 
     // Finalize the invoice
     const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id);
-
+    
     // Create payment intent from the invoice
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount * 100), // Convert to cents

@@ -66,7 +66,7 @@ exports.handler = async (event, context) => {
         console.log(`PaymentIntent ${paymentIntent.id} succeeded`);
         
         // Payment is successful, but reservation data is handled by the frontend
-        // through the save-meal-reservation endpoint
+        // through the reservation-confirmation endpoint
         console.log(`Payment for ${paymentIntent.metadata.event || 'event'} by ${paymentIntent.metadata.customerName || 'customer'}`);
         break;
         
