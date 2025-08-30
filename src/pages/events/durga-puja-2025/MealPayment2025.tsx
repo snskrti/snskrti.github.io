@@ -1,216 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { CreditCard, Lock, ArrowLeft, CheckCircle } from 'lucide-react';
+import { CreditCard, ArrowLeft, Lock } from 'lucide-react';
 import { Footer } from '../../../components/shared/Footer';
 import { SEOHead } from '../../../components/SEO/SEOHead';
-import { MealReservation, SelectedItemWithAge } from '../../../types/mealReservation';
+import { MealReservation } from '../../../types/mealReservation';
 import { getPriceByDay, AGE_GROUPS } from '../../../utils/mealData';
-
-// Initialize Stripe
-const stripePublishableKey = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || '';
-const stripePromise = stripePublishableKey ? loadStripe(stripePublishableKey) : null;
-
-const PaymentWrapper: React.FC<{ reservation: MealReservation }> = ({ reservation }) => {
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const createPaymentIntent = async () => {
-      try {
-        const response = await fetch('/.netlify/functions/create-payment-intent', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            amount: reservation.totalAmount,
-            currency: 'eur',
-            customerInfo: reservation.customerInfo,
-            reservationData: reservation,
-          }),
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || 'Failed to create payment intent');
-        }
-
-        setClientSecret(data.clientSecret);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to initialize payment');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    createPaymentIntent();
-  }, [reservation]);
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600"></div>
-        <span className="ml-2 text-gray-600">Initializing payment...</span>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-        <p className="text-red-600">{error}</p>
-      </div>
-    );
-  }
-
-  if (!clientSecret) {
-    return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-        <p className="text-red-600">Failed to initialize payment. Please try again.</p>
-      </div>
-    );
-  }
-
-  return (
-    <Elements 
-      stripe={stripePromise} 
-      options={{
-        clientSecret,
-        appearance: {
-          theme: 'stripe',
-        },
-      }}
-    >
-      <PaymentForm reservation={reservation} clientSecret={clientSecret} />
-    </Elements>
-  );
-};
-
-const PaymentForm: React.FC<{ reservation: MealReservation; clientSecret: string }> = ({ reservation, clientSecret }) => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const navigate = useNavigate();
-  
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [paymentError, setPaymentError] = useState<string | null>(null);
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-
-    if (!stripe || !elements) {
-      return;
-    }
-
-    setIsProcessing(true);
-    setPaymentError(null);
-
-    try {
-      // Confirm payment using PaymentElement
-      const { error, paymentIntent } = await stripe.confirmPayment({
-        elements,
-        confirmParams: {
-          return_url: window.location.origin + '/events/durga-puja-2025',
-        },
-        redirect: 'if_required',
-      });
-
-      if (error) {
-        setPaymentError(error.message || 'Payment failed');
-      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-        setPaymentSuccess(true);
-        
-        // Redirect to success page after 3 seconds
-        setTimeout(() => {
-          navigate('/events/durga-puja-2025', { 
-            state: { paymentSuccess: true, paymentId: paymentIntent.id } 
-          });
-        }, 3000);
-      }
-    } catch (error) {
-      setPaymentError(error instanceof Error ? error.message : 'An unexpected error occurred');
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  if (paymentSuccess) {
-    return (
-      <div className="text-center py-8">
-        <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-        <h2 className="text-2xl font-bold text-green-700 mb-2">Payment Successful!</h2>
-        <p className="text-gray-600 mb-4">
-          Your meal reservation has been confirmed. You will receive a receipt email shortly.
-        </p>
-        <p className="text-sm text-gray-500">
-          Redirecting you back to the event page...
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="bg-gray-50 p-4 rounded-lg">
-        <h3 className="font-semibold text-gray-800 mb-2">Payment Details</h3>
-        <div className="bg-white p-4 rounded border">
-          <PaymentElement
-            options={{
-              layout: {
-                type: 'accordion',
-                defaultCollapsed: false,
-                radios: false,
-                spacedAccordionItems: true,
-              },
-              defaultValues: {
-                billingDetails: {
-                  name: reservation.customerInfo.name,
-                  email: reservation.customerInfo.email,
-                },
-              },
-              paymentMethodOrder: ['card', 'google_pay', 'apple_pay', 'link'],
-            }}
-          />
-        </div>
-        <p className="text-xs text-gray-500 mt-2">
-          Choose from cards, Google Pay, Apple Pay, Link, and other available payment methods
-        </p>
-      </div>
-
-      {paymentError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-600">{paymentError}</p>
-        </div>
-      )}
-
-      <button
-        type="submit"
-        disabled={!stripe || isProcessing}
-        className="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
-      >
-        {isProcessing ? (
-          <>
-            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-            Processing Payment...
-          </>
-        ) : (
-          <>
-            <Lock className="w-5 h-5 mr-2" />
-            Pay €{(reservation.totalAmount || 0).toFixed(2)}
-          </>
-        )}
-      </button>
-
-      <p className="text-xs text-gray-500 text-center">
-        Your payment is secured by Stripe. We do not store your card information.
-      </p>
-    </form>
-  );
-};
+import StripePayment from '../../../components/shared/payment/StripePayment';
 
 function MealPayment2025() {
   const location = useLocation();
@@ -226,23 +21,28 @@ function MealPayment2025() {
     }
   }, [reservation, navigate]);
 
-  // Check if Stripe is configured
-  if (!stripePromise) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Payment System Unavailable</h2>
-          <p className="text-gray-600 mb-4">The payment system is currently being configured. Please try again later.</p>
-          <button
-            onClick={() => navigate('/events/durga-puja-2025/meal-reservation')}
-            className="bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700"
-          >
-            Back to Meal Reservation
-          </button>
-        </div>
-      </div>
-    );
-  }
+  const handlePaymentSuccess = (paymentId: string, invoiceDetails?: any) => {
+    // Navigate to the shared payment confirmation page with payment details
+    navigate('/payment-confirmation', { 
+      state: { 
+        paymentDetails: {
+          paymentIntentId: paymentId,
+          status: 'succeeded',
+          ...invoiceDetails
+        },
+        eventInfo: {
+          eventName: "Durga Puja 2025 Meal Reservation",
+          eventPath: "/events/durga-puja-2025",
+          returnToEventText: "Back to Durga Puja Event"
+        }
+      } 
+    });
+  };
+
+  const handlePaymentError = (error: string) => {
+    console.error('Payment error:', error);
+    // You can add additional error handling here if needed
+  };
 
   if (!reservation) {
     return (
@@ -461,7 +261,20 @@ function MealPayment2025() {
               Secure Payment
             </h2>
 
-            <PaymentWrapper reservation={reservation} />
+            <StripePayment 
+              amount={reservation.totalAmount}
+              currency="EUR"
+              customerInfo={reservation.customerInfo}
+              reservationData={reservation}
+              onSuccess={handlePaymentSuccess}
+              onError={handlePaymentError}
+              description="Food - Durga Puja 2025(Sanskriti eV)"
+              eventInfo={{
+                eventName: "Durga Puja 2025 Meal Reservation",
+                eventPath: "/events/durga-puja-2025",
+                returnToEventText: "Back to Durga Puja Event"
+              }}
+            />
           </div>
         </div>
 

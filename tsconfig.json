@@ -3,5 +3,7 @@
       // other options
       "jsx": "react",
       "esModuleInterop": true,
+      "moduleResolution": "node",
+      "baseUrl": "."
     }
   }

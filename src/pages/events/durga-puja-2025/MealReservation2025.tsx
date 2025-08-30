@@ -68,7 +68,7 @@ function MealReservation2025() {
         const itemTotal = price * itemDetails.quantity;
         total += itemTotal;
         
-        console.log(`Item: ${compositeKey}, Price: ${price}, Qty: ${itemDetails.quantity}, Total: ${itemTotal}`);
+        // console.log(`Item: ${compositeKey}, Price: ${price}, Qty: ${itemDetails.quantity}, Total: ${itemTotal}`);
       } catch (error) {
         console.error(`Error calculating price for ${compositeKey}:`, error);
       }
@@ -77,7 +77,7 @@ function MealReservation2025() {
     // Set the total amount
     setTotalAmount(total);
     
-    console.log(`Final total: ${total}`);
+    // console.log(`Final total: ${total}`);
   }, [selectedItems, customerInfo.isMember]);
 
   const validateForm = useCallback(() => {

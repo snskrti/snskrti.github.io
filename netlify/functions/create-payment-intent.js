@@ -26,7 +26,7 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    const { amount, currency = 'eur', customerInfo, reservationData } = JSON.parse(event.body);
+    const { amount, currency = 'eur', customerInfo, reservationData, description = 'Food - Durga Puja 2025(Sanskriti eV)' } = JSON.parse(event.body);
 
     if (!amount || amount <= 0) {
       return {
@@ -219,7 +219,7 @@ exports.handler = async (event, context) => {
         event: 'Durga Puja 2025 - Meal Reservation',
       },
       // Remove receipt_email to prevent generic receipt, we'll send detailed invoice instead
-      description: `Durga Puja 2025 Meal Reservation - See detailed invoice ${finalizedInvoice.number}`,
+      description: description || `Durga Puja 2025 Meal Reservation - See detailed invoice ${finalizedInvoice.number}`,
       statement_descriptor_suffix: 'DURGA PUJA', // Limited to 22 characters for card payments
       shipping: {
         address: {

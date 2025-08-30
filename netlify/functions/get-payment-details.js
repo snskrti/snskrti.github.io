@@ -1,11 +1,11 @@
-const Stripe = require('stripe');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async (event, context) => {
   // Enable CORS
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
   };
 
   // Handle preflight requests
@@ -17,7 +17,7 @@ exports.handler = async (event, context) => {
     };
   }
 
-  if (event.httpMethod !== 'GET') {
+  if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
       headers,
@@ -26,8 +26,7 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-    const { paymentIntentId } = event.queryStringParameters || {};
+    const { paymentIntentId } = JSON.parse(event.body);
 
     if (!paymentIntentId) {
       return {
@@ -38,7 +37,28 @@ exports.handler = async (event, context) => {
     }
 
     // Retrieve payment intent details
-    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId, {
+      expand: ['invoice', 'customer']
+    });
+
+    // Try to find the invoice by metadata if it exists
+    let invoice;
+    if (paymentIntent.metadata && paymentIntent.metadata.invoiceId) {
+      try {
+        invoice = await stripe.invoices.retrieve(paymentIntent.metadata.invoiceId);
+      } catch (err) {
+        console.log('Invoice not found in metadata:', err);
+      }
+    }
+
+    // Get customer info
+    const customerName = paymentIntent.metadata?.customerName || 
+                         paymentIntent.customer?.name || 
+                         'Customer';
+                         
+    const customerEmail = paymentIntent.metadata?.customerEmail || 
+                          paymentIntent.customer?.email || 
+                          '';
 
     // Return relevant payment details
     const paymentDetails = {
@@ -47,15 +67,12 @@ exports.handler = async (event, context) => {
       currency: paymentIntent.currency,
       status: paymentIntent.status,
       created: paymentIntent.created,
-      metadata: paymentIntent.metadata,
-      charges: paymentIntent.charges?.data?.map(charge => ({
-        id: charge.id,
-        amount: charge.amount,
-        currency: charge.currency,
-        status: charge.status,
-        receipt_url: charge.receipt_url,
-        billing_details: charge.billing_details,
-      })) || [],
+      customerName,
+      customerEmail,
+      // Invoice details if available
+      invoiceId: invoice?.id || paymentIntent.metadata?.invoiceId,
+      invoiceNumber: invoice?.number || paymentIntent.metadata?.invoiceNumber,
+      invoiceUrl: invoice?.hosted_invoice_url || paymentIntent.metadata?.invoiceUrl,
     };
 
     return {
@@ -68,7 +85,10 @@ exports.handler = async (event, context) => {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: 'Failed to retrieve payment details' }),
+      body: JSON.stringify({ 
+        error: 'Failed to retrieve payment details',
+        details: error.message 
+      }),
     };
   }
 };
