@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Calendar, MapPin, Plus, Minus, ShoppingCart, User, Mail, Utensils, Leaf, Users } from 'lucide-react';
 import { Footer } from '../../components/shared/Footer';
 import { SEOHead } from '../../components/SEO/SEOHead';
-import { durgaPujaMeals2025, MEMBER_DISCOUNT_PERCENTAGE, getPriceByDay, AGE_GROUPS } from '../../utils/mealData';
+import { durgaPujaMeals2025, getPriceByDay, AGE_GROUPS } from '../../utils/mealData';
 import { MealReservation, MenuItem, SelectedItemWithAge } from '../../types/mealReservation';
 
 function MealReservation2025() {
@@ -41,17 +41,20 @@ function MealReservation2025() {
       const isVeg = itemId.includes('veg-');
       const dayNumber = itemId.match(/day(\d+)/)?.[1] || '1';
       
-      // Get the price based on day, type, and age group
-      const price = getPriceByDay(dayNumber, isVeg && !itemId.includes('nonveg'), itemDetails.ageGroup);
+      // Get the price based on day, type, age group, and membership status
+      const price = getPriceByDay(
+        dayNumber, 
+        isVeg && !itemId.includes('nonveg'), 
+        itemDetails.ageGroup,
+        customerInfo.isMember
+      );
       total += price * itemDetails.quantity;
     });
 
-    const discount = customerInfo.isMember ? (total * MEMBER_DISCOUNT_PERCENTAGE / 100) : 0;
-    const final = total - discount;
-
+    // No discount calculation needed as prices are already member-specific
     setTotalAmount(total);
-    setDiscountAmount(discount);
-    setFinalAmount(final);
+    setDiscountAmount(0); // No discount since we're using flat pricing
+    setFinalAmount(total);
   }, [selectedItems, customerInfo.isMember]);
 
   const validateForm = useCallback(() => {
@@ -222,7 +225,7 @@ function MealReservation2025() {
             <ul className="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500">
               {Object.entries(AGE_GROUPS).map(([ageKey, ageInfo]) => {
                 const ageGroupKey = ageKey as keyof typeof AGE_GROUPS;
-                const price = getPriceByDay(dayNumber, isVeg, ageGroupKey);
+                const price = getPriceByDay(dayNumber, isVeg, ageGroupKey, customerInfo.isMember);
                 const selectedItem = selectedItems[item.id];
                 const isSelected = selectedItem && selectedItem.ageGroup === ageGroupKey && selectedItem.quantity > 0;
                 
@@ -253,7 +256,7 @@ function MealReservation2025() {
               const ageGroupKey = ageKey as keyof typeof AGE_GROUPS;
               const selectedItem = selectedItems[item.id];
               const quantity = (selectedItem && selectedItem.ageGroup === ageGroupKey) ? selectedItem.quantity : 0;
-              const price = getPriceByDay(dayNumber, isVeg, ageGroupKey);
+              const price = getPriceByDay(dayNumber, isVeg, ageGroupKey, customerInfo.isMember);
               
               return (
                 <div key={ageKey} className={`p-2 rounded-lg ${quantity > 0 ? 'bg-orange-50' : 'bg-gray-50'}`}>
@@ -344,7 +347,7 @@ function MealReservation2025() {
                 <div className="space-y-1 text-sm">
                   <p className={key === 'infant' ? 'text-green-600 font-semibold' : ''}>
                     {key === 'infant' ? 'Free admission' : ''}
-                    {key === 'child' ? 'Discounted price' : ''}
+                    {key === 'child' ? 'Reduced price' : ''}
                     {key === 'adult' ? 'Full price' : ''}
                   </p>
                 </div>
@@ -441,7 +444,7 @@ function MealReservation2025() {
                     />
                     <label htmlFor="isMember" className="ml-3 text-xs font-medium text-gray-700">
                       I am a Sanskriti Hamburg member
-                      <span className="block text-xs text-orange-600 font-semibold">Get 5% discount!</span>
+                      <span className="block text-xs text-orange-600 font-semibold">Special member pricing available!</span>
                     </label>
                   </div>
                 </div>
@@ -512,7 +515,7 @@ function MealReservation2025() {
                         if (!item) return null;
                         
                         const ageGroupInfo = AGE_GROUPS[itemDetails.ageGroup];
-                        const price = getPriceByDay(dayNumber, isVeg && !itemId.includes('nonveg'), itemDetails.ageGroup);
+                        const price = getPriceByDay(dayNumber, isVeg && !itemId.includes('nonveg'), itemDetails.ageGroup, customerInfo.isMember);
                         
                         return (
                           <div key={`${itemId}-${itemDetails.ageGroup}`} className="text-xs bg-white p-2 rounded">
@@ -535,10 +538,11 @@ function MealReservation2025() {
                     <span>Subtotal:</span>
                     <span>€{totalAmount.toFixed(2)}</span>
                   </div>
-                  {customerInfo.isMember && discountAmount > 0 && (
+                  {/* Member pricing message - shown instead of discount */}
+                  {customerInfo.isMember && (
                     <div className="flex justify-between text-sm text-green-600">
-                      <span>Member Discount (5%):</span>
-                      <span>-€{discountAmount.toFixed(2)}</span>
+                      <span>Member Pricing:</span>
+                      <span>Applied</span>
                     </div>
                   )}
                   <hr className="my-2" />

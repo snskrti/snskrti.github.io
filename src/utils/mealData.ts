@@ -88,43 +88,83 @@ export const MENU_DESCRIPTIONS = {
 export const DAILY_PRICES = {
   DAY1: {
     VEG: {
-      adult: 15.00,
-      child: 6.00,
-      infant: 0.00
+      guest: {
+        adult: 15.00,
+        child: 6.00,
+        infant: 0.00
+      },
+      member: {
+        adult: 13.00,
+        child: 6.00,
+        infant: 0.00
+      }
     },
     NON_VEG: {
-      adult: 18.00,
-      child: 8.00,
-      infant: 0.00
+      guest: {
+        adult: 18.00,
+        child: 8.00,
+        infant: 0.00
+      },
+      member: {
+        adult: 16.00,
+        child: 8.00,
+        infant: 0.00
+      }
     }
   },
   DAY2: {
     VEG: {
-      adult: 15.00,
-      child: 6.00,
-      infant: 0.00
+      guest: {
+        adult: 15.00,
+        child: 6.00,
+        infant: 0.00
+      },
+      member: {
+        adult: 13.00,
+        child: 6.00,
+        infant: 0.00
+      }
     },
     NON_VEG: {
-      adult: 17.00,
-      child: 8.00,
-      infant: 0.00
+      guest: {
+        adult: 17.00,
+        child: 8.00,
+        infant: 0.00
+      },
+      member: {
+        adult: 15.00,
+        child: 8.00,
+        infant: 0.00
+      }
     }
   },
   DAY3: {
     VEG: {
-      adult: 15.00,
-      child: 6.00,
-      infant: 0.00
+      guest: {
+        adult: 15.00,
+        child: 6.00,
+        infant: 0.00
+      },
+      member: {
+        adult: 13.00,
+        child: 6.00,
+        infant: 0.00
+      }
     },
     NON_VEG: {
-      adult: 0.00,
-      child: 0.00,
-      infant: 0.00
+      guest: {
+        adult: 0.00,
+        child: 0.00,
+        infant: 0.00
+      },
+      member: {
+        adult: 0.00,
+        child: 0.00,
+        infant: 0.00
+      }
     }
   }
 } as const;
-
-export const MEMBER_DISCOUNT_PERCENTAGE = 5;
 
 export const AGE_GROUPS = {
   adult: {
@@ -144,12 +184,13 @@ export const AGE_GROUPS = {
   }
 };
 
-// Helper function to get price by day number, type, and age group
-export const getPriceByDay = (dayNumber: string, isVeg: boolean, ageGroup: keyof typeof AGE_GROUPS = 'adult'): number => {
+// Helper function to get price by day number, type, age group, and membership status
+export const getPriceByDay = (dayNumber: string, isVeg: boolean, ageGroup: keyof typeof AGE_GROUPS = 'adult', isMember: boolean = false): number => {
   const key = `DAY${dayNumber}` as keyof typeof DAILY_PRICES;
   if (key in DAILY_PRICES) {
     const priceType = !isVeg ? DAILY_PRICES[key].NON_VEG : DAILY_PRICES[key].VEG;
-    return priceType[ageGroup];
+    const membershipType = isMember ? 'member' : 'guest';
+    return priceType[membershipType][ageGroup];
   }
   return 0;
 };
@@ -163,7 +204,7 @@ export const durgaPujaMeals2025: DayMenu[] = [
         id: 'veg-day1',
         name: MENU_DESCRIPTIONS.DAY1.VEG.name,
         description: MENU_DESCRIPTIONS.DAY1.VEG.description,
-        price: DAILY_PRICES.DAY1.VEG.adult,
+        price: DAILY_PRICES.DAY1.VEG.guest.adult,
         category: 'veg',
         available: true
       }
@@ -173,7 +214,7 @@ export const durgaPujaMeals2025: DayMenu[] = [
         id: 'nonveg-day1',
         name: MENU_DESCRIPTIONS.DAY1.NON_VEG.name,
         description: MENU_DESCRIPTIONS.DAY1.NON_VEG.description,
-        price: DAILY_PRICES.DAY1.NON_VEG.adult,
+        price: DAILY_PRICES.DAY1.NON_VEG.guest.adult,
         category: 'non-veg',
         available: true
       }
@@ -187,7 +228,7 @@ export const durgaPujaMeals2025: DayMenu[] = [
         id: 'veg-day2',
         name: MENU_DESCRIPTIONS.DAY2.VEG.name,
         description: MENU_DESCRIPTIONS.DAY2.VEG.description,
-        price: DAILY_PRICES.DAY2.VEG.adult,
+        price: DAILY_PRICES.DAY2.VEG.guest.adult,
         category: 'veg',
         available: true
       }
@@ -197,7 +238,7 @@ export const durgaPujaMeals2025: DayMenu[] = [
         id: 'nonveg-day2',
         name: MENU_DESCRIPTIONS.DAY2.NON_VEG.name,
         description: MENU_DESCRIPTIONS.DAY2.NON_VEG.description,
-        price: DAILY_PRICES.DAY2.NON_VEG.adult,
+        price: DAILY_PRICES.DAY2.NON_VEG.guest.adult,
         category: 'non-veg',
         available: true
       }
@@ -211,7 +252,7 @@ export const durgaPujaMeals2025: DayMenu[] = [
         id: 'veg-day3',
         name: MENU_DESCRIPTIONS.DAY3.VEG.name,
         description: MENU_DESCRIPTIONS.DAY3.VEG.description,
-        price: DAILY_PRICES.DAY3.VEG.adult,
+        price: DAILY_PRICES.DAY3.VEG.guest.adult,
         category: 'veg',
         available: true
       }
