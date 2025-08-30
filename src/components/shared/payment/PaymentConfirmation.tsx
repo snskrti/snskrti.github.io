@@ -38,13 +38,10 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
   const [eventInfo, setEventInfo] = useState<EventInfo | null>(null);
 
   useEffect(() => {
-    console.log('🔄 PaymentConfirmation component mounted/updated');
     window.scrollTo(0, 0);
     
     // Parse event info from query parameters or state
     const query = new URLSearchParams(location.search);
-    console.log('🔍 URL Search params:', Object.fromEntries(query.entries()));
-    console.log('🔍 Location state:', location.state);
     
     const eventName = query.get('eventName') || (location.state?.eventInfo?.eventName || event?.eventName || '');
     const eventPath = query.get('eventPath') || (location.state?.eventInfo?.eventPath || event?.eventPath || '/');
@@ -60,60 +57,44 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
     const paymentIntentId = query.get('payment_intent');
     const paymentIntentClientSecret = query.get('payment_intent_client_secret');
     
-    console.log('🔑 Payment Intent ID from URL:', paymentIntentId);
-    console.log('🔐 Has Client Secret:', !!paymentIntentClientSecret);
-    
     // If we have the payment intent, retrieve details
     if (paymentIntentId && paymentIntentClientSecret) {
-      console.log('✅ Found payment intent in URL, calling fetchPaymentDetails');
       fetchPaymentDetails(paymentIntentId);
     } 
     // If we have state data from direct navigation (non-redirect flow)
     else if (location.state && location.state.paymentDetails) {
-      console.log('ℹ️ Using payment details from state (direct navigation)');
       setPaymentDetails(location.state.paymentDetails);
       
       // Check if we should save reservation data
       if (location.state.paymentDetails.status === 'succeeded' && location.state.reservationData) {
-        console.log('💾 Will try to save reservation from state data');
         saveMealReservationToFirestore(
           location.state.paymentDetails.paymentIntentId || '',
           location.state.reservationData
         ).then(() => {
           setDbSaveStatus('success');
         }).catch((err) => {
-          console.error('Error saving reservation:', err);
           setDbSaveStatus('error');
         }).finally(() => {
           setIsLoading(false);
         });
       } else {
-        console.log('❌ No need to save reservation data, ending loading state');
         setIsLoading(false);
       }
     } 
     // No payment data, redirect to home
     else {
-      console.log('❌ No payment data found in URL or state');
       setError('No payment information found');
       setIsLoading(false);
-      console.log('❌ No payment data, ending loading state');
     }
   }, [location, event]);
 
   const fetchPaymentDetails = async (paymentIntentId: string) => {
-    console.log('🚀 fetchPaymentDetails called for ID:', paymentIntentId);
-    console.log('📦 Current location state:', location.state);
-    
     try {
       // Determine the base URL for Netlify Functions based on NODE_ENV
       const isLocalDev = process.env.NODE_ENV === 'development';
       const functionsBaseUrl = isLocalDev
         ? 'http://localhost:8888/.netlify/functions' 
         : '/.netlify/functions';
-      
-      console.log(`🔍 Fetching payment details for ID: ${paymentIntentId}`);
-      console.log(`🌐 Using functions base URL: ${functionsBaseUrl} (NODE_ENV: ${process.env.NODE_ENV})`);
       
       const response = await fetch(`${functionsBaseUrl}/get-payment-details`, {
         method: 'POST',
@@ -126,7 +107,6 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
       });
 
       const data = await response.json();
-      console.log('📊 Payment details response:', data);
       
       if (!response.ok) {
         throw new Error(data.error || 'Failed to retrieve payment details');
@@ -144,11 +124,6 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
         invoiceUrl: data.invoiceUrl,
       });
       
-      // Debug check for reservation data 
-      console.log('⚠️ Location state present?', !!location.state);
-      console.log('⚠️ Reservation data in state?', !!location.state?.reservationData);
-      console.log('⚠️ Payment status:', data.status);
-      
       // If this is a successful payment, save the reservation data to Firestore
       if (data.status === 'succeeded' && location.state?.reservationData) {
         try {
@@ -157,20 +132,17 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
             location.state.reservationData
           );
         } catch (error) {
-          console.error('Failed to save reservation:', error);
+          setDbSaveStatus('error');
         } finally {
           setIsLoading(false);
         }
       } else {
         // If no reservation data to save or we got here from a redirect, we're done loading
-        console.log('⚠️ No reservation data to save or came from redirect. Ending loading state.');
         setIsLoading(false);
       }
     } catch (err) {
-      console.error('Error retrieving payment details:', err);
       setError('Could not retrieve payment details. Please contact support.');
       setIsLoading(false);
-      console.log('⚠️ Error occurred, ending loading state.');
     }
   };
 

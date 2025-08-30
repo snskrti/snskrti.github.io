@@ -22,15 +22,6 @@ function MealPayment2025() {
   }, [reservation, navigate]);
 
   const handlePaymentSuccess = (paymentId: string, invoiceDetails?: any) => {
-    console.log('💰 Payment success handler called with ID:', paymentId);
-    console.log('📝 Invoice details:', invoiceDetails);
-    console.log('🛒 Reservation data available:', !!reservation);
-    
-    // Log reservation data structure without sensitive details
-    if (reservation) {
-      console.log('🛒 Reservation keys:', Object.keys(reservation));
-    }
-    
     // Navigate to the shared payment confirmation page with payment details
     navigate('/payment-confirmation', { 
       state: { 
@@ -48,12 +39,9 @@ function MealPayment2025() {
         reservationData: reservation
       } 
     });
-    
-    console.log('🧭 Navigation to payment confirmation initiated');
   };
 
   const handlePaymentError = (error: string) => {
-    console.error('Payment error:', error);
     // You can add additional error handling here if needed
   };
 
@@ -148,7 +136,6 @@ function MealPayment2025() {
                               
                               // Ensure we have a valid age group
                               if (!AGE_GROUPS[ageGroupKey]) {
-                                console.error(`Invalid age group in key ${compositeKey}`);
                                 return null;
                               }
                               
@@ -161,7 +148,7 @@ function MealPayment2025() {
                                 </div>
                               );
                             } catch (error) {
-                              console.error(`Error rendering Anandamela item ${compositeKey}:`, error);
+                              // Error handling for Anandamela item rendering
                               return null;
                             }
                           })}
@@ -184,7 +171,7 @@ function MealPayment2025() {
                         
                         // Ensure we have a valid age group
                         if (!AGE_GROUPS[ageGroupKey]) {
-                          console.error(`Invalid age group in key ${compositeKey}`);
+                          // Skip if age group is invalid
                           return null;
                         }
                         
@@ -211,7 +198,7 @@ function MealPayment2025() {
                         
                         // Make sure price is a valid number
                         if (isNaN(pricePerItem)) {
-                          console.error(`Invalid price calculated for ${compositeKey}`);
+                          // Skip if price is invalid
                           return null;
                         }
                         
@@ -251,7 +238,7 @@ function MealPayment2025() {
                           </div>
                         );
                       } catch (error) {
-                        console.error(`Error rendering item ${compositeKey}:`, error);
+                        // Error handling for item rendering
                         return null;
                       }
                     })}

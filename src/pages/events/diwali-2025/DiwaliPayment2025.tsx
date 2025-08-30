@@ -32,7 +32,7 @@ function DiwaliPayment2025() {
   };
 
   const handlePaymentError = (error: string) => {
-    console.error('Payment error:', error);
+    // Handle payment error
   };
 
   return (

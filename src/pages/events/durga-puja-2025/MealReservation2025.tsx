@@ -43,7 +43,6 @@ function MealReservation2025() {
         
         // Ensure we have a valid age group
         if (!AGE_GROUPS[ageGroup]) {
-          console.error(`Invalid age group in key ${compositeKey}`);
           return;
         }
         
@@ -61,23 +60,18 @@ function MealReservation2025() {
         
         // Make sure price is a valid number
         if (isNaN(price)) {
-          console.error(`Invalid price calculated for ${compositeKey}`);
           return;
         }
         
         const itemTotal = price * itemDetails.quantity;
         total += itemTotal;
-        
-        // console.log(`Item: ${compositeKey}, Price: ${price}, Qty: ${itemDetails.quantity}, Total: ${itemTotal}`);
       } catch (error) {
-        console.error(`Error calculating price for ${compositeKey}:`, error);
+        // Error handling for price calculation
       }
     });
 
     // Set the total amount
     setTotalAmount(total);
-    
-    // console.log(`Final total: ${total}`);
   }, [selectedItems, customerInfo.isMember]);
 
   const validateForm = useCallback(() => {
@@ -105,19 +99,16 @@ function MealReservation2025() {
       try {
         // Create a composite key that combines itemId and ageGroup
         const compositeKey = `${itemId}-${ageGroup}`;
-        // console.log(`Updating item: ${compositeKey}, change: ${change}`);
         
         const currentItem = prev[compositeKey] || { quantity: 0, ageGroup };
         
         // Calculate the new quantity
         const newQuantity = Math.max(0, currentItem.quantity + change);
-        // console.log(`New quantity: ${newQuantity}`);
         
         if (newQuantity === 0) {
           // Remove the item completely if quantity is 0
           const newItems = { ...prev };
           delete newItems[compositeKey];
-          console.log(`Removed item: ${compositeKey}`);
           return newItems;
         }
         
@@ -130,7 +121,7 @@ function MealReservation2025() {
           }
         };
       } catch (error) {
-        console.error('Error updating quantity:', error);
+        // Error handling for quantity updates
         return prev;
       }
     });
@@ -145,7 +136,7 @@ function MealReservation2025() {
         return sum;
       }, 0);
     } catch (error) {
-      console.error('Error calculating selected items count:', error);
+      // Error handling for item count calculation
       return 0;
     }
   };
@@ -174,7 +165,7 @@ function MealReservation2025() {
             ...itemDetails
           });
         } catch (error) {
-          console.error(`Error organizing item ${compositeKey}:`, error);
+          // Error handling for item organization
         }
       }
     });

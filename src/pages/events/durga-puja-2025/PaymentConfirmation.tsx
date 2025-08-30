@@ -85,7 +85,6 @@ function PaymentConfirmation() {
         invoiceUrl: data.invoiceUrl,
       });
     } catch (err) {
-      console.error('Error retrieving payment details:', err);
       setError('Could not retrieve payment details. Please contact support.');
     } finally {
       setIsLoading(false);
