@@ -204,48 +204,39 @@ exports.handler = async (event, context) => {
     // Finalize the invoice - this automatically creates a PaymentIntent
     const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id);
     
-    // Retrieve the invoice with expanded confirmation_secret to get PaymentIntent details
+    // Retrieve the invoice with expanded fields to get PaymentIntent details using the newer API structure
     const retrievedInvoice = await stripe.invoices.retrieve(finalizedInvoice.id, {
-      expand: ['payment_intent', 'confirmation_secret']
+      expand: [
+        'confirmation_secret',
+        'payments.data.payment.payment_intent'
+      ],
     });
     
     // Get the PaymentIntent client_secret from the invoice
     const paymentIntentClientSecret = retrievedInvoice.confirmation_secret?.client_secret;
-    const paymentIntentId = retrievedInvoice.payment_intent?.id;
+    
+    // Find the default invoice payment (Stripe creates this when the invoice is finalized)
+    const defaultPayment = retrievedInvoice.payments?.data?.find(p => p.is_default);
+    const paymentIntentId = defaultPayment?.payment?.payment_intent?.id;
     
     if (!paymentIntentClientSecret || !paymentIntentId) {
+      // Log detailed information for debugging
       console.error('Missing payment information:', {
         hasClientSecret: !!paymentIntentClientSecret,
         hasPaymentIntentId: !!paymentIntentId,
-        invoiceId: finalizedInvoice.id
+        invoiceId: finalizedInvoice.id,
+        hasPayments: !!retrievedInvoice.payments,
+        paymentsCount: retrievedInvoice.payments?.data?.length || 0,
+        hasDefaultPayment: !!retrievedInvoice.payments?.data?.find(p => p.is_default),
       });
       throw new Error('Could not retrieve complete payment information from the finalized invoice');
     }
     
     console.log(`Invoice ${finalizedInvoice.id} finalized with payment intent ${paymentIntentId}`);
     
-    // Try to directly pay the invoice if the customer already has a payment method
-    try {
-      const paymentMethods = await stripe.customers.listPaymentMethods(
-        customer.id,
-        {limit: 5}
-      );
-      
-      if (paymentMethods.data.length > 0) {
-        // Try to pay with the most recently added payment method
-        await stripe.invoices.pay(finalizedInvoice.id, {
-          payment_method: paymentMethods.data[0].id,
-          off_session: true
-        });
-        console.log(`Successfully paid invoice ${finalizedInvoice.id} with existing payment method`);
-      } else {
-        console.log('No existing payment method found. Invoice will be paid through frontend payment flow');
-      }
-    } catch (payError) {
-      // This is expected to fail if the customer doesn't have a payment method
-      // The actual payment will happen through the frontend Stripe Elements
-      console.log('Invoice will be paid through frontend payment flow:', payError.message);
-    }
+    // DO NOT try to pay the invoice automatically
+    // The client will handle the payment process through Stripe Elements
+    console.log('Invoice will be paid through frontend payment flow using Payment Element');
 
     return {
       statusCode: 200,
