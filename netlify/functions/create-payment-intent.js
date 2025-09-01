@@ -200,7 +200,7 @@ exports.handler = async (event, context) => {
         customerEmail: customerInfo.email,
         isMember: customerInfo.isMember.toString(),
         event: 'Durga Puja 2025 - Meal Reservation'
-        // Complete reservation data is saved separately via the save-meal-reservation endpoint
+        // Complete reservation data is saved separately via the reservation-confirmation endpoint
       },
       // Remove receipt_email to prevent generic receipt, we'll send detailed invoice instead
       description: description || `Durga Puja 2025 Meal Reservation - See detailed invoice ${finalizedInvoice.number}`,
