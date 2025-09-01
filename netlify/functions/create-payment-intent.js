@@ -144,12 +144,11 @@ exports.handler = async (event, context) => {
       });
     }
 
-    // Create invoice
+    // Create invoice - use collection_method: 'charge_automatically' instead of 'send_invoice'
     const invoice = await stripe.invoices.create({
       customer: customer.id,
       auto_advance: false, // Don't auto-finalize
-      collection_method: 'send_invoice',
-      days_until_due: 1,
+      collection_method: 'charge_automatically', // This allows automatic payment
       metadata: {
         customerName: customerInfo.name,
         customerEmail: customerInfo.email,
@@ -183,37 +182,77 @@ exports.handler = async (event, context) => {
       });
     }
 
-    // Finalize the invoice
-    const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id);
-    
-    // Create payment intent from the invoice
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100), // Convert to cents
-      currency,
-      automatic_payment_methods: {
-        enabled: true,
+    // Set payment_settings on the invoice to enable automatic payment methods
+    await stripe.invoices.update(invoice.id, {
+      payment_settings: {
+        payment_method_options: {
+          card: {
+            request_three_d_secure: 'automatic'
+          }
+        }
       },
-      customer: customer.id,
+      description: description || `Durga Puja 2025 Meal Reservation for ${customerInfo.name}`,
       metadata: {
-        invoiceId: finalizedInvoice.id,
         customerName: customerInfo.name,
         customerEmail: customerInfo.email,
         isMember: customerInfo.isMember.toString(),
-        event: 'Durga Puja 2025 - Meal Reservation'
-        // Complete reservation data is saved separately via the reservation-confirmation endpoint
-      },
-      // Remove receipt_email to prevent generic receipt, we'll send detailed invoice instead
-      description: description || `Durga Puja 2025 Meal Reservation - See detailed invoice ${finalizedInvoice.number}`,
-      statement_descriptor_suffix: 'DURGA PUJA', // Limited to 22 characters for card payments
-      receipt_email: customerInfo.email,
+        event: 'Durga Puja 2025 - Meal Reservation',
+        reservationDetails: 'Food reservation for Durga Puja 2025'
+      }
     });
+
+    // Finalize the invoice - this automatically creates a PaymentIntent
+    const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id);
+    
+    // Retrieve the invoice with expanded confirmation_secret to get PaymentIntent details
+    const retrievedInvoice = await stripe.invoices.retrieve(finalizedInvoice.id, {
+      expand: ['payment_intent', 'confirmation_secret']
+    });
+    
+    // Get the PaymentIntent client_secret from the invoice
+    const paymentIntentClientSecret = retrievedInvoice.confirmation_secret?.client_secret;
+    const paymentIntentId = retrievedInvoice.payment_intent?.id;
+    
+    if (!paymentIntentClientSecret || !paymentIntentId) {
+      console.error('Missing payment information:', {
+        hasClientSecret: !!paymentIntentClientSecret,
+        hasPaymentIntentId: !!paymentIntentId,
+        invoiceId: finalizedInvoice.id
+      });
+      throw new Error('Could not retrieve complete payment information from the finalized invoice');
+    }
+    
+    console.log(`Invoice ${finalizedInvoice.id} finalized with payment intent ${paymentIntentId}`);
+    
+    // Try to directly pay the invoice if the customer already has a payment method
+    try {
+      const paymentMethods = await stripe.customers.listPaymentMethods(
+        customer.id,
+        {limit: 5}
+      );
+      
+      if (paymentMethods.data.length > 0) {
+        // Try to pay with the most recently added payment method
+        await stripe.invoices.pay(finalizedInvoice.id, {
+          payment_method: paymentMethods.data[0].id,
+          off_session: true
+        });
+        console.log(`Successfully paid invoice ${finalizedInvoice.id} with existing payment method`);
+      } else {
+        console.log('No existing payment method found. Invoice will be paid through frontend payment flow');
+      }
+    } catch (payError) {
+      // This is expected to fail if the customer doesn't have a payment method
+      // The actual payment will happen through the frontend Stripe Elements
+      console.log('Invoice will be paid through frontend payment flow:', payError.message);
+    }
 
     return {
       statusCode: 200,
       headers,
       body: JSON.stringify({
-        clientSecret: paymentIntent.client_secret,
-        paymentIntentId: paymentIntent.id,
+        clientSecret: paymentIntentClientSecret,
+        paymentIntentId: paymentIntentId,
         invoiceId: finalizedInvoice.id,
         invoiceNumber: finalizedInvoice.number,
         invoiceUrl: finalizedInvoice.hosted_invoice_url,

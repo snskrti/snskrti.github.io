@@ -65,9 +65,13 @@ exports.handler = async (event, context) => {
         const paymentIntent = stripeEvent.data.object;
         console.log(`PaymentIntent ${paymentIntent.id} succeeded`);
         
-        // Payment is successful, but reservation data is handled by the frontend
-        // through the reservation-confirmation endpoint
-        console.log(`Payment for ${paymentIntent.metadata.event || 'event'} by ${paymentIntent.metadata.customerName || 'customer'}`);
+        // With our new approach, we don't need to manually mark invoices as paid
+        // as they are automatically handled by Stripe when using the proper invoice payment flow
+        // Just log the success and any metadata for reference
+        console.log(`Payment for ${paymentIntent.metadata?.event || 'event'} by ${paymentIntent.metadata?.customerName || 'customer'}`);
+        
+        // If we want to update any custom database records, we would do that here
+        // This would typically be handled by the reservation-confirmation endpoint
         break;
         
       case 'charge.succeeded':
@@ -78,6 +82,26 @@ exports.handler = async (event, context) => {
       case 'invoice.paid':
         const invoice = stripeEvent.data.object;
         console.log(`Invoice ${invoice.id} was paid`);
+        
+        // This is now the primary event we should listen to for triggering confirmation steps
+        // The invoice.paid event is more reliable than payment_intent.succeeded for confirming payments
+        try {
+          // Initialize Firebase if needed
+          initializeFirebase();
+          const db = admin.firestore();
+          
+          // Get the customer information from the invoice
+          const customer = await stripe.customers.retrieve(invoice.customer);
+          
+          // Log details for debugging
+          console.log(`Invoice paid for ${invoice.metadata?.customerName || customer.name || 'customer'}`);
+          console.log(`Invoice metadata: ${JSON.stringify(invoice.metadata)}`);
+          
+          // Here we could update a reservation status in Firestore
+          // This might be moved to the reservation-confirmation endpoint if you prefer to handle it there
+        } catch (error) {
+          console.error('Error processing paid invoice:', error);
+        }
         break;
         
       default:

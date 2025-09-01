@@ -162,35 +162,43 @@ exports.handler = async (event, context) => {
     let invoiceId;
     
     try {
-      paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId, {
-        expand: ['invoice']
-      });
-      
-      console.log('Retrieved payment intent:', {
-        id: paymentIntent.id,
-        status: paymentIntent.status,
-        hasInvoice: !!paymentIntent.invoice,
-        amount: paymentIntent.amount,
-        metadata: paymentIntent.metadata
-      });
-      
-      // Extract invoice ID from payment intent
-      if (paymentIntent.invoice) {
-        invoiceId = typeof paymentIntent.invoice === 'string' 
-          ? paymentIntent.invoice 
-          : paymentIntent.invoice.id;
-      } else if (paymentIntent.metadata && paymentIntent.metadata.invoiceId) {
-        invoiceId = paymentIntent.metadata.invoiceId;
+      // First check if we were provided a payment intent ID directly
+      if (paymentIntentId) {
+        paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+        
+        console.log('Retrieved payment intent:', {
+          id: paymentIntent.id,
+          status: paymentIntent.status,
+          amount: paymentIntent.amount,
+          metadata: paymentIntent.metadata
+        });
+        
+        // With our new approach, the payment intent should be directly linked to the invoice
+        // Get the invoice ID from the payment intent
+        if (paymentIntent.invoice) {
+          invoiceId = typeof paymentIntent.invoice === 'string' 
+            ? paymentIntent.invoice 
+            : paymentIntent.invoice.id;
+            
+          console.log(`Found invoice ID ${invoiceId} directly attached to payment intent`);
+        }
       }
       
-      if (!invoiceId) {
-        console.warn('No invoice ID found in payment intent. Will not attempt to finalize invoice.');
+      // If we have an invoice ID, retrieve the invoice details
+      if (invoiceId) {
+        invoice = await stripe.invoices.retrieve(invoiceId);
+        console.log('Retrieved invoice:', {
+          id: invoice.id,
+          status: invoice.status,
+          customerEmail: invoice.customer_email,
+          total: invoice.total,
+          paid: invoice.paid
+        });
       } else {
-        console.log('Found invoice ID:', invoiceId);
+        console.warn('No invoice ID found. This may indicate the payment was not made through an invoice.');
       }
-      
     } catch (stripeError) {
-      console.error('Error retrieving payment intent from Stripe:', stripeError);
+      console.error('Error retrieving payment information from Stripe:', stripeError);
       // Continue with saving the reservation even if we can't get the payment intent
       // This ensures the reservation is saved even if there's an issue with Stripe
     }
@@ -262,59 +270,49 @@ exports.handler = async (event, context) => {
       };
     }
     
-    // Step 4: If we have an invoice ID, finalize it and send to customer
+    // Step 4: If we have an invoice ID, check its status and update as needed
     let invoiceResult = null;
     if (invoiceId) {
       try {
-        // Retrieve the invoice
-        invoice = await stripe.invoices.retrieve(invoiceId);
-        console.log('Retrieved invoice:', {
-          id: invoice.id,
-          status: invoice.status,
-          customerEmail: invoice.customer_email,
-          total: invoice.total
-        });
-        
-        // If invoice is in draft status, finalize it
-        if (invoice.status === 'draft') {
-          invoice = await stripe.invoices.finalize(invoiceId);
-          console.log('Finalized invoice:', {
+        // We already retrieved the invoice above, so we don't need to retrieve it again
+        if (!invoice) {
+          invoice = await stripe.invoices.retrieve(invoiceId);
+          console.log('Retrieved invoice:', {
             id: invoice.id,
-            status: invoice.status
-          });
-        }
-        
-        // Send the invoice to the customer
-        if (invoice.status !== 'paid' && invoice.status !== 'void') {
-          const sentInvoice = await stripe.invoices.sendInvoice(invoiceId);
-          console.log('Sent invoice to customer:', {
-            id: sentInvoice.id,
-            status: sentInvoice.status
-          });
-          
-          invoiceResult = {
-            id: sentInvoice.id,
-            number: sentInvoice.number,
-            status: sentInvoice.status,
-            url: sentInvoice.hosted_invoice_url
-          };
-        } else {
-          console.log(`Invoice ${invoiceId} is already ${invoice.status}, no need to send it.`);
-          
-          invoiceResult = {
-            id: invoice.id,
-            number: invoice.number,
             status: invoice.status,
-            url: invoice.hosted_invoice_url
-          };
+            customerEmail: invoice.customer_email,
+            total: invoice.total,
+            paid: invoice.paid
+          });
         }
+        
+        // With our streamlined approach, we don't need to manually mark invoices as paid
+        // The invoice should be automatically paid when the payment intent succeeds
+        
+        // If the invoice isn't paid yet but the payment succeeded, it might be a timing issue
+        // Just log this scenario but don't try to manually mark it as paid
+        if (paymentIntent && paymentIntent.status === 'succeeded' && !invoice.paid) {
+          console.log(`Note: PaymentIntent ${paymentIntentId} succeeded but invoice ${invoiceId} is not marked as paid yet. This is likely a timing issue and should resolve automatically.`);
+        }
+        
+        // Don't send the invoice email to the customer - they'll already receive payment confirmation from Stripe
+        // Just get the invoice information for our records
+        console.log(`Using invoice ${invoiceId} information for our records without sending email to customer`);
+        
+        invoiceResult = {
+          id: invoice.id,
+          number: invoice.number,
+          status: invoice.status,
+          url: invoice.hosted_invoice_url
+        };
         
         // Update the reservation with invoice information if it wasn't included before
         if (docRef && invoice.hosted_invoice_url) {
           await docRef.update({
             invoiceUrl: invoice.hosted_invoice_url,
             invoiceNumber: invoice.number,
-            invoiceStatus: invoice.status
+            invoiceStatus: invoice.status,
+            invoicePaid: invoice.paid
           });
           console.log('Updated reservation with invoice details');
         }
