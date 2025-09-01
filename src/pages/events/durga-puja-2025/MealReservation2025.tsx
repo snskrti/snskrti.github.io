@@ -100,7 +100,7 @@ function MealReservation2025() {
         // Create a composite key that combines itemId and ageGroup
         const compositeKey = `${itemId}-${ageGroup}`;
         
-        const currentItem = prev[compositeKey] || { quantity: 0, ageGroup };
+        const currentItem = prev[compositeKey] || { quantity: 0, ageGroup, price: 0 };
         
         // Calculate the new quantity
         const newQuantity = Math.max(0, currentItem.quantity + change);
@@ -112,12 +112,29 @@ function MealReservation2025() {
           return newItems;
         }
         
+        // Get the price based on the item ID and age group
+        let price = 0;
+        if (!itemId.includes('anandamela')) {
+          // Parse day number from item ID
+          const isVeg = itemId.includes('veg-') && !itemId.includes('nonveg');
+          const dayNumber = itemId.match(/day(\d+)/)?.[1] || '1';
+          
+          // Get the price based on day, type, and age group
+          price = getPriceByDay(
+            dayNumber, 
+            isVeg, 
+            ageGroup,
+            customerInfo.isMember
+          );
+        }
+        
         // Update or add the item with the composite key
         return {
           ...prev,
           [compositeKey]: {
             quantity: newQuantity,
-            ageGroup
+            ageGroup,
+            price
           }
         };
       } catch (error) {

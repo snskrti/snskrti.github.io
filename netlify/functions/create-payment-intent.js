@@ -28,6 +28,8 @@ exports.handler = async (event, context) => {
   try {
     const { amount, currency = 'eur', customerInfo, reservationData, description = 'Food - Durga Puja 2025(Sanskriti eV)' } = JSON.parse(event.body);
 
+    console.log("reservation data: " + JSON.stringify(reservationData));
+
     if (!amount || amount <= 0) {
       return {
         statusCode: 400,
@@ -117,27 +119,8 @@ exports.handler = async (event, context) => {
             dateDisplay = 'TBD';
         }
         
-        // Determine price based on age group and meal type
-        if (ageGroup === 'infant') {
-          unitPrice = 0; // Free for infants
-        } else if (ageGroup === 'child') {
-          unitPrice = isVeg ? 6.00 : 8.00; // Discounted for children
-        } else {
-          // Adult prices
-          switch(dayNumber) {
-            case '1':
-              unitPrice = isVeg ? 11.00 : 14.00;
-              break;
-            case '2':
-              unitPrice = isVeg ? 12.00 : 15.00;
-              break;
-            case '3':
-              unitPrice = isVeg ? 12.00 : 15.00;
-              break;
-            default:
-              unitPrice = isVeg ? 10.00 : 13.00;
-          }
-        }
+        // Set the price
+        unitPrice = itemDetails.price;
 
         lineItems.push({
           description: `${thaliType} - ${dateDisplay} - ${ageGroupDisplay}`,

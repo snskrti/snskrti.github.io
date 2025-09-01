@@ -22,6 +22,7 @@ export interface DayMenu {
 export interface SelectedItemWithAge {
   quantity: number;
   ageGroup: 'adult' | 'child' | 'infant';
+  price: number;
 }
 
 export interface DaySelections {
