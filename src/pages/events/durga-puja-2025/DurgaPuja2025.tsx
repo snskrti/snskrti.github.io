@@ -535,9 +535,7 @@ function DurgaPuja2025() {
                 <li>• In-kind services and support</li>
               </ul>
               <a
-                href="mailto:admin@sanskriti-hamburg.de?subject=Sponsorship%20-%20Durga%20Puja%202025"
-                target="_blank"
-                rel="noreferrer"
+                href="/donations"
                 className="inline-block bg-purple-600 text-white px-6 py-3 rounded-full hover:bg-purple-700 transition-colors font-semibold"
               >
                 Become a Sponsor
