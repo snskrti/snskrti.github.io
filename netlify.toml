@@ -1,5 +1,5 @@
 [build]
-  publish = "build"
+  publish = "packages/webapp/build"
   functions = "netlify/functions"
   command = "./deploy.sh"
 
@@ -10,7 +10,7 @@
 
 # Development settings
 [dev]
-  command = "npm start"
+  command = "npm run start:webapp"
   port = 8888
   targetPort = 3000
   envFiles = [".env.development"]  # Specifies to use .env.development during netlify dev
@@ -20,6 +20,15 @@
   from = "/*"
   to = "/index.html"
   status = 200
+  force = false
+  conditions = {Path = {exclude = ["/admin/**"]}}
+
+# Redirect /admin paths to the admin app's index.html
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/index.html"
+  status = 200
+  force = false
 
 # Force HTTPS
 [[headers]]
