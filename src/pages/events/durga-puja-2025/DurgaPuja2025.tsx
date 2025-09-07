@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Calendar, MapPin, Users, Heart, Star, Mic, HandHeart, Music, PaintBucket, Mail, Facebook, Instagram, TicketX, Leaf, Utensils } from 'lucide-react';
+import { Calendar, MapPin, Users, Heart, Star, Mic, HandHeart, Music, PaintBucket, Mail, Facebook, Instagram, TicketX, Leaf, Utensils, MapPinIcon } from 'lucide-react';
 import { Footer } from '../../../components/shared/Footer';
 import { SEOHead } from '../../../components/SEO/SEOHead';
 import { getEventDate } from '../../../utils/eventUtils';
@@ -225,6 +225,11 @@ function DurgaPuja2025() {
               <Calendar className="w-5 h-5" />
               <p className="text-xl font-light">{eventDate}</p>
             </div>
+
+            <a href="https://maps.app.goo.gl/LR2jQubpbd4EkBXh6" target="_blank" rel="noreferrer" className="flex items-center justify-center space-x-2 mb-4 hover:text-amber-300 transition-colors">
+              <MapPinIcon className="w-5 h-5" />
+              <p className="text-xl font-light">Nienhöfener Str. 18, 25421 Pinneberg</p>
+            </a>
             
             {/* <h1 className="text-8xl md:text-9xl font-bold mb-12">Durga Puja</h1> */}
             <div className="pt-6 mt-6">
@@ -233,13 +238,19 @@ function DurgaPuja2025() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <a 
-                href="https://www.google.com/maps/place/B%C3%BCrgerverein+Waldenau-Datum+e.V./@53.6211916,9.7977995,17z/data=!3m2!4b1!5s0x47b1811264d608b1:0x1d2d3e834f7f79f0!4m6!3m5!1s0x47b1811264ab5c7b:0xec3cd5b12fe9e60e!8m2!3d53.6211884!4d9.8003744!16s%2Fg%2F1tdmjjnt?entry=ttu&g_ep=EgoyMDI1MDcwOS4wIKXMDSoASAFQAw%3D%3D"
-                target="_blank"
+              <a
+                href="/events/durga-puja-2025/schedule"
                 rel="noreferrer"
                 className="flex items-center space-x-2 px-6 py-3 rounded-full border-2 font-semibold btn-secondary">
-                <MapPin className="w-5 h-5" />
-                <span>View Location</span>
+                <TicketX className="w-5 h-5" />
+                <span>Program Schedule</span>
+              </a>
+              <a
+                href="/events/durga-puja-2025/food-menu"
+                rel="noreferrer"
+                className="flex items-center space-x-2 px-6 py-3 rounded-full border-2 font-semibold btn-secondary">
+                <TicketX className="w-5 h-5" />
+                <span>Secure your Dining Experience</span>
               </a>
               
               <a
@@ -248,17 +259,8 @@ function DurgaPuja2025() {
                 rel="noreferrer"
                 className="flex items-center space-x-2 px-6 py-3 rounded-full border-2 font-semibold btn-secondary">
                 <TicketX className="w-5 h-5" />
-                <span>Get your Entry ticket</span>
+                <span>Get your Entry-only ticket</span>
               </a>
-
-              <a
-                href="/events/durga-puja-2025/schedule"
-                rel="noreferrer"
-                className="flex items-center space-x-2 px-6 py-3 rounded-full border-2 font-semibold btn-secondary">
-                <TicketX className="w-5 h-5" />
-                <span>Food & Entertainment</span>
-              </a>
-
             </div>
           </div>
         </div>

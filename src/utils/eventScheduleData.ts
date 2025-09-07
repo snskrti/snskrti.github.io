@@ -21,7 +21,7 @@ export const durgaPujaSchedule2025: DaySchedule[] = [
         id: 'day1-item3',
         time: '10:30 AM',
         title: 'Pushpanjali & Aarti',
-        description: 'Dance and music performances'
+        description: 'Flower offering and prayer ceremony'
       },
       {
         id: 'day1-item4',
