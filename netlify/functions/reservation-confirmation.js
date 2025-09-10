@@ -240,6 +240,20 @@ exports.handler = async (event, context) => {
       eventType: 'Durga Puja 2025'
     };
     
+    // Check if the payment was actually successful
+    const isPaymentSuccessful = paymentIntent && 
+      (paymentIntent.status === 'succeeded' || paymentIntent.status === 'processing');
+    
+    if (!isPaymentSuccessful) {
+      console.warn(`Payment is not successful. Status: ${paymentIntent ? paymentIntent.status : 'unknown'}`);
+      
+      // Still save the reservation but mark it as not confirmed
+      reservationToSave.paymentConfirmed = false;
+      reservationToSave.paymentStatusMessage = `Payment not confirmed. Status: ${paymentIntent ? paymentIntent.status : 'unknown'}`;
+    } else {
+      reservationToSave.paymentConfirmed = true;
+    }
+    
     // Step 3: Save to Firestore (or update if it exists)
     let docRef;
     try {
@@ -332,7 +346,8 @@ exports.handler = async (event, context) => {
       headers,
       body: JSON.stringify({
         success: true,
-        message: 'Reservation confirmed successfully',
+        message: 'Reservation saved successfully',
+        paymentConfirmed: reservationToSave.paymentConfirmed,
         id: existingDocId || (docRef ? docRef.id : null),
         paymentIntent: {
           id: paymentIntent ? paymentIntent.id : paymentIntentId,

@@ -14,6 +14,8 @@ interface PaymentDetails {
   amount?: number;
   customerName?: string;
   customerEmail?: string;
+  isSuccessful?: boolean;
+  errorMessage?: string | null;
 }
 
 interface EventInfo {
@@ -62,10 +64,30 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
     } 
     // If we have state data from direct navigation (non-redirect flow)
     else if (location.state && location.state.paymentDetails) {
-      setPaymentDetails(location.state.paymentDetails);
+      console.log('Direct navigation with payment details:', location.state.paymentDetails);
+      
+      // Set isSuccessful flag based on payment status if not explicitly provided
+      const paymentDetailsWithStatus = {
+        ...location.state.paymentDetails,
+        // If isSuccessful is undefined but status is 'succeeded', treat as successful
+        isSuccessful: location.state.paymentDetails.isSuccessful !== undefined 
+          ? location.state.paymentDetails.isSuccessful 
+          : (location.state.paymentDetails.status === 'succeeded' || location.state.paymentDetails.status === 'processing')
+      };
+      
+      console.log('Processed payment details:', paymentDetailsWithStatus);
+      setPaymentDetails(paymentDetailsWithStatus);
+      
+      // Check if payment failed
+      if (paymentDetailsWithStatus.isSuccessful === false) {
+        console.error('Payment failed from direct navigation:', paymentDetailsWithStatus.errorMessage);
+        setError(paymentDetailsWithStatus.errorMessage || 'Payment could not be completed. Please try again or contact support.');
+        setIsLoading(false);
+        return;
+      }
       
       // Check if we should save reservation data
-      if (location.state.paymentDetails.status === 'succeeded' && location.state.reservationData) {
+      if (paymentDetailsWithStatus.isSuccessful && location.state.reservationData) {
         // Determine the base URL for Netlify Functions based on NODE_ENV
         const isLocalDev = process.env.NODE_ENV === 'development';
         const functionsBaseUrl = isLocalDev
@@ -80,7 +102,7 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            paymentIntentId: location.state.paymentDetails.paymentIntentId || '',
+            paymentIntentId: paymentDetailsWithStatus.paymentIntentId || '',
             reservationData: location.state.reservationData
           }),
         })
@@ -114,6 +136,8 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
 
   const fetchPaymentDetails = async (paymentIntentId: string) => {
     try {
+      console.log('Fetching payment details from shared component with paymentIntentId:', paymentIntentId);
+      
       // Determine the base URL for Netlify Functions based on NODE_ENV
       const isLocalDev = process.env.NODE_ENV === 'development';
       const functionsBaseUrl = isLocalDev
@@ -146,10 +170,20 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
         invoiceId: data.invoiceId,
         invoiceNumber: data.invoiceNumber,
         invoiceUrl: data.invoiceUrl,
+        isSuccessful: data.isSuccessful,
+        errorMessage: data.errorMessage,
       });
       
+      // If payment failed, set the error message
+      if (!data.isSuccessful && data.errorMessage) {
+        console.error('Payment failed with error in shared component:', data.errorMessage);
+        setError(data.errorMessage || 'Payment could not be completed. Please try again or contact support.');
+        setIsLoading(false);
+        return;
+      }
+      
       // If this is a successful payment, save the reservation data to Firestore
-      if (data.status === 'succeeded' && location.state?.reservationData) {
+      if (data.isSuccessful && location.state?.reservationData) {
         try {
           setIsSavingToDb(true);
           
@@ -190,6 +224,7 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
         setIsLoading(false);
       }
     } catch (err) {
+      console.error('Error fetching payment details in shared component:', err);
       setError('Could not retrieve payment details. Please contact support.');
       setIsLoading(false);
     }
@@ -246,13 +281,21 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
       <main className="container mx-auto px-4 py-12">
         <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
           {/* Header with Success Icon */}
-          <div className="bg-green-50 p-8 text-center border-b border-green-100">
-            <CheckCircle className="w-20 h-20 text-green-600 mx-auto mb-4" />
+          <div className={`${paymentDetails?.isSuccessful ? 'bg-green-50 border-green-100' : 'bg-red-50 border-red-100'} p-8 text-center border-b`}>
+            {paymentDetails?.isSuccessful ? (
+              <CheckCircle className="w-20 h-20 text-green-600 mx-auto mb-4" />
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-20 h-20 text-red-600 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            )}
             <h1 className="text-2xl font-bold text-gray-800 mb-2">
-              Payment Successful!
+              {paymentDetails?.isSuccessful ? 'Payment Successful!' : 'Payment Failed'}
             </h1>
             <p className="text-gray-600">
-              Your payment has been processed successfully.
+              {paymentDetails?.isSuccessful
+                ? 'Your payment has been processed successfully.'
+                : paymentDetails?.errorMessage || 'There was an issue processing your payment.'}
             </p>
             {eventInfo?.eventName && (
               <p className="text-gray-600 mt-2">
@@ -299,8 +342,10 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
               
               <div className="flex justify-between border-b pb-2">
                 <span className="text-gray-600">Payment Status:</span>
-                <span className="font-medium text-green-600">
-                  {paymentDetails?.status === 'succeeded' ? 'Completed' : 'Processed'}
+                <span className={`font-medium ${paymentDetails?.isSuccessful ? 'text-green-600' : 'text-red-600'}`}>
+                  {paymentDetails?.isSuccessful 
+                    ? (paymentDetails?.status === 'succeeded' ? 'Completed' : 'Processing') 
+                    : 'Failed'}
                 </span>
               </div>
               
@@ -318,7 +363,7 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
 
             {/* Actions */}
             <div className="space-y-4">
-              {paymentDetails?.invoiceUrl && (
+              {paymentDetails?.isSuccessful && paymentDetails?.invoiceUrl && (
                 <a 
                   href={paymentDetails.invoiceUrl} 
                   target="_blank"
@@ -331,13 +376,23 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
               )}
               
               <div className="flex space-x-4">
-                {eventInfo?.eventPath && (
+                {paymentDetails?.isSuccessful && eventInfo?.eventPath && (
                   <button
                     onClick={() => navigate(eventInfo.eventPath)}
                     className="flex-1 flex items-center justify-center bg-orange-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-orange-700 transition-colors"
                   >
                     <Calendar className="w-5 h-5 mr-2" />
                     {eventInfo.returnToEventText || 'Event Details'}
+                  </button>
+                )}
+                
+                {!paymentDetails?.isSuccessful && eventInfo?.eventPath && (
+                  <button
+                    onClick={() => navigate(eventInfo.eventPath)}
+                    className="flex-1 flex items-center justify-center bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                  >
+                    <Calendar className="w-5 h-5 mr-2" />
+                    Try Again
                   </button>
                 )}
                 
@@ -353,14 +408,20 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
           </div>
           
           {/* Information Box */}
-          <div className="bg-blue-50 p-6 border-t border-blue-100">
+          <div className={`${paymentDetails?.isSuccessful ? 'bg-blue-50 border-blue-100' : 'bg-gray-50 border-gray-100'} p-6 border-t`}>
             <div className="flex items-start">
-              <Mail className="w-6 h-6 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
+              <Mail className={`w-6 h-6 ${paymentDetails?.isSuccessful ? 'text-blue-600' : 'text-gray-600'} mr-3 mt-0.5 flex-shrink-0`} />
               <div>
-                <h3 className="font-semibold text-blue-900 mb-1">Confirmation Email</h3>
-                <p className="text-sm text-blue-800">
-                  A receipt has been sent to your email address. If you have any questions about your payment, 
-                  please contact us at <a href="mailto:admin@sanskriti-hamburg.de" className="underline">admin@sanskriti-hamburg.de</a>
+                <h3 className={`font-semibold ${paymentDetails?.isSuccessful ? 'text-blue-900' : 'text-gray-900'} mb-1`}>
+                  {paymentDetails?.isSuccessful ? 'Confirmation Email' : 'Need Help?'}
+                </h3>
+                <p className={`text-sm ${paymentDetails?.isSuccessful ? 'text-blue-800' : 'text-gray-800'}`}>
+                  {paymentDetails?.isSuccessful 
+                    ? `A receipt has been sent to your email address. If you have any questions about your payment, 
+                        please contact us at `
+                    : `If you're experiencing issues with your payment or need assistance, 
+                        please contact us at `}
+                  <a href="mailto:admin@sanskriti-hamburg.de" className="underline">admin@sanskriti-hamburg.de</a>
                 </p>
               </div>
             </div>

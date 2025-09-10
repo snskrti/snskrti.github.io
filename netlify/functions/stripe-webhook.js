@@ -65,13 +65,76 @@ exports.handler = async (event, context) => {
         const paymentIntent = stripeEvent.data.object;
         console.log(`PaymentIntent ${paymentIntent.id} succeeded`);
         
+        // Update reservation status in Firestore
+        try {
+          // Initialize Firebase if needed
+          initializeFirebase();
+          const db = admin.firestore();
+          
+          // Define collection name
+          const COLLECTION_NAME = 'durga_puja_2025-mealReservations';
+          
+          // Find the reservation with this payment intent
+          const reservationsSnapshot = await db.collection(COLLECTION_NAME)
+            .where('paymentIntentId', '==', paymentIntent.id)
+            .get();
+          
+          if (!reservationsSnapshot.empty) {
+            // Update the reservation with the new payment status
+            const reservation = reservationsSnapshot.docs[0];
+            await reservation.ref.update({
+              paymentStatus: 'succeeded',
+              paymentConfirmed: true,
+              updatedAt: admin.firestore.FieldValue.serverTimestamp()
+            });
+            console.log(`Updated reservation ${reservation.id} with successful payment status`);
+          } else {
+            console.log(`No reservation found for PaymentIntent ${paymentIntent.id}`);
+          }
+        } catch (error) {
+          console.error('Error updating reservation payment status:', error);
+        }
+        
         // With our new approach, we don't need to manually mark invoices as paid
         // as they are automatically handled by Stripe when using the proper invoice payment flow
         // Just log the success and any metadata for reference
         console.log(`Payment for ${paymentIntent.metadata?.event || 'event'} by ${paymentIntent.metadata?.customerName || 'customer'}`);
+        break;
         
-        // If we want to update any custom database records, we would do that here
-        // This would typically be handled by the reservation-confirmation endpoint
+      case 'payment_intent.payment_failed':
+        const failedPayment = stripeEvent.data.object;
+        console.log(`PaymentIntent ${failedPayment.id} failed`);
+        
+        // Update reservation status in Firestore for failed payment
+        try {
+          // Initialize Firebase if needed
+          initializeFirebase();
+          const db = admin.firestore();
+          
+          // Define collection name
+          const COLLECTION_NAME = 'durga_puja_2025-mealReservations';
+          
+          // Find the reservation with this payment intent
+          const reservationsSnapshot = await db.collection(COLLECTION_NAME)
+            .where('paymentIntentId', '==', failedPayment.id)
+            .get();
+          
+          if (!reservationsSnapshot.empty) {
+            // Update the reservation with the failed payment status
+            const reservation = reservationsSnapshot.docs[0];
+            await reservation.ref.update({
+              paymentStatus: 'failed',
+              paymentConfirmed: false,
+              paymentStatusMessage: failedPayment.last_payment_error?.message || 'Payment failed',
+              updatedAt: admin.firestore.FieldValue.serverTimestamp()
+            });
+            console.log(`Updated reservation ${reservation.id} with failed payment status`);
+          } else {
+            console.log(`No reservation found for PaymentIntent ${failedPayment.id}`);
+          }
+        } catch (error) {
+          console.error('Error updating reservation payment status:', error);
+        }
         break;
         
       case 'charge.succeeded':

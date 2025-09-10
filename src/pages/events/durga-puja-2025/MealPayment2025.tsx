@@ -28,6 +28,7 @@ function MealPayment2025() {
         paymentDetails: {
           paymentIntentId: paymentId,
           status: 'succeeded',
+          isSuccessful: true,
           ...invoiceDetails
         },
         eventInfo: {
@@ -42,7 +43,21 @@ function MealPayment2025() {
   };
 
   const handlePaymentError = (error: string) => {
-    // You can add additional error handling here if needed
+    // Navigate to the shared payment confirmation page with error details
+    navigate('/payment-confirmation', { 
+      state: { 
+        paymentDetails: {
+          status: 'failed',
+          isSuccessful: false,
+          errorMessage: error
+        },
+        eventInfo: {
+          eventName: "Durga Puja 2025 Meal Reservation",
+          eventPath: "/events/durga-puja-2025/meal-reservation",
+          returnToEventText: "Try Again"
+        }
+      } 
+    });
   };
 
   if (!reservation) {
