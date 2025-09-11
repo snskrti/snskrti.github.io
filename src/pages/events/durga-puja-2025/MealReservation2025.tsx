@@ -91,6 +91,7 @@ function MealReservation2025() {
                                 customerInfo.email.trim() !== '' && 
                                 customerInfo.email.includes('@');
     
+    // Allow proceeding even with 0-value reservations as long as items are selected
     setIsFormValid(hasSelectedItems && hasValidCustomerInfo);
   }, [selectedItems, customerInfo.name, customerInfo.email]);
 

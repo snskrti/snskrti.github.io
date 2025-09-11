@@ -107,15 +107,16 @@ exports.handler = async (event, context) => {
 
     // Add logging to see what data we're receiving
     console.log('Received data for reservation confirmation:', { 
-      paymentIntentId, 
-      reservationDataKeys: reservationData ? Object.keys(reservationData) : 'null' 
+      paymentIntentId: paymentIntentId === '' ? 'empty (free reservation)' : paymentIntentId, 
+      reservationDataKeys: reservationData ? Object.keys(reservationData) : 'null',
+      isFreeReservation: !paymentIntentId || paymentIntentId === ''
     });
 
-    if (!paymentIntentId || !reservationData) {
+    if (reservationData === undefined) {
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({ error: 'Payment Intent ID and reservation data are required' }),
+        body: JSON.stringify({ error: 'Reservation data is required' }),
       };
     }
 
@@ -161,9 +162,15 @@ exports.handler = async (event, context) => {
     let invoice;
     let invoiceId;
     
-    try {
-      // First check if we were provided a payment intent ID directly
-      if (paymentIntentId) {
+    // Check if this is a free reservation (empty paymentIntentId)
+    const isFreeReservation = !paymentIntentId || paymentIntentId === '';
+    
+    if (isFreeReservation) {
+      console.log('Processing a free reservation - skipping Stripe API calls');
+      // For free reservations, we don't need to check Stripe
+    } else {
+      try {
+        // For paid reservations, retrieve payment intent from Stripe
         paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
         
         console.log('Retrieved payment intent:', {
@@ -182,25 +189,25 @@ exports.handler = async (event, context) => {
             
           console.log(`Found invoice ID ${invoiceId} directly attached to payment intent`);
         }
+        
+        // If we have an invoice ID, retrieve the invoice details
+        if (invoiceId) {
+          invoice = await stripe.invoices.retrieve(invoiceId);
+          console.log('Retrieved invoice:', {
+            id: invoice.id,
+            status: invoice.status,
+            customerEmail: invoice.customer_email,
+            total: invoice.total,
+            paid: invoice.paid
+          });
+        } else {
+          console.warn('No invoice ID found. This may indicate the payment was not made through an invoice.');
+        }
+      } catch (stripeError) {
+        console.error('Error retrieving payment information from Stripe:', stripeError);
+        // Continue with saving the reservation even if we can't get the payment intent
+        // This ensures the reservation is saved even if there's an issue with Stripe
       }
-      
-      // If we have an invoice ID, retrieve the invoice details
-      if (invoiceId) {
-        invoice = await stripe.invoices.retrieve(invoiceId);
-        console.log('Retrieved invoice:', {
-          id: invoice.id,
-          status: invoice.status,
-          customerEmail: invoice.customer_email,
-          total: invoice.total,
-          paid: invoice.paid
-        });
-      } else {
-        console.warn('No invoice ID found. This may indicate the payment was not made through an invoice.');
-      }
-    } catch (stripeError) {
-      console.error('Error retrieving payment information from Stripe:', stripeError);
-      // Continue with saving the reservation even if we can't get the payment intent
-      // This ensures the reservation is saved even if there's an issue with Stripe
     }
     
     // Get Firestore instance
@@ -212,18 +219,24 @@ exports.handler = async (event, context) => {
     // Check if a reservation with this payment intent already exists
     let existingDocId;
     try {
-      console.log(`Checking for existing reservation with paymentIntentId: ${paymentIntentId}`);
-      const existingReservations = await db.collection(COLLECTION_NAME)
-        .where('paymentIntentId', '==', paymentIntentId)
-        .get();
-      
-      // If it exists, get the existing document ID
-      if (!existingReservations.empty) {
-        const existingDoc = existingReservations.docs[0];
-        existingDocId = existingDoc.id;
-        console.log(`Reservation with paymentIntentId ${paymentIntentId} already exists. ID: ${existingDocId}`);
+      // For free reservations (empty paymentIntentId), we don't check for existing reservations
+      // as there's no unique identifier to use
+      if (!isFreeReservation && paymentIntentId) {
+        console.log(`Checking for existing reservation with paymentIntentId: ${paymentIntentId}`);
+        const existingReservations = await db.collection(COLLECTION_NAME)
+          .where('paymentIntentId', '==', paymentIntentId)
+          .get();
+        
+        // If it exists, get the existing document ID
+        if (!existingReservations.empty) {
+          const existingDoc = existingReservations.docs[0];
+          existingDocId = existingDoc.id;
+          console.log(`Reservation with paymentIntentId ${paymentIntentId} already exists. ID: ${existingDocId}`);
+        } else {
+          console.log('No existing reservation found, proceeding to save');
+        }
       } else {
-        console.log('No existing reservation found, proceeding to save');
+        console.log('Processing a free reservation - skipping existing reservation check');
       }
     } catch (queryError) {
       console.error('Error querying for existing reservations:', queryError);
@@ -233,16 +246,18 @@ exports.handler = async (event, context) => {
     // Add payment information and timestamp to the reservation
     const reservationToSave = {
       ...reservationData,
-      paymentIntentId,
-      paymentStatus: paymentIntent ? paymentIntent.status : 'unknown',
+      paymentIntentId: paymentIntentId || '',
+      paymentStatus: isFreeReservation ? 'succeeded' : (paymentIntent ? paymentIntent.status : 'unknown'),
       invoiceId: invoiceId || null,
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      eventType: 'Durga Puja 2025'
+      eventType: 'Durga Puja 2025',
+      isFreeReservation: isFreeReservation
     };
     
-    // Check if the payment was actually successful
-    const isPaymentSuccessful = paymentIntent && 
-      (paymentIntent.status === 'succeeded' || paymentIntent.status === 'processing');
+    // For free reservations, we'll mark them as confirmed automatically
+    // For paid reservations, check if the payment was actually successful
+    const isPaymentSuccessful = isFreeReservation || 
+      (paymentIntent && (paymentIntent.status === 'succeeded' || paymentIntent.status === 'processing'));
     
     if (!isPaymentSuccessful) {
       console.warn(`Payment is not successful. Status: ${paymentIntent ? paymentIntent.status : 'unknown'}`);
@@ -252,6 +267,9 @@ exports.handler = async (event, context) => {
       reservationToSave.paymentStatusMessage = `Payment not confirmed. Status: ${paymentIntent ? paymentIntent.status : 'unknown'}`;
     } else {
       reservationToSave.paymentConfirmed = true;
+      if (isFreeReservation) {
+        reservationToSave.paymentStatusMessage = 'Free reservation confirmed';
+      }
     }
     
     // Step 3: Save to Firestore (or update if it exists)
@@ -349,10 +367,10 @@ exports.handler = async (event, context) => {
         message: 'Reservation saved successfully',
         paymentConfirmed: reservationToSave.paymentConfirmed,
         id: existingDocId || (docRef ? docRef.id : null),
-        paymentIntent: {
-          id: paymentIntent ? paymentIntent.id : paymentIntentId,
-          status: paymentIntent ? paymentIntent.status : 'unknown'
-        },
+        isFreeReservation: isFreeReservation,
+        paymentIntent: isFreeReservation ? 
+          { status: 'succeeded', isFreeReservation: true } : 
+          { id: paymentIntent ? paymentIntent.id : paymentIntentId, status: paymentIntent ? paymentIntent.status : 'unknown' },
         invoice: invoiceResult
       }),
     };
