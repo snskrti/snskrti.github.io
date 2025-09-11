@@ -59,7 +59,7 @@ const StripeCheckoutForm: React.FC<StripeCheckoutFormProps> = ({
       const result = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          // Make sure to include the return_url with event info as query parameters
+          // Use the shared payment confirmation component for all events
           return_url: eventInfo 
             ? `${window.location.origin}/payment-confirmation?eventName=${encodeURIComponent(eventInfo.eventName)}&eventPath=${encodeURIComponent(eventInfo.eventPath)}${eventInfo.returnToEventText ? `&returnToEventText=${encodeURIComponent(eventInfo.returnToEventText)}` : ''}`
             : `${window.location.origin}/payment-confirmation`,

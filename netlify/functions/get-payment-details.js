@@ -69,6 +69,9 @@ exports.handler = async (event, context) => {
       created: paymentIntent.created,
       customerName,
       customerEmail,
+      isSuccessful: ['succeeded', 'processing'].includes(paymentIntent.status),
+      // Include any error message if the payment failed
+      errorMessage: paymentIntent.last_payment_error?.message || null,
       // Invoice details if available
       invoiceId: invoice?.id || paymentIntent.metadata?.invoiceId,
       invoiceNumber: invoice?.number || paymentIntent.metadata?.invoiceNumber,

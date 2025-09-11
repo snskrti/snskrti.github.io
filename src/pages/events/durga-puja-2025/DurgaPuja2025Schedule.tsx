@@ -82,6 +82,24 @@ function DurgaPuja2025Schedule() {
         </div>
       </div>
 
+      {/* Food Menu Notice Banner */}
+      <div className="bg-gradient-to-r from-amber-200 to-orange-200 py-4 border-y-2 border-amber-300 shadow-inner">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <div className="flex flex-col sm:flex-row items-center justify-center">
+            <p className="text-amber-900 font-semibold flex items-center justify-center mb-2 sm:mb-0">
+              <Utensils className="w-5 h-5 mr-2 text-amber-700" />
+              Festivities taste better with flavors!
+            </p>
+            <a 
+              href="/events/durga-puja-2025/food-menu" 
+              className="sm:ml-3 inline-block bg-amber-600 hover:bg-amber-700 text-white font-medium py-1.5 px-4 rounded-md text-sm transition-colors shadow-md hover:shadow-lg"
+            >
+              Book your dining experience
+            </a>
+          </div>
+        </div>
+      </div>
+
       <main className="max-w-6xl mx-auto px-2 sm:px-4 py-8 sm:py-12">
         {/* Main Content Section */}
         <section className={`animate-on-scroll ${isContentVisible ? 'animate-fade-in' : ''}`}>

@@ -15,7 +15,6 @@ import SitAndDraw2025 from './pages/events/SitAndDraw2025';
 import Diwali2025 from './pages/events/Diwali2025';
 import MealReservation2025 from './pages/events/durga-puja-2025/MealReservation2025';
 import MealPayment2025 from './pages/events/durga-puja-2025/MealPayment2025';
-import PaymentConfirmation from './pages/events/durga-puja-2025/PaymentConfirmation';
 // Import the shared payment confirmation component
 import SharedPaymentConfirmation from './components/shared/payment/PaymentConfirmation';
 import DurgaPuja2025FoodMenu from './pages/events/durga-puja-2025/DurgaPuja2025FoodMenu';
@@ -35,7 +34,7 @@ function App() {
           <Route path="/events/durga-puja-2025/food-menu" element={<DurgaPuja2025FoodMenu />} />
           <Route path="/events/durga-puja-2025/meal-reservation" element={<MealReservation2025 />} />
           <Route path="/events/durga-puja-2025/meal-payment" element={<MealPayment2025 />} />
-          <Route path="/events/durga-puja-2025/payment-confirmation" element={<PaymentConfirmation />} />
+          {/* Keep this route for backwards compatibility, but it now uses the shared component */}
           <Route path="/events/diwali-2025" element={<Diwali2025 />} />
           <Route path="/membership/request" element={<MembershipRequest />} />
           <Route path="/donations" element={<DonationsPage />} />

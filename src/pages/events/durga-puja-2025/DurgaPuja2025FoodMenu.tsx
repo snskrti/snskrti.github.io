@@ -75,8 +75,26 @@ function DurgaPuja2025FoodMenu() {
               <p className="text-lg sm:text-xl font-light">Durga Puja 2025</p>
             </div>
             
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">Food & Schedule</h1>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">Sanskritir Pritibhoj</h1>
             
+          </div>
+        </div>
+      </div>
+
+      {/* Schedule Notice Banner */}
+      <div className="bg-gradient-to-r from-amber-200 to-orange-200 py-4 border-y-2 border-amber-300 shadow-inner">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <div className="flex flex-col sm:flex-row items-center justify-center">
+            <p className="text-amber-900 font-semibold flex items-center justify-center mb-2 sm:mb-0">
+              <Calendar className="w-5 h-5 mr-2 text-amber-700" />
+              Plan your plate and your day!
+            </p>
+            <a 
+              href="/events/durga-puja-2025/schedule" 
+              className="sm:ml-3 inline-block bg-amber-600 hover:bg-amber-700 text-white font-medium py-1.5 px-4 rounded-md text-sm transition-colors shadow-md hover:shadow-lg"
+            >
+              View Event Schedule
+            </a>
           </div>
         </div>
       </div>
@@ -85,8 +103,6 @@ function DurgaPuja2025FoodMenu() {
         {/* Main Content Section */}
         <section className={`animate-on-scroll ${isContentVisible ? 'animate-fade-in' : ''}`}>
           <div className="bg-gradient-to-r from-orange-50 to-amber-100 p-4 sm:p-8 md:p-10 rounded-lg shadow-lg max-w-5xl mx-auto">
-            <h2 className="text-2xl sm:text-3xl font-bold text-amber-800 mb-4 sm:mb-6 text-center">Food & Schedule</h2>
-            <div className="w-16 sm:w-20 h-1 bg-amber-500 mx-auto mb-6 sm:mb-10"></div>
             
             {/* Food Menu Section - First Half */}
             <div className="mb-10 sm:mb-16">
