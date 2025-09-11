@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CreditCard, ArrowLeft, Lock } from 'lucide-react';
+import { CreditCard, ArrowLeft, Lock, CheckCircle } from 'lucide-react';
 import { Footer } from '../../../components/shared/Footer';
 import { SEOHead } from '../../../components/SEO/SEOHead';
 import { MealReservation } from '../../../types/mealReservation';
@@ -11,6 +11,8 @@ function MealPayment2025() {
   const location = useLocation();
   const navigate = useNavigate();
   const reservation = location.state as MealReservation;
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const isFreeReservation = reservation?.totalAmount === 0;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -60,6 +62,65 @@ function MealPayment2025() {
     });
   };
 
+  const handleFreeReservation = async () => {
+    setIsSubmitting(true);
+    
+    try {
+      // Determine the base URL for Netlify Functions
+      const isLocalDev = process.env.NODE_ENV === 'development';
+      const functionsBaseUrl = isLocalDev
+        ? 'http://localhost:8888/.netlify/functions' 
+        : '/.netlify/functions';
+      
+      // For free reservations, we'll directly call the reservation-confirmation endpoint
+      // with an empty paymentIntentId
+      const response = await fetch(`${functionsBaseUrl}/reservation-confirmation`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          // Use an empty string to indicate a free reservation
+          paymentIntentId: '',
+          reservationData: {
+            ...reservation,
+            isFreeReservation: true // Add flag to explicitly mark this as a free reservation
+          }
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to save reservation');
+      }
+      
+      // Navigate to confirmation page
+      navigate('/payment-confirmation', { 
+        state: { 
+          paymentDetails: {
+            paymentIntentId: '',
+            status: 'succeeded',
+            isSuccessful: true,
+            isFreeReservation: true // Add flag to explicitly mark this as a free reservation
+            // Free reservations don't have invoice details
+          },
+          eventInfo: {
+            eventName: "Durga Puja 2025 Meal Reservation",
+            eventPath: "/events/durga-puja-2025",
+            returnToEventText: "Back to Durga Puja Event"
+          },
+          reservationData: reservation
+        } 
+      });
+    } catch (error) {
+      console.error('Error saving free reservation:', error);
+      handlePaymentError(error instanceof Error ? error.message : 'Failed to save your reservation');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   if (!reservation) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center">
@@ -97,10 +158,12 @@ function MealPayment2025() {
           </button>
           
           <h1 className="text-2xl font-bold text-gray-800 mb-2">
-            Complete Your Payment
+            {isFreeReservation ? 'Confirm Your Reservation' : 'Complete Your Payment'}
           </h1>
           <p className="text-sm text-gray-600">
-            Secure payment for your Durga Puja 2025 meal reservation
+            {isFreeReservation 
+              ? 'Please review and confirm your free meal reservation' 
+              : 'Secure payment for your Durga Puja 2025 meal reservation'}
           </p>
         </div>
 
@@ -269,37 +332,89 @@ function MealPayment2025() {
             </div>
           </div>
 
-          {/* Payment Form */}
+          {/* Payment or Confirmation Section */}
           <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
-              <Lock className="w-5 h-5 mr-2" />
-              Secure Payment
-            </h2>
+            {isFreeReservation ? (
+              // Free Reservation Confirmation Section
+              <div>
+                <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                  <CheckCircle className="w-5 h-5 mr-2" />
+                  Confirm Reservation
+                </h2>
+                
+                <div className="bg-green-50 p-4 rounded-lg mb-6 border border-green-100">
+                  <h3 className="font-semibold text-green-800 mb-2">Free Reservation</h3>
+                  <p className="text-sm text-green-700 mb-2">
+                    Your reservation does not require payment. Please confirm to save your reservation.
+                  </p>
+                </div>
+                
+                <button
+                  onClick={handleFreeReservation}
+                  disabled={isSubmitting}
+                  className={`w-full py-3 px-4 rounded-lg font-medium text-white 
+                    ${isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'} 
+                    transition-colors flex items-center justify-center`}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle className="w-5 h-5 mr-2" />
+                      Confirm Reservation
+                    </>
+                  )}
+                </button>
+              </div>
+            ) : (
+              // Paid Reservation - Stripe Payment Section
+              <div>
+                <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                  <Lock className="w-5 h-5 mr-2" />
+                  Secure Payment
+                </h2>
 
-            <StripePayment 
-              amount={reservation.totalAmount}
-              currency="EUR"
-              customerInfo={reservation.customerInfo}
-              reservationData={reservation}
-              onSuccess={handlePaymentSuccess}
-              onError={handlePaymentError}
-              description="Food - Durga Puja 2025(Sanskriti eV)"
-              eventInfo={{
-                eventName: "Durga Puja 2025 Meal Reservation",
-                eventPath: "/events/durga-puja-2025",
-                returnToEventText: "Back to Durga Puja Event"
-              }}
-            />
+                <StripePayment 
+                  amount={reservation.totalAmount}
+                  currency="EUR"
+                  customerInfo={reservation.customerInfo}
+                  reservationData={reservation}
+                  onSuccess={handlePaymentSuccess}
+                  onError={handlePaymentError}
+                  description="Food - Durga Puja 2025(Sanskriti eV)"
+                  eventInfo={{
+                    eventName: "Durga Puja 2025 Meal Reservation",
+                    eventPath: "/events/durga-puja-2025",
+                    returnToEventText: "Back to Durga Puja Event"
+                  }}
+                />
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Security Notice */}
+        {/* Security/Info Notice */}
         <div className="max-w-2xl mx-auto mt-8 bg-blue-50 rounded-lg p-4">
-          <h3 className="font-semibold text-blue-900 mb-2">Secure Payment</h3>
-          <p className="text-sm text-blue-800">
-            Your payment is processed securely through Stripe. We never store your card information. 
-            You will receive a confirmation email once your payment is successful.
-          </p>
+          {isFreeReservation ? (
+            <>
+              <h3 className="font-semibold text-blue-900 mb-2">Reservation Information</h3>
+              <p className="text-sm text-blue-800">
+                By confirming, your free reservation will be recorded in our system. 
+                Please bring your confirmation email when attending the event.
+              </p>
+            </>
+          ) : (
+            <>
+              <h3 className="font-semibold text-blue-900 mb-2">Secure Payment</h3>
+              <p className="text-sm text-blue-800">
+                Your payment is processed securely through Stripe. We never store your card information. 
+                You will receive a confirmation email once your payment is successful.
+              </p>
+            </>
+          )}
         </div>
       </main>
 

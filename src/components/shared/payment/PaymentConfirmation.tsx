@@ -16,6 +16,7 @@ interface PaymentDetails {
   customerEmail?: string;
   isSuccessful?: boolean;
   errorMessage?: string | null;
+  isFreeReservation?: boolean;
 }
 
 interface EventInfo {
@@ -37,6 +38,16 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
   const [dbSaveStatus, setDbSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [error, setError] = useState<string | null>(null);
   const [eventInfo, setEventInfo] = useState<EventInfo | null>(null);
+  
+  // Helper function to check if a reservation is free
+  const isFreeReservation = (details: PaymentDetails | null): boolean => {
+    if (!details) return false;
+    return (
+      details.isFreeReservation === true || 
+      details.paymentIntentId === '' || 
+      (typeof details.paymentIntentId === 'string' && details.paymentIntentId.startsWith('free_reservation_'))
+    );
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -290,12 +301,18 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
               </svg>
             )}
             <h1 className="text-2xl font-bold text-gray-800 mb-2">
-              {paymentDetails?.isSuccessful ? 'Payment Successful!' : 'Payment Failed'}
+              {isFreeReservation(paymentDetails)
+                ? 'Reservation Successful!' 
+                : paymentDetails?.isSuccessful 
+                  ? 'Payment Successful!' 
+                  : 'Payment Failed'}
             </h1>
             <p className="text-gray-600">
-              {paymentDetails?.isSuccessful
-                ? 'Your payment has been processed successfully.'
-                : paymentDetails?.errorMessage || 'There was an issue processing your payment.'}
+              {isFreeReservation(paymentDetails)
+                ? 'Your free reservation has been processed successfully.'
+                : paymentDetails?.isSuccessful
+                  ? 'Your payment has been processed successfully.'
+                  : paymentDetails?.errorMessage || 'There was an issue processing your payment.'}
             </p>
             {eventInfo?.eventName && (
               <p className="text-gray-600 mt-2">
@@ -307,7 +324,7 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
                 Your reservation has been saved successfully!
               </p>
             )}
-            {dbSaveStatus === 'error' && (
+            {dbSaveStatus === 'error' && !isFreeReservation(paymentDetails) && (
               <p className="text-orange-600 mt-2 font-medium">
                 Note: We had trouble saving your reservation. Our team will follow up to ensure it's properly recorded.
               </p>
@@ -326,10 +343,17 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
                 </div>
               )}
               
-              {paymentDetails?.amount && (
+              {paymentDetails?.amount && !isFreeReservation(paymentDetails) && (
                 <div className="flex justify-between border-b pb-2">
                   <span className="text-gray-600">Amount Paid:</span>
                   <span className="font-medium text-gray-800">€{(paymentDetails.amount / 100).toFixed(2)}</span>
+                </div>
+              )}
+              
+              {isFreeReservation(paymentDetails) && (
+                <div className="flex justify-between border-b pb-2">
+                  <span className="text-gray-600">Amount:</span>
+                  <span className="font-medium text-green-600">Free</span>
                 </div>
               )}
               
@@ -343,9 +367,11 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
               <div className="flex justify-between border-b pb-2">
                 <span className="text-gray-600">Payment Status:</span>
                 <span className={`font-medium ${paymentDetails?.isSuccessful ? 'text-green-600' : 'text-red-600'}`}>
-                  {paymentDetails?.isSuccessful 
-                    ? (paymentDetails?.status === 'succeeded' ? 'Completed' : 'Processing') 
-                    : 'Failed'}
+                  {isFreeReservation(paymentDetails)
+                    ? 'Free Reservation'
+                    : paymentDetails?.isSuccessful 
+                      ? (paymentDetails?.status === 'succeeded' ? 'Completed' : 'Processing') 
+                      : 'Failed'}
                 </span>
               </div>
               
@@ -363,7 +389,7 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
 
             {/* Actions */}
             <div className="space-y-4">
-              {paymentDetails?.isSuccessful && paymentDetails?.invoiceUrl && (
+              {paymentDetails?.isSuccessful && paymentDetails?.invoiceUrl && !isFreeReservation(paymentDetails) && (
                 <a 
                   href={paymentDetails.invoiceUrl} 
                   target="_blank"
@@ -416,11 +442,14 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
                   {paymentDetails?.isSuccessful ? 'Confirmation Email' : 'Need Help?'}
                 </h3>
                 <p className={`text-sm ${paymentDetails?.isSuccessful ? 'text-blue-800' : 'text-gray-800'}`}>
-                  {paymentDetails?.isSuccessful 
-                    ? `A receipt has been sent to your email address. If you have any questions about your payment, 
+                  {isFreeReservation(paymentDetails)
+                    ? `A confirmation has been sent to your email address. If you have any questions about your reservation, 
                         please contact us at `
-                    : `If you're experiencing issues with your payment or need assistance, 
-                        please contact us at `}
+                    : paymentDetails?.isSuccessful 
+                      ? `A receipt has been sent to your email address. If you have any questions about your payment, 
+                          please contact us at `
+                      : `If you're experiencing issues with your payment or need assistance, 
+                          please contact us at `}
                   <a href="mailto:admin@sanskriti-hamburg.de" className="underline">admin@sanskriti-hamburg.de</a>
                 </p>
               </div>
