@@ -64,7 +64,7 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
     } 
     // If we have state data from direct navigation (non-redirect flow)
     else if (location.state && location.state.paymentDetails) {
-      console.log('Direct navigation with payment details:', location.state.paymentDetails);
+      // console.log('Direct navigation with payment details:', location.state.paymentDetails);
       
       // Set isSuccessful flag based on payment status if not explicitly provided
       const paymentDetailsWithStatus = {
@@ -75,7 +75,7 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
           : (location.state.paymentDetails.status === 'succeeded' || location.state.paymentDetails.status === 'processing')
       };
       
-      console.log('Processed payment details:', paymentDetailsWithStatus);
+      // console.log('Processed payment details:', paymentDetailsWithStatus);
       setPaymentDetails(paymentDetailsWithStatus);
       
       // Check if payment failed
@@ -136,7 +136,7 @@ function PaymentConfirmation({ event }: PaymentConfirmationProps) {
 
   const fetchPaymentDetails = async (paymentIntentId: string) => {
     try {
-      console.log('Fetching payment details from shared component with paymentIntentId:', paymentIntentId);
+      // console.log('Fetching payment details from shared component with paymentIntentId:', paymentIntentId);
       
       // Determine the base URL for Netlify Functions based on NODE_ENV
       const isLocalDev = process.env.NODE_ENV === 'development';
