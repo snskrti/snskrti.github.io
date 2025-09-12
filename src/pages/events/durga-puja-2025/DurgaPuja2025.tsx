@@ -415,15 +415,15 @@ function DurgaPuja2025() {
                   </div>
                   <h3 className="text-xl font-semibold text-amber-800 mb-4 text-center">Food Menu</h3>
                   <p className="text-gray-700 text-center leading-relaxed">
-                    Enjoy authentic Bengali cuisine prepared by our community. The full menu for all four days will be revealed closer to the event!
+                    The celebration isn’t complete without the cuisine. Book your dining experience now!
                   </p>
                 </div>
                 <div className="flex justify-center mt-6">
                   <a
-                    href="/events/durga-puja-2025/schedule"
+                    href="/events/durga-puja-2025/food-menu"
                     className="inline-block bg-amber-600 text-white px-6 py-3 rounded-full hover:bg-amber-700 transition-colors font-semibold"
                     >
-                    View Schedule
+                    View Food Menu
                   </a>
                 </div>
               </div>

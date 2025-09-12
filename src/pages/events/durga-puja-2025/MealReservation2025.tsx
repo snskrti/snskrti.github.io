@@ -253,9 +253,7 @@ function MealReservation2025() {
                 <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-200 mb-3">
                 <p className="text-xs text-yellow-800">
                   <span className="font-semibold block mb-1">⚠️ Important Notice</span>
-                  If you're attending only Anandamela (Day 4) and not reserving meals for other days,
-                  please purchase an <a href="https://www.desipass.com/events/events-details?eventId=01K206DZB1DAGBX15RZV6SAH52" target="_blank" rel="noopener noreferrer" className="underline font-medium">entry-only ticket for Navami & Dashami</a>.
-                  <span className="block mt-1">Food payments will be accepted directly at the venue.</span>
+                  <span className="block mt-1">Food payments will be accepted in cash, directly at the venue</span>
                 </p>
                 </div>
               
