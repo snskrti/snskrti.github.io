@@ -6,13 +6,13 @@ export interface Event {
     link: string;
 }
 
-export const events: Event[] = [
+export const upcomingEvents: Event[] = [
     {
-      title: "Rakhi",
-      date: "August 03, 2025",
-      description: "Rakhi Celebration",
-      image: "/images/rakhi-event-banner-2025.jpg",
-      link: "/events/rakhi-2025"
+      title: "Mahalaya",
+      date: "September 21, 2025",
+      description: "Mahalaya Celebration",
+      image: "/images/durga-puja-announcement-2025/mahalaya_banner.jpg",
+      link: "/events/mahalaya-2025"
     },
     {
       title: "Durga Puja",
@@ -28,4 +28,8 @@ export const events: Event[] = [
       image: "/images/candles-among-diwali-designs.jpg",
       link: "/events/diwali-2025"
     }
+  ];
+
+  export const pastEvents: Event[] = [
+    
   ];

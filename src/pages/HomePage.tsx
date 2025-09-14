@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { Home, Calendar, Users, Info } from 'lucide-react';
 import { NavigationSection } from '../types/navigation_section';
-import { events } from '../types/events';
+import { upcomingEvents } from '../types/events';
 import { SectionNavigation } from '../components/shared/SectionNavigation';
 import { socialMediaLinks } from '../types/socialMediaLinks';
 import { NewsletterSubscribe } from '../components/shared/NewsletterSubscribe';
@@ -133,7 +133,7 @@ function HomePage() {
           <h2 className="text-4xl font-bold mb-12 text-center mt-12">Upcoming Events</h2>
           <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {
-          events.map((event, index) => (
+          upcomingEvents.map((event, index) => (
           <div 
             key={index}
             className="group relative overflow-hidden rounded-lg shadow-lg transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl flex items-center justify-center">

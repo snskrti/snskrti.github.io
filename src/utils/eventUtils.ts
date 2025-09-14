@@ -1,7 +1,7 @@
-import { events } from '../types/events';
+import { upcomingEvents } from '../types/events';
 
 export const getEventByLink = (link: string) => {
-  return events.find(event => event.link === link);
+  return upcomingEvents.find(event => event.link === link);
 };
 
 export const getEventDate = (link: string): string => {
