@@ -241,40 +241,82 @@ function Mahalaya2025() {
       {/* Image Gallery Section - Full Screen */}
       <section className="relative" id="gallery">
         <div className="relative" style={{ height: `${galleryData.length * 100}vh` }}>
-          {/* Fixed Background Image */}
+          {/* Fixed Background Image - Different styles for mobile vs desktop */}
           <div className="sticky top-0 h-screen w-screen overflow-hidden">
-            <div className="absolute inset-0">
+            {/* Desktop view (md and above) */}
+            <div className="absolute inset-0 hidden md:block">
               <img
                 src="/images/durga-puja-announcement-2025/mahalaya_flyer_horizontal.jpeg"
                 alt="Mahalaya Celebration Background"
                 className="w-full h-full object-cover"
               />
-                <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, transparent 0%, transparent 20%, rgba(0,0,0,0.8) 40%, rgba(0,0,0,0.95) 50%, rgba(0,0,0,1) 100%)' }}></div>
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, transparent 0%, transparent 20%, rgba(0,0,0,0.8) 40%, rgba(0,0,0,0.95) 50%, rgba(0,0,0,1) 100%)' }}></div>
+            </div>
+            
+            {/* Mobile view (below md) - Shows full image with left side clear */}
+            <div className="absolute inset-0 md:hidden">
+              <img
+                src="/images/durga-puja-announcement-2025/mahalaya_flyer_horizontal.jpeg"
+                alt="Mahalaya Celebration Background" 
+                className="h-full w-full object-cover object-left"
+                style={{ objectPosition: "12% center" }}
+              />
+              {/* Light overlay across entire image */}
+              <div className="absolute inset-0 bg-black/10"></div>
+              
+              {/* Stronger gradient only on right side for text readability */}
+              <div className="absolute right-0 top-0 w-1/2 h-full" 
+                style={{ background: 'linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 60%, rgba(0,0,0,0.85) 100%)' }}>
+              </div>
             </div>
           </div>
           
           {/* Text Content - This will change as user scrolls */}
           <div className="absolute inset-0 flex flex-col">
             {galleryData.map((item) => (
-              <div key={item.id} className="h-screen w-screen flex items-center justify-end pr-8 md:pr-16 lg:pr-24">
-                <div className="max-w-md text-white z-10">
-                  <h3 className="text-3xl md:text-4xl font-bold mb-6">{item.title}</h3>
-                  <p className="text-lg leading-relaxed mb-6">
-                    {item.description}
-                  </p>
-                  
-                  {/* Bullet Points */}
-                  <ul className="space-y-2 mb-8">
-                    {item.bulletPoints.map((point, index) => (
-                      <li key={index} className="flex items-start">
-                        <span className="text-amber-400 mr-2">•</span>
-                        <span>{point}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  
-                  
-                  <div className="w-16 h-1 bg-amber-500"></div>
+              <div key={item.id} className="h-screen w-screen flex items-center">
+                {/* Mobile text positioning - Right aligned */}
+                <div className="md:hidden w-full flex justify-end">
+                  <div className="max-w-xs text-white z-10 p-4 mr-4 bg-black/30 backdrop-blur-sm rounded-lg">
+                    <h3 className="text-xl font-bold mb-3">{item.title}</h3>
+                    <p className="text-sm leading-relaxed mb-3">
+                      {item.description}
+                    </p>
+                    
+                    {/* Bullet Points */}
+                    <ul className="space-y-1 mb-4 text-sm">
+                      {item.bulletPoints.map((point, index) => (
+                        <li key={index} className="flex items-start">
+                          <span className="text-amber-400 mr-2">•</span>
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    
+                    <div className="w-12 h-1 bg-amber-500"></div>
+                  </div>
+                </div>
+                
+                {/* Desktop text positioning */}
+                <div className="hidden md:flex w-full items-center justify-end pr-16 lg:pr-24">
+                  <div className="max-w-md text-white z-10">
+                    <h3 className="text-4xl font-bold mb-6">{item.title}</h3>
+                    <p className="text-lg leading-relaxed mb-6">
+                      {item.description}
+                    </p>
+                    
+                    {/* Bullet Points */}
+                    <ul className="space-y-2 mb-8">
+                      {item.bulletPoints.map((point, index) => (
+                        <li key={index} className="flex items-start">
+                          <span className="text-amber-400 mr-2">•</span>
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    
+                    <div className="w-16 h-1 bg-amber-500"></div>
+                  </div>
                 </div>
               </div>
             ))}
