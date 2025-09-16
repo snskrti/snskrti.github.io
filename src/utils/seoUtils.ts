@@ -1,4 +1,4 @@
-import { events } from '../types/events';
+import { upcomingEvents } from '../types/events';
 
 export const generateSitemap = () => {
   const baseUrl = 'https://sanskriti-hamburg.de';
@@ -10,7 +10,7 @@ export const generateSitemap = () => {
     { url: '/membership/request', priority: '0.8', changefreq: 'monthly' },
   ];
   
-  const eventPages = events.map(event => ({
+  const eventPages = upcomingEvents.map(event => ({
     url: event.link,
     priority: '0.8',
     changefreq: 'weekly'

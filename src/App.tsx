@@ -18,6 +18,7 @@ import MealPayment2025 from './pages/events/durga-puja-2025/MealPayment2025';
 // Import the shared payment confirmation component
 import SharedPaymentConfirmation from './components/shared/payment/PaymentConfirmation';
 import DurgaPuja2025FoodMenu from './pages/events/durga-puja-2025/DurgaPuja2025FoodMenu';
+import Mahalaya2025 from './pages/events/durga-puja-2025/Mahalaya2025';
 
 function App() {
   return (
@@ -27,7 +28,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/sponsors-partners" element={<SponsorsPartners />} />
           <Route path="/events/holi-2025" element={<Holi2025 />} />
-          <Route path="/events/rakhi-2025" element={<Rakhi2025 />} />
+          <Route path="/events/mahalaya-2025" element={<Mahalaya2025 />} />
           <Route path="/events/sit-and-draw-2025" element={<SitAndDraw2025 />} />
           <Route path="/events/durga-puja-2025" element={<DurgaPuja2025 />} />
           <Route path="/events/durga-puja-2025/schedule" element={<DurgaPuja2025Schedule />} />
