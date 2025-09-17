@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary-color: #005F73;
+    --secondary-color: #e5980a;
+    --accent-color: #e3342f;
+    --background-color: #f7f6e4;
+    --background-color-radial: radial-gradient(circle, rgb(253, 207, 147), var(--primary-color));
+    --text-color: #2d3748;
+  }
+}
+
+html, body, #root {
+  background: var(--background-color);
+  height: 100%;
+  margin: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease-out forwards;
+  /* Ensure this is fully visible on mobile without needing JavaScript */
+  opacity: 1;
+}
+
+.animate-hero-fade-in {
+  animation: heroFadeIn 1.5s ease-out forwards;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+.prose {
+  max-width: 65ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+  color: black;
+  border: 2px solid var(--secondary-color);
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: transparent;
+  color: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
+}
+
+.btn-secondary-accent {
+  background-color: transparent;
+  color: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
+  transition: all 0.3s ease;
+}
+
+.btn-secondary-accent:hover {
+  background-color: var(--secondary-color);
+  color: black;
+  border: 2px solid var(--secondary-color);
+}
+
+.btn-secondary-accent {
+  background-color: transparent;
+  color: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
+  transition: all 0.3s ease;
+}
+
+.btn-secondary-accent:hover {
+  background-color: var(--secondary-color);
+  color: black;
+  border: 2px solid var(--secondary-color);
+}

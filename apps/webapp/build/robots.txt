@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://sanskriti-hamburg.de/sitemap.xml
+
+# Disallow admin and development files
+Disallow: /admin/
+Disallow: /.git/
+Disallow: /node_modules/
+Disallow: /src/
+Disallow: /build/
+Disallow: /public/
+Disallow: /dummy
+
+# Allow important files
+Allow: /images/
+Allow: /static/
+Allow: /.well-known/
