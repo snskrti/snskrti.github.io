@@ -1,0 +1,30 @@
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { useEffect } from 'react';
+import { Calendar } from 'lucide-react';
+import { Footer } from '../../components/shared/Footer';
+import { SEOHead } from '../../components/SEO/SEOHead';
+import { getEventDate } from '../../utils/eventUtils';
+function Holi2025() {
+    useEffect(function () {
+        window.scrollTo(0, 0);
+    }, []);
+    var eventDate = getEventDate('/events/holi-2025');
+    return (_jsxs("div", __assign({ className: "min-h-screen bg-inherit" }, { children: [_jsx(SEOHead, { title: "Holi 2025 \u2013 Festival of Colors in Hamburg | Sanskriti Hamburg", description: "Celebrate Holi 2025 with Sanskriti e.V. in Hamburg. Join us for the vibrant Festival of Colors with traditional celebrations, music, dance, and community joy. Experience the triumph of good over evil.", keywords: "Holi 2025, Hamburg, Festival of Colors, Indian festival, colors, cultural celebration, Sanskriti Hamburg, spring festival, Hindu festival, community event", url: "/events/holi-2025", type: "event", image: "/images/holi-crowd-1.jpg", eventStartDate: "2025-03-13", eventLocation: "Hamburg, Germany", eventType: "Cultural Festival", performer: "Sanskriti e.V. Hamburg Community", offers: {
+                    price: "0",
+                    currency: "EUR",
+                    availability: "https://schema.org/InStock",
+                    url: "/events/holi-2025"
+                } }), _jsxs("div", __assign({ className: "relative h-[60vh]" }, { children: [_jsx("img", { src: "/images/holi-crowd-1.jpg", alt: "Durga Puja Celebration", className: "w-full h-full object-cover" }), _jsx("div", __assign({ className: "absolute inset-0 bg-black/20 flex items-center justify-center" }, { children: _jsxs("div", __assign({ className: "text-center text-white" }, { children: [_jsx("h1", __assign({ className: "text-5xl md:text-6xl font-bold mb-4" }, { children: "Holi 2025" })), _jsxs("div", __assign({ className: "flex items-center justify-center space-x-2" }, { children: [_jsx(Calendar, { className: "w-6 h-6" }), _jsx("p", __assign({ className: "text-xl" }, { children: eventDate }))] }))] })) }))] })), _jsxs("main", __assign({ className: "min-w-[70vw] mx-auto px-4 py-16" }, { children: [_jsxs("section", __assign({ className: "prose lg:prose-xl mx-auto mb-16 w-full" }, { children: [_jsx("h2", __assign({ className: 'text-lg font-semibold my-2' }, { children: "The Story of Holi" })), _jsx("p", { children: "Holi, also known as the Festival of Colors, is a popular ancient Hindu festival celebrated across India. It signifies the arrival of spring, the end of winter, and the blossoming of love. Holi is a time for people to come together, play with colors, and celebrate the triumph of good over evil." }), _jsx("p", { children: "The festival is celebrated over two days. The first day is known as Holika Dahan or Chhoti Holi, where people light bonfires to symbolize the burning of the demoness Holika. The second day, known as Rangwali Holi, is when people smear each other with colors and enjoy festive foods and drinks." })] })), _jsxs("section", __assign({ className: "prose lg:prose-xl mx-auto mb-16" }, { children: [_jsx("h2", __assign({ className: 'text-lg font-semibold my-2' }, { children: "Celebration in India" })), _jsx("p", { children: "Holi is celebrated with great enthusiasm and joy across India. The streets come alive with people playing with vibrant colors, singing, dancing, and enjoying festive delicacies. Each region has its own unique traditions and ways of celebrating Holi." }), _jsx("p", { children: "The festival is characterized by:" }), _jsxs("ul", { children: [_jsx("li", { children: "Throwing and applying colors on each other" }), _jsx("li", { children: "Traditional music and dance performances" }), _jsx("li", { children: "Delicious festive foods like gujiya, thandai, and more" }), _jsx("li", { children: "Community gatherings and celebrations" }), _jsx("li", { children: "Bonfires on the eve of Holi to signify Holika Dahan" })] })] })), _jsxs("section", __assign({ className: "prose lg:prose-xl mx-auto mb-16" }, { children: [_jsx("h2", __assign({ className: 'text-lg font-semibold my-2' }, { children: "Sanskriti's Vision for Holi 2025" })), _jsx("p", { children: "At Sanskriti e.V., we aim to recreate the vibrant and joyous atmosphere of Holi as celebrated in India. Our 2025 celebration will be a grand showcase of Indian culture and traditions, bringing together our community in Hamburg for two days of festivities." }), _jsx("br", {}), _jsx("h3", { children: "Our Plans Include:" }), _jsxs("ul", __assign({ className: 'list-inside' }, { children: [_jsxs("li", __assign({ className: 'flex items-center' }, { children: [_jsx("span", __assign({ className: 'text-green-500 mr-2' }, { children: "\u2714" })), "A beautifully decorated venue with colorful aesthetics"] })), _jsxs("li", __assign({ className: 'flex items-center' }, { children: [_jsx("span", __assign({ className: 'text-green-500 mr-2' }, { children: "\u2714" })), "Playing with eco-friendly colors"] })), _jsxs("li", __assign({ className: 'flex items-center' }, { children: [_jsx("span", __assign({ className: 'text-green-500 mr-2' }, { children: "\u2714" })), "Music and dance performances"] })), _jsxs("li", __assign({ className: 'flex items-center' }, { children: [_jsx("span", __assign({ className: 'text-green-500 mr-2' }, { children: "\u2714" })), "Delicious Indian festive foods and drinks"] })), _jsxs("li", __assign({ className: 'flex items-center' }, { children: [_jsx("span", __assign({ className: 'text-green-500 mr-2' }, { children: "\u2714" })), "Community gathering and cultural programs"] }))] }))] }))] })), _jsx(Footer, {})] })));
+}
+export default Holi2025;

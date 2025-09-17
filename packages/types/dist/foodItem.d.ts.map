@@ -1,0 +1,1 @@
+{"version":3,"file":"foodItem.d.ts","sourceRoot":"","sources":["../src/foodItem.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,QAAQ;IACvB,IAAI,EAAE,MAAM,CAAC;IACb,WAAW,EAAE,MAAM,CAAC;CACrB;AAED,MAAM,WAAW,aAAa;IAC5B,CAAC,GAAG,EAAE,MAAM,GAAG,QAAQ,EAAE,CAAC;CAC3B"}
