@@ -4,8 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
-import Login from './pages/Login';
-import ReservationList from './pages/ReservationList';
+import { Login, ReservationList } from './pages';
 
 function App() {
   return (

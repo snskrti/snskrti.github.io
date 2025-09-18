@@ -21,7 +21,6 @@ const Login: React.FC = () => {
       navigate('/');
     } catch (error) {
       setError('Failed to sign in. Please check your credentials.');
-      console.error(error);
     } finally {
       setLoading(false);
     }
