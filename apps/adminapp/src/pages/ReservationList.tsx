@@ -317,8 +317,8 @@ const ReservationList: React.FC = () => {
   }
 
   return (
-    <div className="overflow-x-auto">
-      <div className="flex justify-between items-center mb-4">
+    <div className="w-full px-2 sm:px-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
         <h1 className="text-2xl font-bold">Durga Puja 2025 - Meal Reservations</h1>
         <button 
           className={`${exporting ? 'bg-green-500' : 'bg-green-600 hover:bg-green-700'} text-white font-semibold py-2 px-4 rounded flex items-center`}
@@ -387,10 +387,11 @@ const ReservationList: React.FC = () => {
       ) : filteredReservations.length === 0 ? (
         <p className="text-gray-500">No reservations match your search criteria.</p>
       ) : (
-        <>
-          <ReservationSummary reservations={filteredReservations} />
-          
-          <table className="min-w-full bg-white border border-gray-300">
+        <div className="flex flex-col lg:flex-row gap-4 w-full">
+          {/* Main table content - takes 75% of the width on larger screens */}
+          <div className="lg:w-3/4 w-full overflow-auto">
+            <div className="overflow-x-auto">
+              <table className="w-full bg-white border border-gray-300">
             <thead>
               <tr className="bg-gray-100">
                 <th className="py-2 px-4 border-b border-r">Customer Name</th>
@@ -576,7 +577,16 @@ const ReservationList: React.FC = () => {
               })}
             </tbody>
           </table>
-        </>
+          </div>
+          </div>
+          
+          {/* Right column for the ReservationSummary - takes 25% of the width on larger screens */}
+          <div className="lg:w-1/4 w-full sticky top-0 self-start">
+            <div className="bg-white rounded-lg shadow">
+              <ReservationSummary reservations={filteredReservations} />
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

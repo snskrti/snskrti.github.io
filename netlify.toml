@@ -31,6 +31,8 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
 
 # Cache static assets
+
+# Cache static assets
 [[headers]]
   for = "/static/*"
   [headers.values]

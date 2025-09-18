@@ -4,7 +4,7 @@
     "version": "0.1.0",
     "homepage": "/",
     "scripts": {
-        "start": "react-scripts start",
+        "start": "PORT=3010 react-scripts start",
         "prebuild": "rm -rf build dist",
         "build": "DISABLE_ESLINT_PLUGIN=true CI=false TSC_COMPILE_ON_ERROR=true PUBLIC_URL=/ NODE_ENV=production react-scripts build",
         "postbuild": "echo '/* /index.html 200' > build/_redirects && echo 'Build completed successfully'",
