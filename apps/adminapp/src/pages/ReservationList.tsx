@@ -1,10 +1,8 @@
-// src/pages/ReservationList.tsx
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/clientApp';
 import { MealReservation } from 'types/src/mealReservation';
 import ReservationSummary from '../components/ReservationSummary';
-import DebugDataView from '../components/DebugDataView';
 
 // Day mapping constants
 const DAY_MAPPING: Record<string, string> = {
@@ -60,6 +58,22 @@ const parseItemId = (itemId: string) => {
   return null;
 };
 
+// Helper function to highlight search text
+const highlightSearchText = (text: string, searchQuery: string): JSX.Element => {
+  if (!searchQuery) return <>{text}</>;
+  
+  const parts = text.split(new RegExp(`(${searchQuery})`, 'gi'));
+  return (
+    <>
+      {parts.map((part, index) => 
+        part.toLowerCase() === searchQuery.toLowerCase() 
+          ? <span key={index} className="bg-yellow-200">{part}</span> 
+          : part
+      )}
+    </>
+  );
+};
+
 // Function to organize meal data by day
 const organizeMealsByDay = (selectedItems: Record<string, any>) => {
   const mealsByDay: Record<string, Record<string, Record<string, number>>> = {
@@ -100,9 +114,20 @@ const organizeMealsByDay = (selectedItems: Record<string, any>) => {
 
 const ReservationList: React.FC = () => {
   const [reservations, setReservations] = useState<MealReservation[]>([]);
+  const [filteredReservations, setFilteredReservations] = useState<MealReservation[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [showDebug, setShowDebug] = useState(false);
+
+  // Debounce search query to avoid too many re-renders
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   useEffect(() => {
     async function fetchReservations() {
@@ -124,6 +149,23 @@ const ReservationList: React.FC = () => {
     fetchReservations();
   }, []);
 
+  // Filter reservations based on search query
+  useEffect(() => {
+    if (!debouncedSearchQuery) {
+      setFilteredReservations(reservations);
+      return;
+    }
+
+    const query = debouncedSearchQuery.toLowerCase();
+    const filtered = reservations.filter(reservation => {
+      const name = reservation.customerInfo.name.toLowerCase();
+      const email = reservation.customerInfo.email.toLowerCase();
+      return name.includes(query) || email.includes(query);
+    });
+
+    setFilteredReservations(filtered);
+  }, [debouncedSearchQuery, reservations]);
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -144,21 +186,41 @@ const ReservationList: React.FC = () => {
     <div className="overflow-x-auto">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Durga Puja 2025 - Meal Reservations</h1>
-        <button 
-          className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded"
-          onClick={() => setShowDebug(!showDebug)}
-        >
-          {showDebug ? 'Hide Debug Info' : 'Show Debug Info'}
-        </button>
       </div>
       
-      {showDebug && <DebugDataView reservations={reservations} />}
+      {/* Search input */}
+      <div className="mb-4">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search by name or email..."
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          {searchQuery && (
+            <button
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              onClick={() => setSearchQuery('')}
+            >
+              ✕
+            </button>
+          )}
+        </div>
+        {searchQuery && (
+          <p className="mt-2 text-sm text-gray-600">
+            Showing {filteredReservations.length} of {reservations.length} reservations
+          </p>
+        )}
+      </div>
       
       {reservations.length === 0 ? (
         <p className="text-gray-500">No reservations found.</p>
+      ) : filteredReservations.length === 0 ? (
+        <p className="text-gray-500">No reservations match your search criteria.</p>
       ) : (
         <>
-          <ReservationSummary reservations={reservations} />
+          <ReservationSummary reservations={filteredReservations} />
           
           <table className="min-w-full bg-white border border-gray-300">
             <thead>
@@ -246,13 +308,17 @@ const ReservationList: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {reservations.map((reservation, index) => {
+              {filteredReservations.map((reservation, index) => {
                 const mealsByDay = organizeMealsByDay(reservation.selectedItems);
                 
                 return (
                   <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                    <td className="py-2 px-4 border-b border-r">{reservation.customerInfo.name}</td>
-                    <td className="py-2 px-4 border-b border-r">{reservation.customerInfo.email}</td>
+                    <td className="py-2 px-4 border-b border-r">
+                      {highlightSearchText(reservation.customerInfo.name, debouncedSearchQuery)}
+                    </td>
+                    <td className="py-2 px-4 border-b border-r">
+                      {highlightSearchText(reservation.customerInfo.email, debouncedSearchQuery)}
+                    </td>
                     <td className="py-2 px-4 border-b border-r">${reservation.totalAmount}</td>
                     
                     {/* Day 1 Veg */}
