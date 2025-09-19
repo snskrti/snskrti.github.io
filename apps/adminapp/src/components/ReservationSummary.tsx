@@ -121,12 +121,50 @@ const organizeMealsByDay = (reservations: MealReservation[]): SummaryData => {
   return summary;
 };
 
+// Function to count Anandamela registrations by age group
+const countAnandamelaRegistrations = (reservations: MealReservation[]) => {
+  const anandamelaCount = {
+    adult: 0,
+    child: 0,
+    infant: 0,
+    total: 0
+  };
+  
+  reservations.forEach(reservation => {
+    // Check if selectedItems exists and is an object
+    if (!reservation.selectedItems || typeof reservation.selectedItems !== 'object') {
+      return; // Skip this reservation
+    }
+    
+    Object.entries(reservation.selectedItems).forEach(([itemId, details]) => {
+      // Check if this is an Anandamela registration (format: anandamela-<age group>)
+      if (itemId.startsWith('anandamela-')) {
+        const parts = itemId.split('-');
+        if (parts.length >= 2) {
+          const ageGroup = parts[1].toLowerCase();
+          
+          // Validate age group and count registrations
+          if (ageGroup === 'adult' || ageGroup === 'child' || ageGroup === 'infant') {
+            // Get quantity with default of 0 if not available
+            const quantity = details?.quantity || 0;
+            anandamelaCount[ageGroup] += quantity;
+            anandamelaCount.total += quantity;
+          }
+        }
+      }
+    });
+  });
+  
+  return anandamelaCount;
+};
+
 interface ReservationSummaryProps {
   reservations: MealReservation[];
 }
 
 const ReservationSummary: React.FC<ReservationSummaryProps> = ({ reservations }) => {
   const summary = organizeMealsByDay(reservations);
+  const anandamelaRegistrations = countAnandamelaRegistrations(reservations);
   
   // Calculate totals
   const dayTotals: DayTotals = {
@@ -145,12 +183,42 @@ const ReservationSummary: React.FC<ReservationSummaryProps> = ({ reservations })
     });
   });
   
-  // Calculate overall total
-  const overallTotal = Object.values(dayTotals).reduce((sum, day) => sum + day.total, 0);
-  
   return (
     <div className="p-4 rounded-lg">
       <h2 className="text-xl font-bold mb-4">Reservation Summary</h2>
+      
+      <div className="bg-indigo-50 p-4 rounded-lg text-center mb-4">
+        <p className="text-xl font-bold">Total Bookings: {reservations.length}</p>
+      </div>
+      
+      {/* Anandamela Registrations Summary */}
+      {anandamelaRegistrations.total > 0 && (
+        <div className="border rounded-lg p-4 bg-purple-50 shadow-md mb-4">
+          <h3 className="text-lg font-semibold mb-2">Anandamela Registrations</h3>
+          
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div className="text-center">
+              <h4 className="font-medium">Adult</h4>
+              <p className="text-xl font-bold text-purple-800">{anandamelaRegistrations.adult}</p>
+            </div>
+            
+            <div className="text-center">
+              <h4 className="font-medium">Child</h4>
+              <p className="text-xl font-bold text-purple-800">{anandamelaRegistrations.child}</p>
+            </div>
+            
+            <div className="text-center">
+              <h4 className="font-medium">Infant</h4>
+              <p className="text-xl font-bold text-purple-800">{anandamelaRegistrations.infant}</p>
+            </div>
+            
+            <div className="text-center">
+              <h4 className="font-medium">Total</h4>
+              <p className="text-xl font-bold text-purple-800">{anandamelaRegistrations.total}</p>
+            </div>
+          </div>
+        </div>
+      )}
       
       <div className="grid grid-cols-1 gap-4 mb-4">
         {(Object.keys(summary) as Array<keyof SummaryData>).map(day => (
@@ -184,10 +252,6 @@ const ReservationSummary: React.FC<ReservationSummaryProps> = ({ reservations })
             </div>
           </div>
         ))}
-      </div>
-      
-      <div className="bg-indigo-50 p-4 rounded-lg text-center">
-        <p className="text-xl font-bold">Overall Total: {overallTotal} meals</p>
       </div>
     </div>
   );
