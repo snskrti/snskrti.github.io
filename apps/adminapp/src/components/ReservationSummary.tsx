@@ -145,12 +145,13 @@ const ReservationSummary: React.FC<ReservationSummaryProps> = ({ reservations })
     });
   });
   
-  // Calculate overall total
-  const overallTotal = Object.values(dayTotals).reduce((sum, day) => sum + day.total, 0);
-  
   return (
     <div className="p-4 rounded-lg">
       <h2 className="text-xl font-bold mb-4">Reservation Summary</h2>
+      
+      <div className="bg-indigo-50 p-4 rounded-lg text-center mb-4">
+        <p className="text-xl font-bold">Total Bookings: {reservations.length}</p>
+      </div>
       
       <div className="grid grid-cols-1 gap-4 mb-4">
         {(Object.keys(summary) as Array<keyof SummaryData>).map(day => (
@@ -184,10 +185,6 @@ const ReservationSummary: React.FC<ReservationSummaryProps> = ({ reservations })
             </div>
           </div>
         ))}
-      </div>
-      
-      <div className="bg-indigo-50 p-4 rounded-lg text-center">
-        <p className="text-xl font-bold">Overall Total: {overallTotal} meals</p>
       </div>
     </div>
   );

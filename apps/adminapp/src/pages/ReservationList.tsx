@@ -139,7 +139,18 @@ const ReservationList: React.FC = () => {
           const data = doc.data() as MealReservation;
           return data;
         });
-        setReservations(reservationsList);
+        
+        // Sort reservations by createdAt date in descending order (newest first)
+        const sortedReservations = [...reservationsList].sort((a, b) => {
+          // Handle cases where createdAt might be missing
+          if (!a.createdAt) return 1;  // Push items without date to the end
+          if (!b.createdAt) return -1; // Push items without date to the end
+          
+          // Compare timestamps (newer dates come first)
+          return b.createdAt.seconds - a.createdAt.seconds;
+        });
+        
+        setReservations(sortedReservations);
       } catch (err) {
         setError('Failed to fetch reservations. Please try again later.');
       } finally {
@@ -164,6 +175,8 @@ const ReservationList: React.FC = () => {
       return name.includes(query) || email.includes(query);
     });
 
+    // Filtered results maintain the same sort order as the original reservations
+    // (which are already sorted by createdAt date in descending order)
     setFilteredReservations(filtered);
   }, [debouncedSearchQuery, reservations]);
 
@@ -583,7 +596,7 @@ const ReservationList: React.FC = () => {
           {/* Right column for the ReservationSummary - takes 25% of the width on larger screens */}
           <div className="lg:w-1/4 w-full sticky top-0 self-start">
             <div className="bg-white rounded-lg shadow">
-              <ReservationSummary reservations={filteredReservations} />
+              <ReservationSummary reservations={reservations} />
             </div>
           </div>
         </div>
