@@ -63,7 +63,7 @@ export const MENU_DESCRIPTIONS = {
     },
     NON_VEG: {
       name: 'Non-Vegetarian Thali',
-      description: 'Golden Bay Fish Fry, Royal Fried Rice, Fulkopir Dorma, Shahi Mutton Kosha, Aam Madhuri, Rasmalai Royale'
+      description: 'Machher Ruchi Pathuri, Royal Fried Rice, Fulkopir Dorma, Shahi Mutton Kosha, Aam Madhuri, Rasmalai Royale'
     }
   },
   DAY2: {

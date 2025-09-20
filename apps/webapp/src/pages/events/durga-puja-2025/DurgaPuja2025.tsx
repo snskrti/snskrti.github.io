@@ -253,14 +253,6 @@ function DurgaPuja2025() {
                 <span>Secure your Dining Experience</span>
               </a>
               
-              <a
-                href="https://www.desipass.com/events/events-details?eventId=01K206DZB1DAGBX15RZV6SAH52"
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center space-x-2 px-6 py-3 rounded-full border-2 font-semibold btn-secondary">
-                <TicketX className="w-5 h-5" />
-                <span>Get your Entry-only ticket</span>
-              </a>
             </div>
           </div>
         </div>
