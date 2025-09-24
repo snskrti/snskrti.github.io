@@ -6,6 +6,29 @@ export interface Event {
     link: string;
 }
 
+export interface SpecialAnnouncement {
+    title: string;
+    description: string;
+    image?: string;
+    link?: string;
+    buttonText?: string;
+}
+
+export const specialAnnouncements: SpecialAnnouncement[] = [
+    {
+      title: "Aboho Sangeet Release",
+      description: "We are proud to announce the release of our own Aboho Sangeet for Durga Puja 2025. Listen to the melodious rendition celebrating the arrival of Maa Durga.",
+      link: "/events/durga-puja-2025/aboho-sangeet",
+      buttonText: "Listen Now"
+    },
+    {
+      title: "Durga Puja Theme Song",
+      description: "Our official theme song for Durga Puja 2025 is now available! Experience the spiritual journey through music as we prepare to welcome Maa Durga.",
+      link: "/events/durga-puja-2025/theme-song",
+      buttonText: "Listen to Theme Song"
+    }
+];
+
 export const upcomingEvents: Event[] = [
     {
       title: "Mahalaya",

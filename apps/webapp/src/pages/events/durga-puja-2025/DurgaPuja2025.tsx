@@ -373,6 +373,59 @@ function DurgaPuja2025() {
 
         <section className="animate-on-scroll opacity-0">
           <div className="bg-gradient-to-r from-orange-50 to-amber-100 p-10 rounded-lg shadow-lg max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold text-amber-800 mb-6 text-center">Official Music</h2>
+            <div className="w-20 h-1 bg-amber-500 mx-auto mb-10"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Aboho Sangeet Item */}
+              <div className="bg-white rounded-lg shadow p-8 flex flex-col h-full">
+                <div className="flex-grow">
+                  <div className="flex justify-center mb-6">
+                    <div className="bg-amber-100 p-4 rounded-full">
+                      <Music className="w-10 h-10 text-amber-600" />
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-semibold text-amber-800 mb-4 text-center">Aboho Sangeet</h3>
+                  <p className="text-gray-700 text-center leading-relaxed">
+                    "Shankha Dhaker Sure Baje Pran" - Our official Aboho Sangeet for Durga Puja 2025. Listen to this melodious rendition celebrating the arrival of Maa Durga.
+                  </p>
+                </div>
+                <div className="flex justify-center mt-6">
+                  <a
+                    href="/events/durga-puja-2025/aboho-sangeet"
+                    className="inline-block bg-amber-600 text-white px-6 py-3 rounded-full hover:bg-amber-700 transition-colors font-semibold"
+                  >
+                    Listen Now
+                  </a>
+                </div>
+              </div>
+              {/* Theme Song Item */}
+              <div className="bg-white rounded-lg shadow p-8 flex flex-col h-full">
+                <div className="flex-grow">
+                  <div className="flex justify-center mb-6">
+                    <div className="bg-amber-100 p-4 rounded-full">
+                      <Music className="w-10 h-10 text-amber-600" />
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-semibold text-amber-800 mb-4 text-center">Theme Song</h3>
+                  <p className="text-gray-700 text-center leading-relaxed">
+                    "Durga Elen Hamburg e" - Our official theme song for Durga Puja 2025. Experience the spiritual journey through music.
+                  </p>
+                </div>
+                <div className="flex justify-center mt-6">
+                  <a
+                    href="/events/durga-puja-2025/theme-song"
+                    className="inline-block bg-amber-600 text-white px-6 py-3 rounded-full hover:bg-amber-700 transition-colors font-semibold"
+                  >
+                    Listen to Theme Song
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="animate-on-scroll opacity-0">
+          <div className="bg-gradient-to-r from-orange-50 to-amber-100 p-10 rounded-lg shadow-lg max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-amber-800 mb-6 text-center">Food & Schedule</h2>
             <div className="w-20 h-1 bg-amber-500 mx-auto mb-10"></div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

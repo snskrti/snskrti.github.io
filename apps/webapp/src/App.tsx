@@ -19,6 +19,8 @@ import MealPayment2025 from './pages/events/durga-puja-2025/MealPayment2025';
 import SharedPaymentConfirmation from './components/shared/payment/PaymentConfirmation';
 import DurgaPuja2025FoodMenu from './pages/events/durga-puja-2025/DurgaPuja2025FoodMenu';
 import Mahalaya2025 from './pages/events/durga-puja-2025/Mahalaya2025';
+import AbohoSangeet2025 from './pages/events/durga-puja-2025/AbohoSangeet2025';
+import ThemeSong2025 from './pages/events/durga-puja-2025/ThemeSong2025';
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
           <Route path="/events/durga-puja-2025/food-menu" element={<DurgaPuja2025FoodMenu />} />
           <Route path="/events/durga-puja-2025/meal-reservation" element={<MealReservation2025 />} />
           <Route path="/events/durga-puja-2025/meal-payment" element={<MealPayment2025 />} />
+          <Route path="/events/durga-puja-2025/aboho-sangeet" element={<AbohoSangeet2025 />} />
+          <Route path="/events/durga-puja-2025/theme-song" element={<ThemeSong2025 />} />
           {/* Keep this route for backwards compatibility, but it now uses the shared component */}
           <Route path="/events/diwali-2025" element={<Diwali2025 />} />
           <Route path="/membership/request" element={<MembershipRequest />} />

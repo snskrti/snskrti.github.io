@@ -1,12 +1,12 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { Facebook, Instagram, Youtube, Mail, Navigation, Heart, BookCopy } from 'lucide-react';
+import { Facebook, Instagram, Youtube, Mail, Navigation, Heart, BookCopy, Megaphone } from 'lucide-react';
 import { Footer } from '../components/shared/Footer';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { Home, Calendar, Users, Info } from 'lucide-react';
 import { NavigationSection } from 'types';
-import { upcomingEvents } from 'types';
+import { upcomingEvents, specialAnnouncements } from 'types';
 import { SectionNavigation } from '../components/shared/SectionNavigation';
 import { socialMediaLinks } from 'types';
 import { NewsletterSubscribe } from '../components/shared/NewsletterSubscribe';
@@ -61,9 +61,11 @@ function HomePage() {
   }, []);
 
   // define the sections in the page
+
   const sections: NavigationSection[] = [
     { id: 'home', name: 'Banner', icon: <Home size={24} /> },
     { id: 'events', name: 'Events', icon: <Calendar size={24} /> },
+    { id: 'announcements', name: 'Announcements', icon: <Megaphone size={24} /> },
     { id: 'about', name: 'About the Verein', icon: <Info size={24} /> },
     { id: 'organization', name: 'Organisational Structure', icon: <Users size={24} /> }
   ];
@@ -161,6 +163,42 @@ function HomePage() {
             </div>
           ))
         }
+          </div>
+        </div>
+      </section>
+
+      {/* Special Announcements Section */}
+      <section className="w-full py-20 bg-inherit" id="announcements">
+        <div className="h-full w-full animate-on-scroll opacity-0 flex flex-col justify-center px-8 md:px-16 lg:px-24">
+          <h2 className="text-4xl font-bold mb-12 text-center mt-12">Special Announcements</h2>
+          <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {specialAnnouncements.map((announcement, index) => (
+              <div 
+                key={index}
+                className="group relative overflow-hidden rounded-lg shadow-lg transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl flex items-center justify-center">
+                
+                <div className="relative h-full w-full">
+                  <div className="absolute bottom-0 left-0 p-6 group-hover:opacity-0 transition-opacity duration-300">
+                    <h3 className="text-xl text-white font-bold mb-2 transition-opacity duration-300 ease-in-out">{announcement.title}</h3>
+                  </div>
+
+                  <img 
+                    src={announcement.image || "/images/welcome_to_club.jpg"}
+                    alt={announcement.title}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
+                    
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                  <div className="absolute inset-0 p-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end">
+                    <Link to={announcement.link || '#'}>
+                      <h3 className="text-xl font-bold mb-2">{announcement.title}</h3>
+                      <p className="text-sm mb-2">{announcement.date}</p>
+                      <p>{announcement.description}</p>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
