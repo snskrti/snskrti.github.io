@@ -83,7 +83,7 @@ function DurgaPuja2025Schedule() {
       </div>
 
       {/* Food Menu Notice Banner */}
-      <div className="bg-gradient-to-r from-amber-200 to-orange-200 py-4 border-y-2 border-amber-300 shadow-inner">
+      {/* <div className="bg-gradient-to-r from-amber-200 to-orange-200 py-4 border-y-2 border-amber-300 shadow-inner">
         <div className="max-w-6xl mx-auto px-4 text-center">
           <div className="flex flex-col sm:flex-row items-center justify-center">
             <p className="text-amber-900 font-semibold flex items-center justify-center mb-2 sm:mb-0">
@@ -98,7 +98,7 @@ function DurgaPuja2025Schedule() {
             </a>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <main className="max-w-6xl mx-auto px-2 sm:px-4 py-8 sm:py-12">
         {/* Main Content Section */}

@@ -624,7 +624,7 @@ function MealReservation2025() {
 
                 <button
                   onClick={handleProceedToPayment}
-                  disabled={!isFormValid}
+                  disabled={true}
                   className="w-full mt-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg"
                 >
                   Proceed to Payment

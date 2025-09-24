@@ -226,10 +226,10 @@ function DurgaPuja2025() {
               <p className="text-xl font-light">{eventDate}</p>
             </div>
 
-            <a href="https://maps.app.goo.gl/LR2jQubpbd4EkBXh6" target="_blank" rel="noreferrer" className="flex items-center justify-center space-x-2 mb-4 hover:text-amber-300 transition-colors">
+            {/* <a href="https://maps.app.goo.gl/LR2jQubpbd4EkBXh6" target="_blank" rel="noreferrer" className="flex items-center justify-center space-x-2 mb-4 hover:text-amber-300 transition-colors">
               <MapPinIcon className="w-5 h-5" />
               <p className="text-xl font-light">Nienhöfener Str. 18, 25421 Pinneberg</p>
-            </a>
+            </a> */}
             
             {/* <h1 className="text-8xl md:text-9xl font-bold mb-12">Durga Puja</h1> */}
             <div className="pt-6 mt-6">
@@ -246,11 +246,12 @@ function DurgaPuja2025() {
                 <span>Program Schedule</span>
               </a>
               <a
-                href="/events/durga-puja-2025/food-menu"
+                href="https://maps.app.goo.gl/LR2jQubpbd4EkBXh6"
+                target='_blank'
                 rel="noreferrer"
                 className="flex items-center space-x-2 px-6 py-3 rounded-full border-2 font-semibold btn-secondary">
-                <TicketX className="w-5 h-5" />
-                <span>Secure your Dining Experience</span>
+                <MapPin className="w-5 h-5" />
+                <span>View Location</span>
               </a>
               
             </div>
@@ -411,13 +412,19 @@ function DurgaPuja2025() {
                   </p>
                 </div>
                 <div className="flex justify-center mt-6">
+                  <div className="inline-block bg-orange-100 text-amber-800 px-6 py-3 rounded-full font-semibold text-center">
+                    <span className="block font-bold">Registration Closed</span>
+                    <span className="text-sm">We've received overwhelming response and are at capacity</span>
+                  </div>
+                </div>
+                {/* <div className="flex justify-center mt-6">
                   <a
                     href="/events/durga-puja-2025/food-menu"
                     className="inline-block bg-amber-600 text-white px-6 py-3 rounded-full hover:bg-amber-700 transition-colors font-semibold"
                     >
                     View Food Menu
                   </a>
-                </div>
+                </div> */}
               </div>
             </div>
             <p className="text-md text-gray-600 text-center mt-10">
