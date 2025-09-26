@@ -401,255 +401,303 @@ function MealReservation2025() {
             Reserve your authentic Bengali thalis for the four-day Durga Puja celebration.
           </p>
         </div>
-
-        {/* Age Group Information */}
-        <div className="max-w-4xl mx-auto mb-8 bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-          <div className="flex items-center mb-4">
-            <Users className="w-5 h-5 text-orange-600 mr-2" />
-            <h2 className="text-xl font-semibold text-gray-800">Age-Based Pricing</h2>
+        
+        {/* Registration Closed Banner - Prominent Version */}
+        <div className="max-w-4xl mx-auto mb-8 bg-red-50 rounded-xl border-2 border-red-300 p-6 shadow-lg">
+          <div className="flex flex-col items-center">
+            <div className="w-full flex justify-center">
+              <div className="rounded-full bg-red-100 p-4 mb-4">
+                <Calendar className="w-8 h-8 text-red-600" />
+              </div>
+            </div>
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-red-800 mb-3">MEAL RESERVATIONS NOW CLOSED</h2>
+              <div className="w-24 h-1 bg-red-400 mx-auto mb-4"></div>
+              
+              <p className="text-red-600 text-md">
+                We warmly welcome you to join us at the Durga Puja celebration. Unfortunately, we can no longer accept additional food reservations.
+              </p>
+            </div>
           </div>
-          <div className="grid sm:grid-cols-3 gap-4">
-            {Object.entries(AGE_GROUPS).map(([key, info]) => (
-              <div key={key} className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-medium text-lg mb-1">{info.name}</h3>
-                <p className="text-sm text-gray-600 mb-2">{info.description}</p>
-                <div className="space-y-1 text-sm">
-                  <p className={key === 'infant' ? 'text-green-600 font-semibold' : ''}>
-                    {key === 'infant' ? 'Free admission' : ''}
-                    {key === 'child' ? 'Reduced price' : ''}
-                    {key === 'adult' ? 'Full price' : ''}
+        </div>
+
+        {/* Navigation Buttons */}
+        <div className="max-w-4xl mx-auto mb-8">
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <a 
+              href="/events/durga-puja-2025" 
+              className="bg-amber-500 hover:bg-amber-600 text-white py-3 px-6 rounded-lg font-medium flex items-center justify-center shadow-md hover:shadow-lg transition-all"
+            >
+              <span className="mr-2">📌</span>
+              Main Event Page
+            </a>
+            <a 
+              href="/events/durga-puja-2025/schedule" 
+              className="bg-orange-500 hover:bg-orange-600 text-white py-3 px-6 rounded-lg font-medium flex items-center justify-center shadow-md hover:shadow-lg transition-all"
+            >
+              <span className="mr-2">📅</span>
+              Program Schedule
+            </a>
+            <a 
+              href="https://maps.app.goo.gl/LR2jQubpbd4EkBXh6" 
+              target="_blank" 
+              rel="noreferrer" 
+              className="bg-blue-500 hover:bg-blue-600 text-white py-3 px-6 rounded-lg font-medium flex items-center justify-center shadow-md hover:shadow-lg transition-all"
+            >
+              <span className="mr-2">🗺️</span>
+              View Location
+            </a>
+          </div>
+        </div>
+
+        {/* Information Section - Visible */}
+        <div className="max-w-4xl mx-auto bg-blue-50 rounded-xl p-4 mb-8 border border-blue-100">
+          <h3 className="text-sm font-semibold text-blue-900 mb-2">Important Information</h3>
+          <ul className="space-y-1 text-xs text-blue-800">
+            <li>• For questions about the event, contact us at admin@sanskriti-hamburg.de</li>
+            <li>• We look forward to seeing you at Durga Puja 2025!</li>
+          </ul>
+        </div>
+        
+        {/* Hidden content - keeping the code but not displaying it */}
+        <div className="hidden">
+          {/* Age Group Information */}
+          <div className="max-w-4xl mx-auto mb-8 bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+            <div className="flex items-center mb-4">
+              <Users className="w-5 h-5 text-orange-600 mr-2" />
+              <h2 className="text-xl font-semibold text-gray-800">Age-Based Pricing</h2>
+            </div>
+            <div className="grid sm:grid-cols-3 gap-4">
+              {Object.entries(AGE_GROUPS).map(([key, info]) => (
+                <div key={key} className="bg-gray-50 p-4 rounded-lg">
+                  <h3 className="font-medium text-lg mb-1">{info.name}</h3>
+                  <p className="text-sm text-gray-600 mb-2">{info.description}</p>
+                  <div className="space-y-1 text-sm">
+                    <p className={key === 'infant' ? 'text-green-600 font-semibold' : ''}>
+                      {key === 'infant' ? 'Free admission' : ''}
+                      {key === 'child' ? 'Reduced price' : ''}
+                      {key === 'adult' ? 'Full price' : ''}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Menu for each day */}
+          <div className="max-w-4xl mx-auto space-y-6 mb-8">
+            {durgaPujaMeals2025.map((day, dayIndex) => (
+              <div key={dayIndex} className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                <div className="text-center mb-6">
+                  <h2 className="text-xl font-bold text-gray-800 mb-1">
+                    {day.day}
+                  </h2>
+                  <p className="text-sm text-gray-500">
+                    {new Date(day.date).toLocaleDateString('en-GB', { 
+                      weekday: 'long',
+                      day: 'numeric',
+                      month: 'long'
+                    })}
                   </p>
+                </div>
+                
+                <div className={`grid gap-4 ${day.day.includes('Day 4') ? 'grid-cols-1' : 'md:grid-cols-2'}`}>
+                  {/* Vegetarian Menu */}
+                  <div>
+                    {day.vegItems.map(item => renderMenuItem(item, true))}
+                  </div>
+
+                  {/* Non-Vegetarian Menu */}
+                  {day.nonVegItems && day.nonVegItems.length > 0 && (
+                    <div>
+                      {day.nonVegItems.map(item => renderMenuItem(item, false))}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
           </div>
-        </div>
 
-        {/* Menu for each day */}
-        <div className="max-w-4xl mx-auto space-y-6 mb-8">
-          {durgaPujaMeals2025.map((day, dayIndex) => (
-            <div key={dayIndex} className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-              <div className="text-center mb-6">
-                <h2 className="text-xl font-bold text-gray-800 mb-1">
-                  {day.day}
-                </h2>
-                <p className="text-sm text-gray-500">
-                  {new Date(day.date).toLocaleDateString('en-GB', { 
-                    weekday: 'long',
-                    day: 'numeric',
-                    month: 'long'
-                  })}
-                </p>
-              </div>
-              
-              <div className={`grid gap-4 ${day.day.includes('Day 4') ? 'grid-cols-1' : 'md:grid-cols-2'}`}>
-                {/* Vegetarian Menu */}
+          {/* Customer Information & Order Summary */}
+          {getSelectedItemsCount() > 0 && (
+            <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
+              <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                <ShoppingCart className="w-5 h-5 mr-2" />
+                Complete Your Order
+              </h2>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Customer Information */}
                 <div>
-                  {day.vegItems.map(item => renderMenuItem(item, true))}
-                </div>
-
-                {/* Non-Vegetarian Menu */}
-                {day.nonVegItems && day.nonVegItems.length > 0 && (
-                  <div>
-                    {day.nonVegItems.map(item => renderMenuItem(item, false))}
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Customer Information & Order Summary */}
-        {getSelectedItemsCount() > 0 && (
-          <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
-            <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
-              <ShoppingCart className="w-5 h-5 mr-2" />
-              Complete Your Order
-            </h2>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Customer Information */}
-              <div>
-                <h3 className="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide">Your Information</h3>
-                
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-2">
-                      <User className="w-3 h-3 inline mr-1" />
-                      Full Name *
-                    </label>
-                    <input
-                      type="text"
-                      value={customerInfo.name}
-                      onChange={(e) => setCustomerInfo(prev => ({ ...prev, name: e.target.value }))}
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                      placeholder="Enter your full name"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-2">
-                      <Mail className="w-3 h-3 inline mr-1" />
-                      Email Address *
-                    </label>
-                    <input
-                      type="email"
-                      value={customerInfo.email}
-                      onChange={(e) => setCustomerInfo(prev => ({ ...prev, email: e.target.value }))}
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                      placeholder="Enter your email address"
-                      required
-                    />
-                  </div>
-
-                  {/* <div className="flex items-center p-3 bg-orange-50 rounded-lg">
-                    <input
-                      type="checkbox"
-                      id="isMember"
-                      checked={customerInfo.isMember}
-                      onChange={(e) => setCustomerInfo(prev => ({ ...prev, isMember: e.target.checked }))}
-                      className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded focus:ring-orange-500"
-                    />
-                    <label htmlFor="isMember" className="ml-3 text-xs font-medium text-gray-700">
-                      I declare that I and every adult in this reservation is a registered member of Sanskriti e.V.
-                    </label>
-                  </div> */}
-                </div>
-              </div>
-
-              {/* Order Summary */}
-              <div>
-                <h3 className="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide">Order Summary</h3>
-                
-                <div className="bg-gray-50 p-4 rounded-xl space-y-3">
-                  <div className="flex justify-between text-sm">
-                    <span>Total Items:</span>
-                    <span className="font-semibold">{getSelectedItemsCount()}</span>
-                  </div>
+                  <h3 className="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide">Your Information</h3>
                   
-                  {/* Detailed breakdown of selected items */}
-                  <div className="border-t border-b border-gray-200 py-3 space-y-2">
-                    {/* Anandamela attendance - show first if selected */}
-                    {Object.entries(selectedItems)
-                      .filter(([compositeKey]) => compositeKey.includes('anandamela'))
-                      .some(([_, itemDetails]) => itemDetails.quantity > 0) && (
-                        <div className="bg-orange-50 p-3 rounded-lg mb-2 border border-orange-100">
-                          <div className="font-medium text-sm text-orange-800 mb-1">Anandamela Attendance</div>
-                          <div className="text-xs text-orange-700 flex justify-between">
-                            <span>Expected Attendees:</span>
-                            <span className="font-medium">
-                              {Object.entries(selectedItems)
-                                .filter(([compositeKey]) => compositeKey.includes('anandamela'))
-                                .reduce((sum, [_, itemDetails]) => sum + itemDetails.quantity, 0)}
-                            </span>
-                          </div>
-                          {Object.entries(selectedItems)
-                            .filter(([compositeKey]) => compositeKey.includes('anandamela'))
-                            .map(([compositeKey, itemDetails]) => {
-                              if (itemDetails.quantity === 0) return null;
-                              // Extract age group from composite key
-                              const ageGroupKey = compositeKey.split('-')[2] as keyof typeof AGE_GROUPS;
-                              const ageGroupInfo = AGE_GROUPS[ageGroupKey];
-                              
-                              return (
-                                <div key={compositeKey} className="text-xs text-orange-600 flex justify-between">
-                                  <span>{ageGroupInfo.name}:</span>
-                                  <span>{itemDetails.quantity}</span>
-                                </div>
-                              );
-                            })}
-                          <div className="text-xs mt-2 text-orange-600 italic">
-                            Free registration - Pay for food at stalls
-                          </div>
-                        </div>
-                      )
-                    }
-                    
-                    {/* Meal items with pricing */}
-                    {Object.entries(selectedItems)
-                      .filter(([compositeKey]) => !compositeKey.includes('anandamela'))
-                      .map(([compositeKey, itemDetails]) => {
-                        if (itemDetails.quantity === 0) return null;
-                        
-                        // Parse item details from composite key
-                        const [itemId, ageGroupKey] = compositeKey.split('-');
-                        const isVeg = itemId.includes('veg-');
-                        const dayNumber = itemId.match(/day(\d+)/)?.[1] || '1';
-                        const dayIndex = parseInt(dayNumber) - 1;
-                        const itemType = isVeg && !itemId.includes('nonveg') ? 'vegItems' : 'nonVegItems';
-                        const day = durgaPujaMeals2025[dayIndex];
-                        const items = itemType === 'vegItems' ? day.vegItems : day.nonVegItems || [];
-                        const item = items.find(i => i.id === itemId);
-                        
-                        if (!item) return null;
-                        
-                        const ageGroupInfo = AGE_GROUPS[ageGroupKey as keyof typeof AGE_GROUPS];
-                        const price = getPriceByDay(dayNumber, isVeg && !itemId.includes('nonveg'), ageGroupKey as keyof typeof AGE_GROUPS, customerInfo.isMember);
-                        
-                        return (
-                          <div key={compositeKey} className="text-xs bg-white p-2 rounded">
-                            <div className="flex justify-between mb-1">
-                              <span className="font-medium">{item.name}</span>
-                              <span className="text-gray-600">{day.day}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-gray-600">
-                                {ageGroupInfo.name} • {itemDetails.quantity} × {price > 0 ? `€${price.toFixed(2)}` : 'Free'}
-                              </span>
-                              <span className="font-medium">{price > 0 ? `€${(price * itemDetails.quantity).toFixed(2)}` : 'Free'}</span>
-                            </div>
-                          </div>
-                        );
-                      })}
-                  </div>
-                  
-                  <div className="flex justify-between text-sm">
-                    <span>Subtotal:</span>
-                    <span>€{totalAmount.toFixed(2)}</span>
-                  </div>
-                  {/* Member pricing message - shown instead of discount */}
-                  {customerInfo.isMember && (
-                    <div className="flex justify-between text-sm text-green-600">
-                      <span>Member Pricing:</span>
-                      <span>Applied</span>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                        <User className="w-3 h-3 inline mr-1" />
+                        Full Name *
+                      </label>
+                      <input
+                        type="text"
+                        value={customerInfo.name}
+                        onChange={(e) => setCustomerInfo(prev => ({ ...prev, name: e.target.value }))}
+                        className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                        placeholder="Enter your full name"
+                        required
+                      />
                     </div>
-                  )}
-                  <hr className="my-2" />
-                  <div className="flex justify-between text-lg font-bold">
-                    <span>Total:</span>
-                    <span className="text-orange-600">€{totalAmount.toFixed(2)}</span>
+
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                        <Mail className="w-3 h-3 inline mr-1" />
+                        Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        value={customerInfo.email}
+                        onChange={(e) => setCustomerInfo(prev => ({ ...prev, email: e.target.value }))}
+                        className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                        placeholder="Enter your email address"
+                        required
+                      />
+                    </div>
+
+                    {/* <div className="flex items-center p-3 bg-orange-50 rounded-lg">
+                      <input
+                        type="checkbox"
+                        id="isMember"
+                        checked={customerInfo.isMember}
+                        onChange={(e) => setCustomerInfo(prev => ({ ...prev, isMember: e.target.checked }))}
+                        className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded focus:ring-orange-500"
+                      />
+                      <label htmlFor="isMember" className="ml-3 text-xs font-medium text-gray-700">
+                        I declare that I and every adult in this reservation is a registered member of Sanskriti e.V.
+                      </label>
+                    </div> */}
                   </div>
                 </div>
 
-                <button
-                  onClick={handleProceedToPayment}
-                  disabled={true}
-                  className="w-full mt-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg"
-                >
-                  Proceed to Payment
-                </button>
-                
-                {!isFormValid && (
-                  <p className="text-xs text-gray-500 mt-3 text-center">
-                    Please select meals and fill in your information to continue
-                  </p>
-                )}
+                {/* Order Summary */}
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide">Order Summary</h3>
+                  
+                  <div className="bg-gray-50 p-4 rounded-xl space-y-3">
+                    <div className="flex justify-between text-sm">
+                      <span>Total Items:</span>
+                      <span className="font-semibold">{getSelectedItemsCount()}</span>
+                    </div>
+                    
+                    {/* Detailed breakdown of selected items */}
+                    <div className="border-t border-b border-gray-200 py-3 space-y-2">
+                      {/* Anandamela attendance - show first if selected */}
+                      {Object.entries(selectedItems)
+                        .filter(([compositeKey]) => compositeKey.includes('anandamela'))
+                        .some(([_, itemDetails]) => itemDetails.quantity > 0) && (
+                          <div className="bg-orange-50 p-3 rounded-lg mb-2 border border-orange-100">
+                            <div className="font-medium text-sm text-orange-800 mb-1">Anandamela Attendance</div>
+                            <div className="text-xs text-orange-700 flex justify-between">
+                              <span>Expected Attendees:</span>
+                              <span className="font-medium">
+                                {Object.entries(selectedItems)
+                                  .filter(([compositeKey]) => compositeKey.includes('anandamela'))
+                                  .reduce((sum, [_, itemDetails]) => sum + itemDetails.quantity, 0)}
+                              </span>
+                            </div>
+                            {Object.entries(selectedItems)
+                              .filter(([compositeKey]) => compositeKey.includes('anandamela'))
+                              .map(([compositeKey, itemDetails]) => {
+                                if (itemDetails.quantity === 0) return null;
+                                // Extract age group from composite key
+                                const ageGroupKey = compositeKey.split('-')[2] as keyof typeof AGE_GROUPS;
+                                const ageGroupInfo = AGE_GROUPS[ageGroupKey];
+                                
+                                return (
+                                  <div key={compositeKey} className="text-xs text-orange-600 flex justify-between">
+                                    <span>{ageGroupInfo.name}:</span>
+                                    <span>{itemDetails.quantity}</span>
+                                  </div>
+                                );
+                              })}
+                            <div className="text-xs mt-2 text-orange-600 italic">
+                              Free registration - Pay for food at stalls
+                            </div>
+                          </div>
+                        )
+                      }
+                      
+                      {/* Meal items with pricing */}
+                      {Object.entries(selectedItems)
+                        .filter(([compositeKey]) => !compositeKey.includes('anandamela'))
+                        .map(([compositeKey, itemDetails]) => {
+                          if (itemDetails.quantity === 0) return null;
+                          
+                          // Parse item details from composite key
+                          const [itemId, ageGroupKey] = compositeKey.split('-');
+                          const isVeg = itemId.includes('veg-');
+                          const dayNumber = itemId.match(/day(\d+)/)?.[1] || '1';
+                          const dayIndex = parseInt(dayNumber) - 1;
+                          const itemType = isVeg && !itemId.includes('nonveg') ? 'vegItems' : 'nonVegItems';
+                          const day = durgaPujaMeals2025[dayIndex];
+                          const items = itemType === 'vegItems' ? day.vegItems : day.nonVegItems || [];
+                          const item = items.find(i => i.id === itemId);
+                          
+                          if (!item) return null;
+                          
+                          const ageGroupInfo = AGE_GROUPS[ageGroupKey as keyof typeof AGE_GROUPS];
+                          const price = getPriceByDay(dayNumber, isVeg && !itemId.includes('nonveg'), ageGroupKey as keyof typeof AGE_GROUPS, customerInfo.isMember);
+                          
+                          return (
+                            <div key={compositeKey} className="text-xs bg-white p-2 rounded">
+                              <div className="flex justify-between mb-1">
+                                <span className="font-medium">{item.name}</span>
+                                <span className="text-gray-600">{day.day}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">
+                                  {ageGroupInfo.name} • {itemDetails.quantity} × {price > 0 ? `€${price.toFixed(2)}` : 'Free'}
+                                </span>
+                                <span className="font-medium">{price > 0 ? `€${(price * itemDetails.quantity).toFixed(2)}` : 'Free'}</span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </div>
+                    
+                    <div className="flex justify-between text-sm">
+                      <span>Subtotal:</span>
+                      <span>€{totalAmount.toFixed(2)}</span>
+                    </div>
+                    {/* Member pricing message - shown instead of discount */}
+                    {customerInfo.isMember && (
+                      <div className="flex justify-between text-sm text-green-600">
+                        <span>Member Pricing:</span>
+                        <span>Applied</span>
+                      </div>
+                    )}
+                    <hr className="my-2" />
+                    <div className="flex justify-between text-lg font-bold">
+                      <span>Total:</span>
+                      <span className="text-orange-600">€{totalAmount.toFixed(2)}</span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={handleProceedToPayment}
+                    disabled={true}
+                    className="w-full mt-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg"
+                  >
+                    Proceed to Payment
+                  </button>
+                  
+                  {!isFormValid && (
+                    <p className="text-xs text-gray-500 mt-3 text-center">
+                      Please select meals and fill in your information to continue
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        )}
-
-        {/* Information Section */}
-        <div className="max-w-4xl mx-auto bg-blue-50 rounded-xl p-4 mb-8 border border-blue-100">
-          <h3 className="text-sm font-semibold text-blue-900 mb-2">Important Information</h3>
-          <ul className="space-y-1 text-xs text-blue-800">
-            <li>• Meal reservations are required in advance for Days 1-3</li>
-            <li>• Day 4 features Anandamela style food stalls - buy on spot</li>
-            <li>• Children 0-8 years eat for free, 8-12 years at reduced price</li>
-            <li>• You will receive a confirmation email after payment</li>
-            <li>• For questions, contact us at admin@sanskriti-hamburg.de</li>
-          </ul>
+          )}
         </div>
       </main>
 
